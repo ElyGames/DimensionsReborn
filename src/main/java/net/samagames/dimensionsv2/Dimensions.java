@@ -3,6 +3,8 @@ package net.samagames.dimensionsv2;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamesNames;
 import net.samagames.dimensionsv2.game.DimensionsGame;
+import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
+import net.samagames.dimensionsv2.game.listeners.ChestItemListener;
 import net.samagames.dimensionsv2.game.listeners.PlayerListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +25,8 @@ public class Dimensions extends JavaPlugin
         SamaGamesAPI.get().getGameManager().registerGame(game);
         SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.DIMENSION, true);
         getServer().getPluginManager().registerEvents(new PlayerListener(),this);
+        getServer().getPluginManager().registerEvents(new ChestItemListener(),this);
+        ChestItemManager.getInstance();
 
     }
 
