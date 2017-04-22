@@ -6,23 +6,15 @@ import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Chest;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
-import org.bukkit.entity.Item;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
+
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.material.Dye;
-import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +43,13 @@ public class ChestItemManager {
         fwm.setPower(0);
         fw.setFireworkMeta(fwm);
         Dimensions.getInstance().getServer().getScheduler().runTaskLater(Dimensions.getInstance(), fw::detonate, 2);
+    }
+    public void opened(Chest c){
+        openedChests.add(c.getLocation());
+    }
+
+    public boolean isOpened(Chest c){
+        return openedChests.contains(c.getLocation());
     }
 
     public void fillRandomChestInventory(Inventory inv){
@@ -81,6 +80,7 @@ public class ChestItemManager {
     private ChestItemManager() {
         items = new ArrayList<>();
         random = new Random();
+        openedChests= new ArrayList<>();
 
         // Armors
 
