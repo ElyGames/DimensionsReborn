@@ -1,5 +1,6 @@
 package net.samagames.dimensionsv2.game.listeners;
 
+import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -19,30 +20,16 @@ import org.bukkit.inventory.InventoryHolder;
  */
 public class ChestItemListener implements Listener {
 
-
-    /*@EventHandler
-    public void onBreak(BlockBreakEvent e){
-        if(e.getBlock().getType() == Material.CHEST){
-            Chest chest = (Chest) e.getBlock().getState();
-            ChestItemManager manager = ChestItemManager.getInstance();
-
-            if(!manager.isOpened(chest)){
-                Inventory inv = chest.getInventory();
-                ChestItemManager.getInstance().fillRandomChestInventory(inv);
-                manager.launchAndExplode( chest.getLocation(), FireworkEffect.builder().withColor(new Color[] { Color.FUCHSIA, Color.PURPLE, Color.RED }).with(FireworkEffect.Type.BALL).build());
-                manager.opened(chest);
-            }
-
-        }
-    }*/
-
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void onChestOpen(PlayerInteractEvent event)
+    public void onChestOpen(PlayerInteractEvent e)
     {
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && event.getClickedBlock().getType().equals(Material.CHEST))
+        if(Dimensions.getInstance().getGame().isSpectator(e.getPlayer())){
+            e.setCancelled(true);
+        }
+        else if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.CHEST))
         {
             ChestItemManager manager = ChestItemManager.getInstance();
-                 Chest chest = (Chest) event.getClickedBlock().getState();
+                 Chest chest = (Chest) e.getClickedBlock().getState();
             if(!manager.isOpened(chest)) {
                 Inventory inv = chest.getInventory();
                 ChestItemManager.getInstance().fillRandomChestInventory(inv);

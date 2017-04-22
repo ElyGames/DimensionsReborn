@@ -9,6 +9,7 @@ public enum GameStep {
     IN_GAME,
     PVP,
     DEATHMATCH_PLANNED,
-    DEATHMATCH;
+    DEATHMATCH,
+    FINISH;
 
 }

@@ -1,7 +1,6 @@
 package net.samagames.dimensionsv2.game;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 import net.samagames.api.games.Game;
 import net.samagames.api.games.IGameProperties;
 import net.samagames.dimensionsv2.Dimensions;
@@ -12,6 +11,7 @@ import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -33,6 +33,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private int pvpIn;
     private int deathMatchIn;
     private GameStep gameStep;
+    private List<Material> blockPlaceAndBreakWhitelist;
 
 
 
@@ -44,6 +45,14 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         pvpIn = 120;
         deathMatchIn = 60;
         gameStep = GameStep.WAIT;
+        blockPlaceAndBreakWhitelist = new ArrayList<>();
+
+        blockPlaceAndBreakWhitelist.add(Material.TNT);
+        blockPlaceAndBreakWhitelist.add(Material.WORKBENCH);
+        blockPlaceAndBreakWhitelist.add(Material.FURNACE);
+        blockPlaceAndBreakWhitelist.add(Material.CAKE);
+        blockPlaceAndBreakWhitelist.add(Material.CAKE_BLOCK);
+
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
@@ -55,6 +64,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         for(JsonElement elt : prop.getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray()){
             deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString()));
         }
+
+        waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
         Collections.shuffle(deathMatchSpawns);
 
     }
@@ -62,13 +73,15 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     @Override
     public void handleLogout(Player player)
     {
-        getCoherenceMachine().getMessageManager().writeCustomMessage("§f" + player.getDisplayName() + " §fs'est déconnecté.",true);
         stumpPlayer(player);
         super.handleLogout(player);
     }
     @Override
     public void handleLogin(Player player){
         player.setGameMode(GameMode.ADVENTURE);
+        player.teleport(waitingRoom);
+        player.setHealth(20D);
+        player.setFoodLevel(20);
         super.handleLogin(player);
     }
 
@@ -87,6 +100,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         int index=0;
         for(DimensionsPlayer dp : getInGamePlayers().values()){
             dp.getPlayerIfOnline().teleport(spawns.get(index));
+            dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
             index++;
         }
 
@@ -133,6 +147,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         new TimeTask().runTaskTimer(Dimensions.getInstance(),1L,20L);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6La partie commence. Bonne chance !",true);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans 2 minutes  !",true);
+        for(DimensionsPlayer dp : getInGamePlayers().values()){
+            dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
+        }
     }
     public void playSound(Sound sound,float pitch){
         for(DimensionsPlayer dp : this.getInGamePlayers().values()){
@@ -140,6 +157,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
     }
 
+
+    public List<Material> getBlockPlaceAndBreakWhitelist() {
+        return blockPlaceAndBreakWhitelist;
+    }
 
     public int getDeathMatchIn() {
         return deathMatchIn;
