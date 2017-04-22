@@ -9,13 +9,19 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.material.Dye;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
@@ -35,6 +41,7 @@ public class ChestItemManager {
 
     private List<ChestItem> items;
     private Random random;
+    private List<Location> openedChests;
 
     public void launchAndExplode(Location loc, FireworkEffect effect){
         loc = loc.add(0.5,0.5,0.5);
@@ -113,11 +120,17 @@ public class ChestItemManager {
         items.add(new ChestItem(new ItemStack(Material.BOW), 1000));
 
         // Potions
-        items.add(new ChestItem(MojangShitUtils.getPotion("instant_heal", true, false), 800));
-        items.add(new ChestItem(MojangShitUtils.getPotion("regeneration", false, false), 100));
-        items.add(new ChestItem(MojangShitUtils.getPotion("poison", true, true), 500));
-        items.add(new ChestItem(MojangShitUtils.getPotion("instant_damage", true, false), 500));
-        items.add(new ChestItem(MojangShitUtils.getPotion("speed", false, false), 500));
+
+        //Heal
+        items.add(new ChestItem(new ItemStack(Material.POTION, 1 , (short)8197), 800));
+        //Regeneration
+        items.add(new ChestItem(new ItemStack(Material.POTION, 1 , (short)16385), 100));
+        //Poison
+        items.add(new ChestItem(new ItemStack(Material.POTION, 1 , (short)16388), 500));
+        //Instant damage
+        items.add(new ChestItem(new ItemStack(Material.POTION, 1 , (short)16396), 500));
+        //Speed
+        items.add(new ChestItem(new ItemStack(Material.POTION, 1 , (short)8194), 500));
 
         // Enchants
         ItemStack sharpness = new ItemStack(Material.ENCHANTED_BOOK);
@@ -144,4 +157,6 @@ public class ChestItemManager {
         items.add(new ChestItem(new ItemStack(Material.LAVA_BUCKET, 1), 50));
         items.add(new ChestItem(new ItemStack(Material.ENDER_PEARL), 100, new int[]{1, 2, 3}));
     }
+
+
 }

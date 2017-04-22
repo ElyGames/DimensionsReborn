@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
@@ -19,6 +20,16 @@ import org.bukkit.inventory.InventoryHolder;
  */
 public class ChestItemListener implements Listener {
 
+
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent e){
+        if(e.getBlock().getType() == Material.CHEST){
+            Chest chest = (Chest) e.getBlock().getState();
+            Inventory inv = chest.getInventory();
+            ChestItemManager.getInstance().fillRandomChestInventory(inv);
+        }
+    }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChestOpen(PlayerInteractEvent event)
