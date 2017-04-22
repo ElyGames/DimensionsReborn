@@ -3,17 +3,22 @@ package net.samagames.dimensionsv2.game;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.samagames.api.games.Game;
+import net.samagames.api.games.IGameProperties;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
+import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.tasks.TimeTask;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -24,10 +29,12 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     private List<Location> spawns;
     private List<Location> deathMatchSpawns;
+    private Location waitingRoom;
     private int gameTime;
     private int pvpIn;
     private int deathMatchIn;
-    private boolean deathMatchPlanned;
+    private GameStep gameStep;
+
 
 
     public DimensionsGame() {
@@ -37,14 +44,19 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         gameTime=0;
         pvpIn = 120;
         deathMatchIn = 60;
-        deathMatchPlanned=false;
+        gameStep = GameStep.WAIT;
 
-        for(JsonElement elt : Dimensions.getInstance().getApi().getGameManager().getGameProperties().getConfig("spawns",new JsonArray()).getAsJsonArray()){
+        IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
+
+        for(JsonElement elt : prop.getConfig("spawns",new JsonArray()).getAsJsonArray()){
             spawns.add(LocationUtils.str2loc(elt.getAsString()));
         }
-        for(JsonElement elt : Dimensions.getInstance().getApi().getGameManager().getGameProperties().getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray()){
+        Collections.shuffle(spawns);
+
+        for(JsonElement elt : prop.getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray()){
             deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString()));
         }
+        Collections.shuffle(deathMatchSpawns);
 
     }
 
@@ -55,20 +67,30 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         stumpPlayer(player);
         super.handleLogout(player);
     }
+    @Override
+    public void handleLogin(Player player){
+        player.setGameMode(GameMode.ADVENTURE);
+        super.handleLogin(player);
+    }
 
     public void stumpPlayer(Player p){
 
-        if(!deathMatchPlanned && deathMatchSpawns.size()==getInGamePlayers().size()){
-            deathMatchPlanned=true;
+        if(gameStep!=GameStep.DEATHMATCH_PLANNED && deathMatchSpawns.size()==getInGamePlayers().size()){
+           gameStep= GameStep.DEATHMATCH_PLANNED;
         }
     }
-
-
 
     @Override
     public void startGame()
     {
         super.startGame();
+        gameStep = GameStep.PRE_TELEPORT;
+        int index=0;
+        for(DimensionsPlayer dp : getInGamePlayers().values()){
+            dp.getPlayerIfOnline().teleport(spawns.get(index));
+            index++;
+        }
+
 
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Préparation du jeu ! ",true);
         new BukkitRunnable(){
@@ -81,7 +103,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 }
                 setXp(i);
                 switch(i){
-                    case 15: playSound(Sound.BLOCK_NOTE_PLING,1.0F);getCoherenceMachine().getMessageManager().writeCustomMessage("§eDémarrage du jeu dans §c" + i + " " + secFormat + "§e.",true); break;
+                    case 15: getCoherenceMachine().getMessageManager().writeCustomMessage("§eDémarrage du jeu dans §c" + i + " " + secFormat + "§e.",true); break;
                     case 10: case 5 : case 4 : case 3 : case 2 : case 1: playSound(Sound.BLOCK_NOTE_PLING,1.0F);sendTitle("§6Démarrage dans §c" + i + "§6sec.","§6Préparez vous au combat !"); break;
                     case 0 : playSound(Sound.BLOCK_NOTE_PLING,2.0F);begin();this.cancel(); break;
 
@@ -108,6 +130,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     public void begin(){
 
+        gameStep= GameStep.IN_GAME;
         new TimeTask().runTaskTimer(Dimensions.getInstance(),1L,20L);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6La partie commence. Bonne chance !",true);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans 2 minutes  !",true);
@@ -123,9 +146,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         return deathMatchIn;
     }
 
-    public boolean isDeathMatchPlanned() {
-        return deathMatchPlanned;
-    }
+
 
     public void decreaseDeathmatchIn(){
         deathMatchIn--;
@@ -142,11 +163,15 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         return pvpIn;
     }
 
-    public void setDeathMatchPlanned(boolean deathMatchPlanned) {
-        this.deathMatchPlanned = deathMatchPlanned;
-    }
-
     public void decreasePvpIn(){
         pvpIn--;
+    }
+
+    public GameStep getGameStep() {
+        return gameStep;
+    }
+
+    public void setGameStep(GameStep gameStep) {
+        this.gameStep = gameStep;
     }
 }

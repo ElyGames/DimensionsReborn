@@ -63,7 +63,7 @@ public class DimensionsPlayer extends GamePlayer{
 
         objectiveSign.setLine(-8," ");
 
-        if(game.isDeathMatchPlanned()){
+        if(game.getGameStep()== GameStep.DEATHMATCH_PLANNED ||game.getGameStep()== GameStep.DEATHMATCH  ){
             if(game.getDeathMatchIn()>0){
                 String dmIn = TimeUtil.timeToString(game.getDeathMatchIn());
                 objectiveSign.setLine(-7,"§eD.Match§7 : §f" + dmIn);
@@ -72,12 +72,14 @@ public class DimensionsPlayer extends GamePlayer{
                 objectiveSign.setLine(-7,"§aFight final !");
             }
         }
-        else if(game.getPvpIn()==0){
-            objectiveSign.setLine(-7,"§aLet's fight !");
-        }
-        else{
-            String pvpIn = TimeUtil.timeToString(game.getPvpIn());
-            objectiveSign.setLine(-7,"§ePVP§7 : §f" + pvpIn);
+        else if(game.getGameStep()== GameStep.PVP ||game.getGameStep()== GameStep.IN_GAME  ){
+            if(game.getPvpIn()>0){
+                String pvpIn = TimeUtil.timeToString(game.getPvpIn());
+                objectiveSign.setLine(-7,"§ePVP§7 : §f" + pvpIn);
+            }
+            else{
+                objectiveSign.setLine(-7,"§aLet's fight !");
+            }
         }
 
         objectiveSign.setLine(-6, "  " );
