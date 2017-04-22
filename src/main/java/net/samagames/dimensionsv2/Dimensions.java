@@ -12,14 +12,21 @@ public class Dimensions extends JavaPlugin
 {
     private SamaGamesAPI api;
     private DimensionsGame game;
+    private static Dimensions instance;
 
     @Override
     public void onEnable(){
+        instance = this;
         this.api = SamaGamesAPI.get();
-        this.game = new DimensionsGame(this);
+        this.game = new DimensionsGame();
         SamaGamesAPI.get().getGameManager().registerGame(game);
         SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.DIMENSION, true);
 
+    }
+
+
+    public static Dimensions getInstance() {
+        return instance;
     }
 
     public SamaGamesAPI getApi() {
