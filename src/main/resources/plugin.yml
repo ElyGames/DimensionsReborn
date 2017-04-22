@@ -1,0 +1,5 @@
+name: DimensionsV2
+main: net.samagames.dimensionsv2.Dimensions
+version: Dev
+depend: [SamaGamesAPI]
+authors: [Tigger_San]
