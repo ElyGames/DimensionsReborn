@@ -1,8 +1,6 @@
 package net.samagames.dimensionsv2.game.entity.chestitem;
 
 import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.tools.MojangShitUtils;
-import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;

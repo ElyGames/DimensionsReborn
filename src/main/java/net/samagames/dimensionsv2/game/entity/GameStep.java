@@ -11,5 +11,4 @@ public enum GameStep {
     DEATHMATCH_PLANNED,
     DEATHMATCH,
     FINISH;
-
 }

@@ -2,9 +2,7 @@ package net.samagames.dimensionsv2.game.listeners;
 
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.GameStep;
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -69,14 +67,10 @@ public class DamageListener implements Listener
     {
         Player p = event.getEntity();
         DimensionsGame game = Dimensions.getInstance().getGame();
-       // Player p = event.getEntity();
-      //  p.setHealth(p.getMaxHealth());
         final List<ItemStack> remove = event.getDrops().stream().filter(stack -> stack.getType() == Material.COMPASS || stack.getType() == Material.EYE_OF_ENDER).collect(Collectors.toList());
         for (ItemStack rem : remove){
             event.getDrops().remove(rem);
         }
-       // event.getDrops().remove(Dimensions.getCompass());
-      //  event.getDrops().remove(Dimensions.getSwap());
         event.setDeathMessage("");
         game.die(p);
         game.stumpPlayer(p);

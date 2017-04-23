@@ -11,16 +11,11 @@ import net.samagames.dimensionsv2.game.tasks.TimeTask;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -39,7 +34,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private GameStep gameStep;
     private List<Material> blockPlaceAndBreakWhitelist;
     private Random random;
-
+    private TimeTask timerTask;
 
 
     public DimensionsGame() {
@@ -52,6 +47,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         gameStep = GameStep.WAIT;
         blockPlaceAndBreakWhitelist = new ArrayList<>();
         random = new Random();
+        timerTask = new TimeTask();
 
         blockPlaceAndBreakWhitelist.add(Material.TNT);
         blockPlaceAndBreakWhitelist.add(Material.WORKBENCH);
@@ -140,14 +136,45 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
 
     public void stumpPlayer(Player p){
-
-        if(gameStep!=GameStep.DEATHMATCH_PLANNED && deathMatchSpawns.size()==getInGamePlayers().size()){
-           gameStep= GameStep.DEATHMATCH_PLANNED;
-        }
         setSpectator(p);
-        //We check if player doesn't suicide
-    }
 
+
+        DimensionsPlayer dp = getPlayer(p.getUniqueId());
+        int left = getInGamePlayers().values().size();
+        if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
+            if (left == 2) {
+                addCoins(p, 20, "Troisième !");
+            } else if (left == 1) {
+                addCoins(p, 40, "Second !");
+            }
+        }
+            this.coherenceMachine.getMessageManager().writeCustomMessage(p.getDisplayName() + " a été éliminé.", true);
+
+            if (left!=1) {
+                getCoherenceMachine().getMessageManager().writeCustomMessage("§eIl reste encore §b" + + left + " §ejoueurs en vie.",false);
+                if(gameStep!=GameStep.DEATHMATCH_PLANNED && deathMatchSpawns.size()==getInGamePlayers().size()){
+                    gameStep= GameStep.DEATHMATCH_PLANNED;
+                }
+            }
+             else {
+                end();
+            }
+        }
+
+
+
+    public void end(){
+        timerTask.cancel();
+        DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
+        Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
+
+        Bukkit.getServer().getOnlinePlayers().stream().filter(p -> !p.equals(winner.getPlayerIfOnline())).forEach(p -> {
+            Titles.sendTitle(p, 5, 80, 5, ChatColor.GOLD + "Fin de partie !", ChatColor.GREEN + "Bravo à " + winner.getPlayerIfOnline().getDisplayName());
+        });
+        this.coherenceMachine.getTemplateManager().getPlayerWinTemplate().execute(winner.getPlayerIfOnline(), winner.getKills());
+        addCoins(winner.getPlayerIfOnline(), 60, "Victoire !");
+        handleGameEnd();
+    }
     @Override
     public void startGame()
     {
@@ -200,7 +227,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void begin(){
 
         gameStep= GameStep.IN_GAME;
-        new TimeTask().runTaskTimer(Dimensions.getInstance(),1L,20L);
+        timerTask.runTaskTimer(Dimensions.getInstance(),1L,20L);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6La partie commence. Bonne chance !",true);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans 2 minutes  !",true);
         for(DimensionsPlayer dp : getInGamePlayers().values()){
@@ -234,6 +261,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void decreaseDeathmatchIn(){
         deathMatchIn--;
     }
+
     public int getGameTime() {
         return gameTime;
     }
