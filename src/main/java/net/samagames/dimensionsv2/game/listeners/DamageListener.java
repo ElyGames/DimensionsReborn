@@ -82,7 +82,7 @@ public class DamageListener implements Listener
         }
         event.setDeathMessage("");
         game.die(p);
-        game.stumpPlayer(p);
+        game.stumpPlayer(p,false);
     }
 
 

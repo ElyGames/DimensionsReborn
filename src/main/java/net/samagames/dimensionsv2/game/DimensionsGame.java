@@ -135,7 +135,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     {
         super.handleLogout(player);
         if(!isNonGameStep()){
-            stumpPlayer(player);
+            stumpPlayer(player,true);
         }
 
     }
@@ -148,19 +148,20 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         super.handleLogin(player);
     }
 
-    public void stumpPlayer(Player p){
+    public void stumpPlayer(Player p, boolean logout){
         setSpectator(p);
-
-
         DimensionsPlayer dp = getPlayer(p.getUniqueId());
         int left = getInGamePlayers().values().size();
-        if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
-            if (left == 2) {
-                addCoins(p, 20, "Troisième !");
-            } else if (left == 1) {
-                addCoins(p, 40, "Second !");
+        if(!logout){
+            if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
+                if (left == 2) {
+                    addCoins(p, 20, "Troisième !");
+                } else if (left == 1) {
+                    addCoins(p, 40, "Second !");
+                }
             }
         }
+
             this.coherenceMachine.getMessageManager().writeCustomMessage(p.getDisplayName() + " a été éliminé.", true);
 
             if (left!=1) {
