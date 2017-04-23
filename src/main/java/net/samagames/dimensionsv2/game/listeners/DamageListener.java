@@ -26,7 +26,7 @@ public class DamageListener implements Listener
         if (e.getCause() == EntityDamageEvent.DamageCause.WITHER){
             e.setCancelled(true);
         }
-        else if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonGameStep()){
+        else if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive()){
             e.setCancelled(true);
         }
     }

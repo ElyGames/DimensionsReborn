@@ -6,7 +6,9 @@ import net.samagames.api.games.IGameProperties;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import net.samagames.dimensionsv2.game.entity.PowerUp;
 import net.samagames.dimensionsv2.game.tasks.TimeTask;
+import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
 import org.bukkit.GameMode;
@@ -16,7 +18,9 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Tigger_San on 21/04/2017.
@@ -33,6 +37,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private GameStep gameStep;
     private List<Material> blockPlaceAndBreakWhitelist;
     private Map<DimensionsPlayer,DimensionsPlayer> lastDamager;
+    private Random random;
 
 
 
@@ -46,6 +51,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         gameStep = GameStep.WAIT;
         blockPlaceAndBreakWhitelist = new ArrayList<>();
         lastDamager = new HashMap<>();
+        random = new Random();
 
         blockPlaceAndBreakWhitelist.add(Material.TNT);
         blockPlaceAndBreakWhitelist.add(Material.WORKBENCH);
@@ -72,9 +78,27 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
 
     public void playerDamageByPlayer(Player p  , Player damager){
+        DimensionsPlayer hitPlayer = getPlayer(p.getUniqueId());
         setLastDamager((getPlayer(p.getUniqueId())), getPlayer(damager.getUniqueId()));
-        //TODO
+
+        int healAtStrike = hitPlayer.getValueForPowerUP(PowerUp.HEAL_AT_STRIKE);
+            new BukkitRunnable()
+            {
+                @Override
+                public void run() {
+                    if (RandomUtil.pickBoolean(random,healAtStrike))
+                    {
+                        double h = p.getHealth() + 2.0;
+                        if (h > p.getMaxHealth()){
+                            h = p.getMaxHealth();
+                        }
+                        p.setHealth(h);
+                        p.sendMessage("§6§oUne fée vous a restauré un coeur !");
+                    }
+                }
+            }.runTaskLater(Dimensions.getInstance(),5L);
     }
+
     @Override
     public void handleLogout(Player player)
     {
