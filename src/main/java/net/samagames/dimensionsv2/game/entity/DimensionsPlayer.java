@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by Tigger_San on 21/04/2017.
@@ -20,6 +21,7 @@ public class DimensionsPlayer extends GamePlayer{
     private Map<PowerUp,Integer> powerUps;
     private ObjectiveSign objectiveSign;
     private int kills;
+    private UUID lastDamager;
 
     public DimensionsPlayer(Player player) {
         super(player);
@@ -89,5 +91,13 @@ public class DimensionsPlayer extends GamePlayer{
         objectiveSign.setLine(-2, "    " );
         objectiveSign.setLine(-1, "§f"  + time);
         objectiveSign.updateLines();
+    }
+
+    public UUID getLastDamager() {
+        return lastDamager;
+    }
+
+    public void setLastDamager(UUID lastDamager) {
+        this.lastDamager = lastDamager;
     }
 }

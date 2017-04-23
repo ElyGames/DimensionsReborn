@@ -16,6 +16,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.awt.*;
@@ -36,7 +38,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private int deathMatchIn;
     private GameStep gameStep;
     private List<Material> blockPlaceAndBreakWhitelist;
-    private Map<DimensionsPlayer,DimensionsPlayer> lastDamager;
     private Random random;
 
 
@@ -50,7 +51,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         deathMatchIn = 60;
         gameStep = GameStep.WAIT;
         blockPlaceAndBreakWhitelist = new ArrayList<>();
-        lastDamager = new HashMap<>();
         random = new Random();
 
         blockPlaceAndBreakWhitelist.add(Material.TNT);
@@ -79,7 +79,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     public void playerDamageByPlayer(Player p  , Player damager){
         DimensionsPlayer hitPlayer = getPlayer(p.getUniqueId());
-        setLastDamager((getPlayer(p.getUniqueId())), getPlayer(damager.getUniqueId()));
+        hitPlayer.setLastDamager(damager.getUniqueId());
 
         int healAtStrike = hitPlayer.getValueForPowerUP(PowerUp.HEAL_AT_STRIKE);
             new BukkitRunnable()
@@ -97,6 +97,31 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                     }
                 }
             }.runTaskLater(Dimensions.getInstance(),5L);
+    }
+
+    public void die(Player p){
+        DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
+        if (killer==null){
+            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() +"a été éliminé sans aide extérieure.",true);
+        }
+        else
+        {
+            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() + "§c a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§c.",true);
+            killer.addKill();
+            addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
+
+            if (killer.getPlayerIfOnline().getHealth() >= 1.0)
+             {
+                 int healAtKill = killer.getValueForPowerUP(PowerUp.HEAL_AT_KILL);
+                 double health = killer.getPlayerIfOnline().getHealth() + healAtKill;
+                 if (health > killer.getPlayerIfOnline().getMaxHealth()){
+                     health = killer.getPlayerIfOnline().getMaxHealth();
+                 }
+                 killer.getPlayerIfOnline().setHealth(health);
+                 int strengthAtKill = killer.getValueForPowerUP(PowerUp.STRENGHT_AT_KILL);
+                 killer.getPlayerIfOnline().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * strengthAtKill, 1));
+             }
+        }
     }
 
     @Override
@@ -119,7 +144,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         if(gameStep!=GameStep.DEATHMATCH_PLANNED && deathMatchSpawns.size()==getInGamePlayers().size()){
            gameStep= GameStep.DEATHMATCH_PLANNED;
         }
-        //TODO
+        setSpectator(p);
+        //We check if player doesn't suicide
     }
 
     @Override
@@ -233,10 +259,4 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         this.gameStep = gameStep;
     }
 
-    public void setLastDamager(DimensionsPlayer damager, DimensionsPlayer player){
-        lastDamager.put(player,damager);
-    }
-    public DimensionsPlayer getLastDamager(DimensionsPlayer player){
-        return lastDamager.get(player);
-    }
 }
