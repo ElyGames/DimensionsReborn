@@ -16,9 +16,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Tigger_San on 21/04/2017.
@@ -34,6 +32,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private int deathMatchIn;
     private GameStep gameStep;
     private List<Material> blockPlaceAndBreakWhitelist;
+    private Map<DimensionsPlayer,DimensionsPlayer> lastDamager;
 
 
 
@@ -46,6 +45,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         deathMatchIn = 60;
         gameStep = GameStep.WAIT;
         blockPlaceAndBreakWhitelist = new ArrayList<>();
+        lastDamager = new HashMap<>();
 
         blockPlaceAndBreakWhitelist.add(Material.TNT);
         blockPlaceAndBreakWhitelist.add(Material.WORKBENCH);
@@ -70,6 +70,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     }
 
+
+    public void playerDamageByPlayer(Player p  , Player damager){
+        setLastDamager((getPlayer(p.getUniqueId())), getPlayer(damager.getUniqueId()));
+        //TODO
+    }
     @Override
     public void handleLogout(Player player)
     {
@@ -90,6 +95,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         if(gameStep!=GameStep.DEATHMATCH_PLANNED && deathMatchSpawns.size()==getInGamePlayers().size()){
            gameStep= GameStep.DEATHMATCH_PLANNED;
         }
+        //TODO
     }
 
     @Override
@@ -166,7 +172,14 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         return deathMatchIn;
     }
 
+    public boolean isNonGameStep(){
 
+        return(gameStep==GameStep.WAIT || gameStep==GameStep.PRE_TELEPORT  || gameStep==GameStep.FINISH);
+    }
+    public boolean isNonPVPActive(){
+
+        return(gameStep==GameStep.WAIT || gameStep==GameStep.PRE_TELEPORT  || gameStep==GameStep.FINISH || gameStep==GameStep.IN_GAME);
+    }
 
     public void decreaseDeathmatchIn(){
         deathMatchIn--;
@@ -178,6 +191,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void increaseGameTime() {
        gameTime++;
     }
+
 
     public int getPvpIn() {
         return pvpIn;
@@ -193,5 +207,12 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     public void setGameStep(GameStep gameStep) {
         this.gameStep = gameStep;
+    }
+
+    public void setLastDamager(DimensionsPlayer damager, DimensionsPlayer player){
+        lastDamager.put(player,damager);
+    }
+    public DimensionsPlayer getLastDamager(DimensionsPlayer player){
+        return lastDamager.get(player);
     }
 }

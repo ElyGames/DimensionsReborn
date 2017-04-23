@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
@@ -23,10 +24,7 @@ import org.bukkit.event.player.*;
 public class PlayerListener implements Listener
 {
 
-    private boolean isNonGameStep(){
-        DimensionsGame game = Dimensions.getInstance().getGame();
-        return(game.getGameStep()==GameStep.WAIT || game.getGameStep()==GameStep.PRE_TELEPORT  || game.getGameStep()==GameStep.FINISH);
-    }
+
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
@@ -36,25 +34,17 @@ public class PlayerListener implements Listener
         }
     }
     @EventHandler
-    public void onPvp(EntityDamageByEntityEvent e){
-        DimensionsGame game = Dimensions.getInstance().getGame();
-        if(e.getDamager() instanceof Player && e.getEntity() instanceof Player){
-            if(game.getGameStep()== GameStep.PRE_TELEPORT || game.getGameStep()== GameStep.WAIT || game.getGameStep()== GameStep.IN_GAME ){
-                e.setCancelled(true);
-            }
-        }
-    }
-    @EventHandler
     public void onFoodUpdateEvent(FoodLevelChangeEvent e){
-            e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+            e.setCancelled(game.isNonGameStep());
     }
     @EventHandler
     public void onBreak(BlockBreakEvent e){
-        if(isNonGameStep()){
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        if(game.isNonGameStep()){
             e.setCancelled(true);
         }
         else{
-            DimensionsGame game = Dimensions.getInstance().getGame();
             if(!game.getBlockPlaceAndBreakWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
             }
@@ -63,11 +53,11 @@ public class PlayerListener implements Listener
 
     @EventHandler
     public void onPlace(BlockPlaceEvent e){
-        if(isNonGameStep()){
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        if(game.isNonGameStep()){
             e.setCancelled(true);
         }
         else{
-            DimensionsGame game = Dimensions.getInstance().getGame();
             if(!game.getBlockPlaceAndBreakWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
             }
@@ -94,13 +84,15 @@ public class PlayerListener implements Listener
     @EventHandler
     public void pickupEvet(PlayerPickupItemEvent e)
     {
-        e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
 
     @EventHandler
     public void dropItem(PlayerDropItemEvent e)
     {
-        e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
 
     @EventHandler
@@ -112,8 +104,8 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent e)
     {
-        e.setCancelled(isNonGameStep());
-
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
 
     @EventHandler
@@ -129,32 +121,39 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onBukket(PlayerBucketFillEvent e)
     {
-        e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
 
     @EventHandler
     public void onBukket(PlayerBucketEmptyEvent e)
     {
-        e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
 
     @EventHandler
     public void onHanging(HangingBreakByEntityEvent e)
     {
+        DimensionsGame game = Dimensions.getInstance().getGame();
         if (e.getEntity() instanceof Player){
-            e.setCancelled(isNonGameStep());
+            e.setCancelled(game.isNonGameStep());
         }
     }
 
     @EventHandler
     public void onSwap(PlayerSwapHandItemsEvent e){
-        e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
-        e.setCancelled(isNonGameStep());
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        e.setCancelled(game.isNonGameStep());
     }
+
+
 
 
 
