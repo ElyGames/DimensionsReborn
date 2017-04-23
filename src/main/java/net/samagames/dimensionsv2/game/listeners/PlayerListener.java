@@ -43,7 +43,7 @@ public class PlayerListener implements Listener
             e.setCancelled(true);
         }
         else{
-            if(!game.getBlockPlaceAndBreakWhitelist().contains(e.getBlock().getType())){
+            if(!game.getBlockBreakWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
             }
         }
@@ -56,7 +56,7 @@ public class PlayerListener implements Listener
             e.setCancelled(true);
         }
         else{
-            if(!game.getBlockPlaceAndBreakWhitelist().contains(e.getBlock().getType())){
+            if(!game.getBlockPlaceWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
             }
             else{
@@ -64,12 +64,12 @@ public class PlayerListener implements Listener
                 int y = e.getBlock().getY();
                 int z = e.getBlock().getZ();
                 World w = e.getBlock().getWorld();
-                boolean cantPlace = game.getBlockPlaceAndBreakWhitelist().contains(w.getBlockAt(x, y + 1, z).getType())
-                        || game.getBlockPlaceAndBreakWhitelist().contains(w.getBlockAt(x, y - 1, z).getType())
-                        || game.getBlockPlaceAndBreakWhitelist().contains(w.getBlockAt(x + 1, y, z).getType())
-                        || game.getBlockPlaceAndBreakWhitelist().contains(w.getBlockAt(x - 1, y, z).getType())
-                        || game.getBlockPlaceAndBreakWhitelist().contains(w.getBlockAt(x, y, z + 1).getType())
-                        || game.getBlockPlaceAndBreakWhitelist().contains(w.getBlockAt(x, y, z - 1).getType());
+                boolean cantPlace = game.getBlockPlaceWhitelist().contains(w.getBlockAt(x, y + 1, z).getType())
+                        || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x, y - 1, z).getType())
+                        || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x + 1, y, z).getType())
+                        || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x - 1, y, z).getType())
+                        || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x, y, z + 1).getType())
+                        || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x, y, z - 1).getType());
                 if (cantPlace)
                 {
                     e.setCancelled(true);

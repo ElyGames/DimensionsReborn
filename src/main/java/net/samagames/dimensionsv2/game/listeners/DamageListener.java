@@ -3,6 +3,7 @@ package net.samagames.dimensionsv2.game.listeners;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import org.bukkit.Material;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,10 @@ public class DamageListener implements Listener
     public void onDamage(EntityDamageEvent e)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
+        if(game.isNonGameStep()){
+            e.setCancelled(true);
+            return;
+        }
         if (e.getCause() == EntityDamageEvent.DamageCause.WITHER){
             e.setCancelled(true);
         }
@@ -36,6 +41,10 @@ public class DamageListener implements Listener
     @EventHandler
     public void onPvp(EntityDamageByEntityEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
+        if(e.getDamager() instanceof Player && !(e.getEntity() instanceof Player)){
+            e.setCancelled(true);
+            return;
+        }
         if(e.getDamager() instanceof Player && e.getEntity() instanceof Player){
             if(game.isNonPVPActive()){
                 e.setCancelled(true);

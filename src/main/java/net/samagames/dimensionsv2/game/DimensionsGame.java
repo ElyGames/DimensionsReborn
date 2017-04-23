@@ -32,7 +32,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private int pvpIn;
     private int deathMatchIn;
     private GameStep gameStep;
-    private List<Material> blockPlaceAndBreakWhitelist;
+    private List<Material> blockPlaceWhitelist;
+    private List<Material> blockBreakWhitelist;
     private Random random;
     private TimeTask timerTask;
 
@@ -45,15 +46,16 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         pvpIn = 120;
         deathMatchIn = 60;
         gameStep = GameStep.WAIT;
-        blockPlaceAndBreakWhitelist = new ArrayList<>();
+        blockBreakWhitelist = new ArrayList<>();
+        blockPlaceWhitelist = new ArrayList<>();
         random = new Random();
         timerTask = new TimeTask();
 
-        blockPlaceAndBreakWhitelist.add(Material.TNT);
-        blockPlaceAndBreakWhitelist.add(Material.WORKBENCH);
-        blockPlaceAndBreakWhitelist.add(Material.FURNACE);
-        blockPlaceAndBreakWhitelist.add(Material.CAKE);
-        blockPlaceAndBreakWhitelist.add(Material.CAKE_BLOCK);
+        blockPlaceWhitelist.add(Material.TNT); blockBreakWhitelist.add(Material.TNT);
+        blockPlaceWhitelist.add(Material.WORKBENCH); blockBreakWhitelist.add(Material.WORKBENCH);
+        blockPlaceWhitelist.add(Material.FURNACE); blockBreakWhitelist.add(Material.FURNACE);
+        blockPlaceWhitelist.add(Material.CAKE); blockBreakWhitelist.add(Material.CAKE);
+        blockPlaceWhitelist.add(Material.CAKE_BLOCK); blockBreakWhitelist.add(Material.CAKE_BLOCK);
 
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
@@ -63,12 +65,19 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
         Collections.shuffle(spawns);
 
+
+        for(JsonElement elt : prop.getConfig("allowBreak",new JsonArray()).getAsJsonArray()){
+            blockBreakWhitelist.add(Material.matchMaterial(elt.getAsString()));
+        }
+        Collections.shuffle(spawns);
+
         for(JsonElement elt : prop.getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray()){
             deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString()));
         }
+        Collections.shuffle(deathMatchSpawns);
 
         waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
-        Collections.shuffle(deathMatchSpawns);
+
 
     }
 
@@ -116,6 +125,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                  killer.getPlayerIfOnline().setHealth(health);
                  int strengthAtKill = killer.getValueForPowerUP(PowerUp.STRENGHT_AT_KILL);
                  killer.getPlayerIfOnline().addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 20 * strengthAtKill, 1));
+                 killer.getPlayerIfOnline().sendMessage("§6§oUne fée vous a restauré " + healAtKill/2 + "§c§o ♥§6§o et vous a donné §c§o"+ strengthAtKill+ " secondes §6§ode force." );
              }
         }
     }
@@ -123,8 +133,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     @Override
     public void handleLogout(Player player)
     {
-        stumpPlayer(player);
         super.handleLogout(player);
+        if(!isNonGameStep()){
+            stumpPlayer(player);
+        }
+
     }
     @Override
     public void handleLogin(Player player){
@@ -164,6 +177,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
 
     public void end(){
+        gameStep = GameStep.PVP;
         timerTask.cancel();
         DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
         Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
@@ -241,8 +255,12 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
 
 
-    public List<Material> getBlockPlaceAndBreakWhitelist() {
-        return blockPlaceAndBreakWhitelist;
+    public List<Material> getBlockPlaceWhitelist() {
+        return blockPlaceWhitelist;
+    }
+
+    public List<Material> getBlockBreakWhitelist() {
+        return blockBreakWhitelist;
     }
 
     public int getDeathMatchIn() {
