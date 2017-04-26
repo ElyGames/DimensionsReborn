@@ -25,6 +25,12 @@ public class ChestItemListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChestOpen(PlayerInteractEvent e)
     {
+        if(e.getAction() == Action.PHYSICAL){
+            if(e.getClickedBlock().getType() == Material.SOIL){
+                e.setCancelled(true);
+                return;
+            }
+        }
         DimensionsGame game = Dimensions.getInstance().getGame();
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST))
         {
@@ -61,9 +67,14 @@ public class ChestItemListener implements Listener {
         InventoryHolder holder = event.getInventory().getHolder();
         if (holder instanceof Chest)
         {
+            DimensionsGame game = Dimensions.getInstance().getGame();
             ChestItemManager manager = ChestItemManager.getInstance();
             Chest chest = (Chest)holder;
-            manager.launchAndExplode( chest.getLocation(), FireworkEffect.builder().withColor(new Color[] { Color.FUCHSIA, Color.PURPLE, Color.RED }).with(FireworkEffect.Type.BALL).build());
+            Color[][] colors = new Color[][]{new Color[] { Color.FUCHSIA, Color.PURPLE, Color.RED },
+                               new Color[] { Color.BLACK, Color.GRAY, Color.WHITE },
+                               new Color[] { Color.GREEN, Color.LIME, Color.OLIVE },
+                               new Color[] { Color.BLUE, Color.AQUA, Color.WHITE }};
+            manager.launchAndExplode( chest.getLocation(), FireworkEffect.builder().withColor(colors[game.getRandom().nextInt(colors.length)]).with(FireworkEffect.Type.BALL).build());
             chest.getBlock().setType(Material.AIR);
         }
 

@@ -48,7 +48,7 @@ public class DamageListener implements Listener
     public void onPvp(EntityDamageByEntityEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
         if(e.getDamager() instanceof Player && !(e.getEntity() instanceof Player)){
-            if(game.isNonGameStep()){
+            if(game.isNonGameStep() ||e.getEntity() instanceof ArmorStand){
                 e.setCancelled(true);
             }
         }
