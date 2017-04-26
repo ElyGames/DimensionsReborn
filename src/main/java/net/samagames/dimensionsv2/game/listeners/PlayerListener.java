@@ -5,6 +5,7 @@ import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.GameStep;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -46,6 +47,14 @@ public class PlayerListener implements Listener
             if(!game.getBlockBreakWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
             }
+        }
+    }
+
+    @EventHandler
+    public void onInteractAt(PlayerInteractAtEntityEvent e){
+        if(e.getRightClicked() instanceof ArmorStand){
+            e.setCancelled(true);
+            return;
         }
     }
 
