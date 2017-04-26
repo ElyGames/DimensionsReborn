@@ -1,6 +1,7 @@
 package net.samagames.dimensionsv2.game.listeners;
 
 import net.samagames.dimensionsv2.Dimensions;
+import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -23,8 +24,10 @@ public class ChestItemListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChestOpen(PlayerInteractEvent e)
     {
-        if(Dimensions.getInstance().getGame().isSpectator(e.getPlayer())){
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        if(Dimensions.getInstance().getGame().isSpectator(e.getPlayer()) ||game.isNonGameStep() ){
             e.setCancelled(true);
+            return;
         }
         else if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.CHEST))
         {

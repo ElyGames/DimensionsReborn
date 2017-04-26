@@ -54,8 +54,7 @@ public class ChestItemManager {
 
         inv.clear();
         Collections.shuffle(this.items);
-        int addedItems = 0;
-        int slot = 0;
+        int addedItems=0,slot = 0;
         for (ChestItem item : this.items)
         {
             if (addedItems > 20)

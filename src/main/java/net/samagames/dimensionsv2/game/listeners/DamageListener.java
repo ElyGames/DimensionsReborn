@@ -3,7 +3,6 @@ package net.samagames.dimensionsv2.game.listeners;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import org.bukkit.Material;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;

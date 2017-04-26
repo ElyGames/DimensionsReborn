@@ -30,10 +30,8 @@ public class DimensionsPlayer extends GamePlayer{
         objectiveSign.addReceiver(this.getOfflinePlayer());
         this.kills = 0;
 
-
         powerUps = new HashMap<>();
         IPlayerShop shop = SamaGamesAPI.get().getShopsManager().getPlayer(this.uuid);
-
 
         for(PowerUp pu : PowerUp.values()){
             powerUps.put(pu,pu.getPowerUpLevelForPlayer(shop));

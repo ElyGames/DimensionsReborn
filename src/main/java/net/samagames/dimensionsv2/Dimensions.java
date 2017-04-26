@@ -1,5 +1,4 @@
 package net.samagames.dimensionsv2;
-
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamesNames;
 import net.samagames.dimensionsv2.game.DimensionsGame;
