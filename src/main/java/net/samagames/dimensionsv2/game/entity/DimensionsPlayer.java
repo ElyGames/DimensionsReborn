@@ -5,6 +5,7 @@ import net.samagames.api.games.GamePlayer;
 import net.samagames.api.shops.IPlayerShop;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
+import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.utils.TimeUtil;
 import net.samagames.tools.scoreboards.ObjectiveSign;
 import org.bukkit.entity.Player;
@@ -22,10 +23,15 @@ public class DimensionsPlayer extends GamePlayer{
     private ObjectiveSign objectiveSign;
     private int kills;
     private UUID lastDamager;
+    private Dimension dimension;
+    private long lastSwap;
 
     public DimensionsPlayer(Player player) {
         super(player);
 
+        lastSwap = -1;
+
+        dimension = Dimension.OVERWORLD;
         objectiveSign = new ObjectiveSign("dimensions","§a§lDimensions");
         objectiveSign.addReceiver(this.getOfflinePlayer());
         this.kills = 0;
@@ -93,6 +99,35 @@ public class DimensionsPlayer extends GamePlayer{
 
     public UUID getLastDamager() {
         return lastDamager;
+    }
+
+
+    public Dimension getDimension() {
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        if(game.getGameStep() == GameStep.DEATHMATCH){
+            return Dimension.OVERWORLD;
+        }
+        return dimension;
+    }
+
+    public int getNextSwapDelay(){
+        if(lastSwap == -1){
+            return 0;
+        }
+        else{
+            long nextSwap = lastSwap + (powerUps.get(PowerUp.TP_TIME)*1000);
+            return new Long((nextSwap - System.currentTimeMillis())/1000).intValue();
+        }
+
+    }
+
+    public void setDimension(Dimension dimension) {
+        this.dimension = dimension;
+    }
+
+
+    public void setLastSwap(long lastSwap) {
+        this.lastSwap = lastSwap;
     }
 
     public void setLastDamager(UUID lastDamager) {

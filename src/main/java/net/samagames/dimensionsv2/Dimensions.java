@@ -3,6 +3,7 @@ import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamesNames;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
+import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import net.samagames.dimensionsv2.game.listeners.ChestItemListener;
 import net.samagames.dimensionsv2.game.listeners.DamageListener;
 import net.samagames.dimensionsv2.game.listeners.PlayerListener;
@@ -30,6 +31,7 @@ public class Dimensions extends JavaPlugin
         getServer().getPluginManager().registerEvents(new ChestItemListener(),this);
         getServer().getPluginManager().registerEvents(new DamageListener(),this);
         ChestItemManager.getInstance();
+        DimensionsManager.getInstance();
 
     }
 

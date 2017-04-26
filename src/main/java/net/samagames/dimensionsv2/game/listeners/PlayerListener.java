@@ -3,6 +3,7 @@ package net.samagames.dimensionsv2.game.listeners;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -167,6 +168,13 @@ public class PlayerListener implements Listener
     public void onInventoryClick(InventoryClickEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
         e.setCancelled(game.isNonGameStep());
+    }
+
+
+    //TEMPORARY FOR TEST
+    @EventHandler
+    public void onSneak(PlayerToggleSneakEvent e){
+        DimensionsManager.getInstance().swap(e.getPlayer());
     }
 
 
