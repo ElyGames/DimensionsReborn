@@ -25,9 +25,6 @@ import java.util.Random;
 public class ChestItemManager {
     private static ChestItemManager ourInstance = new ChestItemManager();
 
-    public static ChestItemManager getInstance() {
-        return ourInstance;
-    }
 
     private List<ChestItem> items;
     private Random random;
@@ -44,6 +41,11 @@ public class ChestItemManager {
     }
     public void opened(Chest c){
         openedChests.add(c.getLocation());
+    }
+
+
+    public static ChestItemManager getInstance() {
+        return ourInstance;
     }
 
     public boolean isOpened(Chest c){

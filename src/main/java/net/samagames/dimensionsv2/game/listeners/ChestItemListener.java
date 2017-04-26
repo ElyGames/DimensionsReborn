@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
+import org.bukkit.block.DoubleChest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,14 +26,26 @@ public class ChestItemListener implements Listener {
     public void onChestOpen(PlayerInteractEvent e)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(Dimensions.getInstance().getGame().isSpectator(e.getPlayer()) ||game.isNonGameStep() ){
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.TRAPPED_CHEST))
+        {
+            e.getPlayer().sendMessage("§6§oIt's a trap !");
             e.setCancelled(true);
             return;
         }
-        else if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.CHEST))
+        if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.CHEST))
         {
+            if(Dimensions.getInstance().getGame().isSpectator(e.getPlayer()) ||game.isNonGameStep() ){
+                e.setCancelled(true);
+                return;
+            }
             ChestItemManager manager = ChestItemManager.getInstance();
-                 Chest chest = (Chest) e.getClickedBlock().getState();
+            Chest chest = (Chest) e.getClickedBlock().getState();
+
+            InventoryHolder ih = chest.getInventory().getHolder();
+            if (ih instanceof DoubleChest) {
+                e.setCancelled(true);
+                return;
+            }
             if(!manager.isOpened(chest)) {
                 Inventory inv = chest.getInventory();
                 ChestItemManager.getInstance().fillRandomChestInventory(inv);

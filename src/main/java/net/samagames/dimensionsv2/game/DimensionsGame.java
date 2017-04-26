@@ -39,6 +39,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
 
     public DimensionsGame() {
+
         super("dimensions", "Dimensions", "", DimensionsPlayer.class);
         spawns = new ArrayList<>();
         deathMatchSpawns = new ArrayList<>();
@@ -107,11 +108,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void die(Player p){
         DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
         if (killer==null){
-            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() +"a été éliminé sans aide extérieure.",true);
+            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() +" a été éliminé sans aide extérieure.",true);
         }
         else
         {
-            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() + "§c a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§c.",true);
+            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() + " §c a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§c.",true);
             killer.addKill();
             addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
 
@@ -144,8 +145,13 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(waitingRoom);
         player.setHealth(20D);
+        player.getInventory().clear();
         player.setFoodLevel(20);
         super.handleLogin(player);
+    }
+
+    public Random getRandom() {
+        return random;
     }
 
     public void stumpPlayer(Player p, boolean logout){

@@ -4,6 +4,7 @@ import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
@@ -19,7 +20,7 @@ public class TimeTask extends BukkitRunnable {
         if(game.getGameStep()==GameStep.IN_GAME){
             switch(game.getPvpIn()){
                 case 10 :case 5:case 4:case 3:case 2:case 1:game.getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans " + game.getPvpIn() + " secondes !",true);break;
-                case 0:game.getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP est activé !",true);game.setGameStep(GameStep.PVP);
+                case 0:game.getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP est activé !",true);game.setGameStep(GameStep.PVP); game.playSound(Sound.ENTITY_CAT_AMBIENT,1F);
             }
             game.decreasePvpIn();
         }

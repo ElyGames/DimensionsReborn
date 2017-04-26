@@ -2,13 +2,14 @@ package net.samagames.dimensionsv2.game.listeners;
 
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
+import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,15 +25,21 @@ public class DamageListener implements Listener
     @EventHandler
     public void onDamage(EntityDamageEvent e)
     {
+
         DimensionsGame game = Dimensions.getInstance().getGame();
         if(game.isNonGameStep()){
             e.setCancelled(true);
             return;
         }
+
+        //Damages
         if (e.getCause() == EntityDamageEvent.DamageCause.WITHER){
             e.setCancelled(true);
         }
         else if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive()){
+            e.setCancelled(true);
+        }
+        else if (e.getCause() == EntityDamageEvent.DamageCause.POISON && game.isNonPVPActive()){
             e.setCancelled(true);
         }
     }
@@ -41,10 +48,11 @@ public class DamageListener implements Listener
     public void onPvp(EntityDamageByEntityEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
         if(e.getDamager() instanceof Player && !(e.getEntity() instanceof Player)){
-            e.setCancelled(true);
-            return;
+            if(game.isNonGameStep()){
+                e.setCancelled(true);
+            }
         }
-        if(e.getDamager() instanceof Player && e.getEntity() instanceof Player){
+        else if(e.getDamager() instanceof Player && e.getEntity() instanceof Player){
             if(game.isNonPVPActive()){
                 e.setCancelled(true);
             }
@@ -71,6 +79,32 @@ public class DamageListener implements Listener
     }
 
     @EventHandler
+    public void onCreatureDeath(EntityDeathEvent e){
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        if(e.getEntity() instanceof Cow){
+            e.getDrops().clear();
+            e.getDrops().add(new ItemStack(Material.COOKED_BEEF, RandomUtil.pickNumber(game.getRandom(),1,2)));
+        }
+        else if(e.getEntity() instanceof Sheep){
+            e.getDrops().clear();
+            e.getDrops().add(new ItemStack(Material.COOKED_MUTTON, RandomUtil.pickNumber(game.getRandom(),1,2)));
+        }
+        else if(e.getEntity() instanceof Pig){
+            e.getDrops().clear();
+            e.getDrops().add(new ItemStack(Material.GRILLED_PORK, RandomUtil.pickNumber(game.getRandom(),1,2)));
+        }
+        else if(e.getEntity().getType() == EntityType.HORSE){
+            e.getDrops().clear();
+            e.getDrops().add(new ItemStack(Material.COOKED_BEEF, RandomUtil.pickNumber(game.getRandom(),1,3)));
+        }
+        else if(e.getEntity() instanceof Chicken){
+            e.getDrops().clear();
+            e.getDrops().add(new ItemStack(Material.COOKED_CHICKEN,  RandomUtil.pickNumber(game.getRandom(),1,3)));
+        }
+    }
+
+
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event)
     {
         Player p = event.getEntity();
@@ -82,6 +116,7 @@ public class DamageListener implements Listener
         event.setDeathMessage("");
         game.die(p);
         game.stumpPlayer(p,false);
+
     }
 
 

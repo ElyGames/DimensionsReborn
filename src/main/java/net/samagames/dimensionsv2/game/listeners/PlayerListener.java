@@ -5,8 +5,7 @@ import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.GameStep;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -31,6 +30,7 @@ public class PlayerListener implements Listener
             if (e.getTo().getBlockX() != e.getFrom().getBlockX() || e.getTo().getBlockZ() != e.getFrom().getBlockZ())
                 e.setTo(e.getFrom());
         }
+
     }
     @EventHandler
     public void onFoodUpdateEvent(FoodLevelChangeEvent e){
@@ -65,7 +65,11 @@ public class PlayerListener implements Listener
             e.setCancelled(true);
         }
         else{
-            if(!game.getBlockPlaceWhitelist().contains(e.getBlock().getType())){
+            if(e.getBlock().getType().equals(Material.TNT)){
+              e.getBlock().setType(Material.AIR);
+              e.getBlock().getWorld().spawnEntity(e.getBlock().getLocation().clone().add(0.5,0,0.5), EntityType.PRIMED_TNT);
+            }
+            else if(!game.getBlockPlaceWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
             }
             else{
@@ -111,6 +115,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent e)
     {
+
         DimensionsGame game = Dimensions.getInstance().getGame();
         e.setCancelled(game.isNonGameStep());
     }
@@ -143,6 +148,10 @@ public class PlayerListener implements Listener
     public void onHanging(HangingBreakByEntityEvent e)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
+        if(e.getEntity() instanceof Painting || e.getEntity() instanceof ItemFrame){
+            e.setCancelled(true);
+            return;
+        }
         if (e.getEntity() instanceof Player){
             e.setCancelled(game.isNonGameStep());
         }
