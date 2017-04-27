@@ -16,6 +16,8 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 
 /**
  * Created by Tigger_San on 22/04/2017.
@@ -178,7 +180,10 @@ public class PlayerListener implements Listener
     }
 
 
-
+    @EventHandler
+    public void onChunkUnload(ChunkUnloadEvent e){
+        e.setCancelled(true);
+    }
 
 
 

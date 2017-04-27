@@ -37,7 +37,7 @@ public class ChestItemManager {
         fwm.addEffect(effect);
         fwm.setPower(0);
         fw.setFireworkMeta(fwm);
-        Dimensions.getInstance().getServer().getScheduler().runTaskLater(Dimensions.getInstance(), fw::detonate, 2);
+        Dimensions.getInstance().getServer().getScheduler().runTaskLater(Dimensions.getInstance(), fw::detonate, 1);
     }
     public void opened(Chest c){
         openedChests.add(c.getLocation());
