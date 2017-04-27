@@ -2,7 +2,9 @@ package net.samagames.dimensionsv2.game.listeners;
 
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
+import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -12,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -186,6 +189,19 @@ public class PlayerListener implements Listener
     }
 
 
+    @EventHandler
+    public void onRegainHealth(EntityRegainHealthEvent e)
+    {
+        if (e.getEntity() instanceof Player)
+        {
+            DimensionsGame game = Dimensions.getInstance().getGame();
+            DimensionsPlayer dp = game.getPlayer(e.getEntity().getUniqueId());
+            if (dp.getDimension() == Dimension.PARALLEL){
+                e.setCancelled(e.getRegainReason().equals(EntityRegainHealthEvent.RegainReason.SATIATED));
+            }
+
+        }
+    }
 
 
 

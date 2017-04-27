@@ -7,15 +7,21 @@ import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.PowerUp;
+import net.samagames.dimensionsv2.game.tasks.RandomEffectsTask;
 import net.samagames.dimensionsv2.game.tasks.TimeTask;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
+import net.samagames.tools.chat.ActionBarAPI;
+import net.samagames.tools.scoreboards.VObjective;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Scoreboard;
+
 import java.util.*;
 import java.util.List;
 
@@ -36,6 +42,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private List<Material> blockBreakWhitelist;
     private Random random;
     private TimeTask timerTask;
+    private Scoreboard lifeBoard;
+    private RandomEffectsTask randomEffects;
 
 
     public DimensionsGame() {
@@ -51,6 +59,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         blockPlaceWhitelist = new ArrayList<>();
         random = new Random();
         timerTask = new TimeTask();
+        randomEffects = new RandomEffectsTask();
+
+
+        this.lifeBoard = Dimensions.getInstance().getServer().getScoreboardManager().getNewScoreboard();
+
 
         blockPlaceWhitelist.add(Material.TNT); blockBreakWhitelist.add(Material.TNT);
         blockPlaceWhitelist.add(Material.WORKBENCH); blockBreakWhitelist.add(Material.WORKBENCH);
@@ -142,6 +155,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
     @Override
     public void handleLogin(Player player){
+        player.setScoreboard(this.lifeBoard);
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(waitingRoom);
         player.setHealth(20D);
@@ -184,7 +198,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
 
     public void end(){
-        gameStep = GameStep.PVP;
+        gameStep = GameStep.FINISH;
         timerTask.cancel();
         DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
         Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
@@ -200,13 +214,18 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void startGame()
     {
         super.startGame();
+        this.lifeBoard.registerNewObjective("vie", "health").setDisplaySlot(DisplaySlot.BELOW_NAME);
+        this.lifeBoard.getObjective("vie").setDisplayName(ChatColor.RED + "♥");
         gameStep = GameStep.PRE_TELEPORT;
         int index=0;
         for(DimensionsPlayer dp : getInGamePlayers().values()){
-            dp.getPlayerIfOnline().teleport(spawns.get(index));
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
+            dp.getPlayerIfOnline().teleport(spawns.get(index).clone().add(0,1,0));
+            this.lifeBoard.getObjective("vie").getScore(dp.getPlayerIfOnline().getName()).setScore(20);
             index++;
         }
+
+
 
 
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Préparation du jeu ! ",true);
@@ -234,19 +253,20 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
 
     public void setXp(int level){
-        for(DimensionsPlayer dp : this.getInGamePlayers().values()){
-            dp.getPlayerIfOnline().setLevel(level);
-        }
+        this.getInGamePlayers().values().forEach(dp ->    dp.getPlayerIfOnline().setLevel(level) );
     }
 
     public void sendTitle(String title,String subTitle){
-        for(DimensionsPlayer dp : this.getInGamePlayers().values()){
-            Titles.sendTitle(dp.getPlayerIfOnline(),5,50,5,title,subTitle);
-        }
+        this.getInGamePlayers().values().forEach(dp ->   Titles.sendTitle(dp.getPlayerIfOnline(),5,50,5,title,subTitle));
+    }
+
+    public void sendActionBar(String message){
+       this.getInGamePlayers().values().forEach(dp ->  ActionBarAPI.sendMessage(dp.getPlayerIfOnline(),message));
     }
 
     public void begin(){
 
+        this.randomEffects.runTaskTimerAsynchronously(Dimensions.getInstance(),1L,20L);
         gameStep= GameStep.IN_GAME;
         timerTask.runTaskTimer(Dimensions.getInstance(),1L,20L);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6La partie commence. Bonne chance !",true);
@@ -254,6 +274,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         for(DimensionsPlayer dp : getInGamePlayers().values()){
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
         }
+
     }
     public void playSound(Sound sound,float pitch){
         for(DimensionsPlayer dp : this.getInGamePlayers().values()){
