@@ -2,7 +2,6 @@ package net.samagames.dimensionsv2.game.listeners;
 
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;

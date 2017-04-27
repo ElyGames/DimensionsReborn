@@ -38,12 +38,9 @@ public class RandomEffectsTask extends BukkitRunnable{
     @Override
     public void run()
     {
-        System.out.println("Hello" + nextEffect);
-
         this.nextEffect--;
         if (this.nextEffect <= 0)
         {
-
             DimensionsGame game = Dimensions.getInstance().getGame();
             if (game.getGameStep() == GameStep.DEATHMATCH){
                 this.cancel();
@@ -65,7 +62,6 @@ public class RandomEffectsTask extends BukkitRunnable{
                 }.runTask(Dimensions.getInstance());
             }
         }
-
     }
 
 }

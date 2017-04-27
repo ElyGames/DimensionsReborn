@@ -9,7 +9,6 @@ import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.utils.TimeUtil;
 import net.samagames.tools.scoreboards.ObjectiveSign;
 import org.bukkit.entity.Player;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

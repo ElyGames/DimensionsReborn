@@ -13,7 +13,6 @@ import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
 import net.samagames.tools.chat.ActionBarAPI;
-import net.samagames.tools.scoreboards.VObjective;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
