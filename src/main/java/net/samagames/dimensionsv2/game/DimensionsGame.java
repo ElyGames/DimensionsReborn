@@ -16,6 +16,7 @@ import net.samagames.tools.Titles;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -95,6 +96,17 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     }
 
+    public void startDeathmatch(){
+       gameStep = GameStep.DEATHMATCH;
+       Iterator<Location> it = deathMatchSpawns.iterator();
+       getInGamePlayers().values().forEach(
+               (p) -> {
+                   p.getPlayerIfOnline().getInventory().setItem(8, new ItemStack(Material.AIR));
+                   p.getPlayerIfOnline().teleport(it.next());
+               }
+       );
+
+    }
 
     public void playerDamageByPlayer(Player p  , Player damager){
 
@@ -148,10 +160,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     @Override
     public void handleLogout(Player player)
     {
-
         super.handleLogout(player);
-        if(!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT){
-            stumpPlayer(player,true);
+        if(this.hasPlayer(player)){
+            if(!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT){
+                stumpPlayer(player,true);
+            }
         }
 
     }
@@ -164,6 +177,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         player.getInventory().clear();
         player.setFoodLevel(20);
         super.handleLogin(player);
+    }
+
+    public List<Location> getDeathMatchSpawns() {
+        return deathMatchSpawns;
     }
 
     public Random getRandom() {
@@ -188,7 +205,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
             if (left!=1) {
                 getCoherenceMachine().getMessageManager().writeCustomMessage("§eIl reste encore §b" + + left + " §ejoueurs en vie.",false);
-                if(gameStep!=GameStep.DEATHMATCH_PLANNED && deathMatchSpawns.size()==getInGamePlayers().size()){
+                if( pvpIn<= 0&& gameStep!=GameStep.DEATHMATCH_PLANNED && getInGamePlayers().size()<=deathMatchSpawns.size()){
                     gameStep= GameStep.DEATHMATCH_PLANNED;
                 }
             }
