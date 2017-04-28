@@ -153,7 +153,6 @@ public class DimensionsPlayer extends GamePlayer{
         this.dimension = dimension;
     }
 
-
     public void setLastSwap(long lastSwap) {
         this.lastSwap = lastSwap;
     }

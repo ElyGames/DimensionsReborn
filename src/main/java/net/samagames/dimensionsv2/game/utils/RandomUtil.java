@@ -1,5 +1,4 @@
 package net.samagames.dimensionsv2.game.utils;
-
 import java.util.Random;
 
 /**

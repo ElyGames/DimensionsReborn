@@ -1,9 +1,6 @@
 package net.samagames.dimensionsv2.game.entity.chestitem;
-
 import org.bukkit.inventory.ItemStack;
-
 import java.util.Random;
-
 
 /**
  * Created by Tigger_San on 22/04/2017.

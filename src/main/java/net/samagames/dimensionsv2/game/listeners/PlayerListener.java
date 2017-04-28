@@ -28,8 +28,6 @@ import org.bukkit.event.world.ChunkUnloadEvent;
  */
 public class PlayerListener implements Listener
 {
-
-
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
@@ -248,8 +246,5 @@ public class PlayerListener implements Listener
 
         }
     }
-
-
-
 }
 

@@ -22,7 +22,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
-
 import java.util.*;
 import java.util.List;
 
@@ -30,7 +29,6 @@ import java.util.List;
  * Created by Tigger_San on 21/04/2017.
  */
 public class DimensionsGame extends Game<DimensionsPlayer>{
-
 
     private List<Location> spawns;
     private List<Location> deathMatchSpawns;
@@ -108,8 +106,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
        );
 
     }
-
-
 
     public void playerDamageByPlayer(Player p  , Player damager){
 

@@ -8,22 +8,17 @@ import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.entity.Player;
-
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.UUID;
 
 /**
  * Created by Tigger_San on 27/04/2017.
  */
 public class RandomEffectsTask extends BukkitRunnable{
 
-
     private int nextEffect = 60;
     private PotionEffect[] effects;
-
 
     public RandomEffectsTask()
     {

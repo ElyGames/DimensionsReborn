@@ -20,13 +20,11 @@ import java.util.stream.Collectors;
  * Created by Tigger_San on 26/04/2017.
  */
 public class DimensionsManager {
-    private static DimensionsManager ourInstance = new DimensionsManager();
 
+    private static DimensionsManager ourInstance = new DimensionsManager();
     public static DimensionsManager getInstance() {
         return ourInstance;
     }
-
-
     private int offsetX;
     private int offsetZ;
     private String overworldName;

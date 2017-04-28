@@ -14,7 +14,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -131,6 +130,4 @@ public class DamageListener implements Listener
         game.stumpPlayer(p,false);
 
     }
-
-
 }

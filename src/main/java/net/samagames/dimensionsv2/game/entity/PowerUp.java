@@ -35,7 +35,4 @@ public enum PowerUp {
         catch (Exception e) {}
         return 1;
       }
-
-
-
 }
