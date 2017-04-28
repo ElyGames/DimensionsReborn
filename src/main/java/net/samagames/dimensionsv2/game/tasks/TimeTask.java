@@ -15,7 +15,7 @@ public class TimeTask extends BukkitRunnable {
     @Override
     public void run() {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        game.getInGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
+        game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
         game.increaseGameTime();
         if(game.getGameStep()==GameStep.IN_GAME){
             switch(game.getPvpIn()){
