@@ -138,25 +138,42 @@ public class PlayerListener implements Listener
             if ((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) ||
                     (e.getAction() == Action.LEFT_CLICK_AIR) || (e.getAction() == Action.LEFT_CLICK_BLOCK)  )
             {
+
                 if(e.getItem().equals(ItemUtils.getSwapItem())){
                     DimensionsManager.getInstance().swap(e.getPlayer());
                     e.setCancelled(true);
                 }
                 else if(e.getItem().equals(ItemUtils.getTargetItem())){
                     DimensionsGame game = Dimensions.getInstance().getGame();
+                    DimensionsPlayer dp = game.getPlayer(e.getPlayer().getUniqueId());
+                    if(dp.getNextTargetDelay() >0){
+                        e.getPlayer().sendMessage("§cMerci de patienter un peu ...");
+                        e.setCancelled(true);
+                        return;
+                    }
+                    dp.setLastTargetTime(System.currentTimeMillis());
+
+                    Player target = null;
                     for(Entity et : e.getPlayer().getNearbyEntities(100,100,100)){
                         if(et instanceof Player){
-                            Player target = (Player) et;
-                            if(!target.equals(e.getPlayer())){
-                                e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : "  + target.getDisplayName());
-                                game.getPlayer(e.getPlayer().getUniqueId()).setTarget(target.getUniqueId());
-                                e.setCancelled(true);
-                                return;
+                            Player current = (Player) et;
+                            if(game.hasPlayer(current)) {
+                                if(target == null || e.getPlayer().getLocation().distance(current.getLocation()) <  e.getPlayer().getLocation().distance(target.getLocation())){
+                                    target=current;
+                                }
                             }
+
                         }
                     }
-                    e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
-
+                    if(target!=null){
+                        e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : " + target.getDisplayName());
+                        dp.setTarget(target.getUniqueId());
+                    }
+                    else{
+                        e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
+                    }
+                    e.setCancelled(true);
+                    return;
                 }
             }
         }
@@ -196,8 +213,7 @@ public class PlayerListener implements Listener
 
     @EventHandler
     public void onSwap(PlayerSwapHandItemsEvent e){
-        DimensionsGame game = Dimensions.getInstance().getGame();
-        e.setCancelled(game.isNonGameStep());
+        e.setCancelled(true);
     }
 
     @EventHandler

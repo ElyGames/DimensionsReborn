@@ -193,7 +193,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void stumpPlayer(Player p, boolean logout){
 
         for(DimensionsPlayer dimPlayer : getInGamePlayers().values()){
-            if(dimPlayer.getTarget()== dimPlayer.getPlayerIfOnline().getUniqueId()){
+            if(dimPlayer.getTarget()== p.getUniqueId()){
                 dimPlayer.setTarget(null);
                 dimPlayer.getPlayerIfOnline().sendMessage("§cVotre cible a disparu du jeu, la boussole ne pointe plus personne.");
             }

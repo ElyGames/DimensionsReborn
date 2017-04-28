@@ -19,7 +19,7 @@ public class ItemUtils {
     public static ItemStack getTargetItem(){
         ItemStack is = new ItemStack(Material.COMPASS);
         ItemMeta im = is.getItemMeta();
-        im.setDisplayName("§aChanger de dimension");
+        im.setDisplayName("§aBoussole magique");
         is.setItemMeta(im);
         return is;
     }

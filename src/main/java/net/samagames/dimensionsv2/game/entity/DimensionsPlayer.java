@@ -24,12 +24,14 @@ public class DimensionsPlayer extends GamePlayer{
     private UUID lastDamager;
     private Dimension dimension;
     private long lastSwap;
+    private long lastTarget;
     private UUID target;
 
     public DimensionsPlayer(Player player) {
         super(player);
 
         lastSwap = -1;
+        lastTarget= -1;
         target =null;
         dimension = Dimension.OVERWORLD;
         objectiveSign = new ObjectiveSign("dimensions","§a§lDimensions");
@@ -123,6 +125,21 @@ public class DimensionsPlayer extends GamePlayer{
 
     }
 
+
+    public int getNextTargetDelay(){
+        if(lastTarget == -1){
+            return 0;
+        }
+        else{
+            long nextTarget = lastTarget + (5*1000);
+            return new Long((nextTarget - System.currentTimeMillis())/1000).intValue();
+        }
+
+    }
+
+    public void setLastTargetTime(long lastTarget) {
+        this.lastTarget = lastTarget;
+    }
 
     public UUID getTarget() {
         return target;

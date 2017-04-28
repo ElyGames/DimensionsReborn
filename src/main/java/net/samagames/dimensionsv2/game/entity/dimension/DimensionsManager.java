@@ -112,11 +112,17 @@ public class DimensionsManager {
             else
                 p.sendMessage("§cVous êtes maintenant dans la dimension §4" + this.hardName);
 
+
+
+            if(dp.getTarget()!=null){
+                dp.setTarget(null);
+                p.sendMessage("§cVous avez changé de dimension, la boussole ne pointe plus personne.");
+            }
+
             for(DimensionsPlayer dimPlayer : game.getInGamePlayers().values()){
-                if(dimPlayer.getTarget()== dimPlayer.getPlayerIfOnline().getUniqueId()){
+                if(dimPlayer.getTarget()== p.getUniqueId()){
                     dimPlayer.setTarget(null);
                     dimPlayer.getPlayerIfOnline().sendMessage("§cVotre cible a changé de dimension, la boussole ne pointe plus personne.");
-                    break;
                 }
             }
         }
