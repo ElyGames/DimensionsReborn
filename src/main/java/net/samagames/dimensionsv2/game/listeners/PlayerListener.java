@@ -6,11 +6,13 @@ import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
+import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -108,6 +110,10 @@ public class PlayerListener implements Listener
     public void dropItem(PlayerDropItemEvent e)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
+        if(e.getItemDrop().getItemStack().equals(ItemUtils.getSwapItem())){
+            e.setCancelled(true);
+            return;
+        }
         e.setCancelled(game.isNonGameStep());
     }
 
@@ -128,6 +134,15 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInteract(PlayerInteractEvent e)
     {
+        if(e.hasItem()){
+            if ((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) ||
+                    (e.getAction() == Action.LEFT_CLICK_AIR) || (e.getAction() == Action.LEFT_CLICK_BLOCK)  )
+            {
+                if(e.getItem().equals(ItemUtils.getSwapItem())){
+                    DimensionsManager.getInstance().swap(e.getPlayer());
+                }
+            }
+        }
         if (e.getClickedBlock() != null){
             if(e.getClickedBlock().getType() == Material.BED || e.getClickedBlock().getType() == Material.BED_BLOCK)
             {
@@ -171,14 +186,13 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
+        if(e.getSlot()==8){
+            if(game.getGameStep()!= GameStep.DEATHMATCH){
+                e.setCancelled(true);
+                return;
+            }
+        }
         e.setCancelled(game.isNonGameStep());
-    }
-
-
-    //TEMPORARY FOR TEST
-    @EventHandler
-    public void onSneak(PlayerToggleSneakEvent e){
-        DimensionsManager.getInstance().swap(e.getPlayer());
     }
 
 

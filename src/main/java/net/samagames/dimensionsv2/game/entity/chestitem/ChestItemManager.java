@@ -131,6 +131,7 @@ public class ChestItemManager {
         //Speed
         items.add(new ChestItem(new ItemStack(Material.POTION, 1 , (short)8194), 500));
 
+
         // Enchants
         ItemStack sharpness = new ItemStack(Material.ENCHANTED_BOOK);
         EnchantmentStorageMeta meta = (EnchantmentStorageMeta) sharpness.getItemMeta();

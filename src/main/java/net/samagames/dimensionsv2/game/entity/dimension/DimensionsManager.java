@@ -40,9 +40,6 @@ public class DimensionsManager {
         this.overworldName = prop.getConfig("overworldName",new JsonPrimitive("No set")).getAsString();
         this.hardName = prop.getConfig("parallelName",new JsonPrimitive("No set")).getAsString();
     }
-
-
-
     public List<DimensionsPlayer> getPlayersInDimension(Dimension dim)
     {
         return Dimensions.getInstance().getGame().getInGamePlayers().values().stream().filter(pl ->  pl.getDimension() == dim).collect(Collectors.toList());

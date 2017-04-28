@@ -9,6 +9,7 @@ import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.PowerUp;
 import net.samagames.dimensionsv2.game.tasks.RandomEffectsTask;
 import net.samagames.dimensionsv2.game.tasks.TimeTask;
+import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.Titles;
@@ -96,6 +97,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
 
     public void playerDamageByPlayer(Player p  , Player damager){
+
         DimensionsPlayer hitPlayer = getPlayer(p.getUniqueId());
         hitPlayer.setLastDamager(damager.getUniqueId());
 
@@ -146,8 +148,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     @Override
     public void handleLogout(Player player)
     {
+
         super.handleLogout(player);
-        if(!isNonGameStep()){
+        if(!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT){
             stumpPlayer(player,true);
         }
 
@@ -272,6 +275,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans 2 minutes  !",true);
         for(DimensionsPlayer dp : getInGamePlayers().values()){
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
+            dp.getPlayerIfOnline().getInventory().setItem(8, ItemUtils.getSwapItem());
         }
 
     }

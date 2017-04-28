@@ -25,6 +25,7 @@ public class Dimensions extends JavaPlugin
         instance = this;
         this.api = SamaGamesAPI.get();
         this.game = new DimensionsGame();
+        SamaGamesAPI.get().getGameManager().setLegacyPvP(true);
         SamaGamesAPI.get().getGameManager().registerGame(game);
         SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.DIMENSION, true);
         getServer().getPluginManager().registerEvents(new PlayerListener(),this);
