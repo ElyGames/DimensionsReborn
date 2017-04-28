@@ -24,12 +24,13 @@ public class DimensionsPlayer extends GamePlayer{
     private UUID lastDamager;
     private Dimension dimension;
     private long lastSwap;
+    private UUID target;
 
     public DimensionsPlayer(Player player) {
         super(player);
 
         lastSwap = -1;
-
+        target =null;
         dimension = Dimension.OVERWORLD;
         objectiveSign = new ObjectiveSign("dimensions","§a§lDimensions");
         objectiveSign.addReceiver(this.getOfflinePlayer());
@@ -120,6 +121,15 @@ public class DimensionsPlayer extends GamePlayer{
             return new Long((nextSwap - System.currentTimeMillis())/1000).intValue();
         }
 
+    }
+
+
+    public UUID getTarget() {
+        return target;
+    }
+
+    public void setTarget(UUID target) {
+        this.target = target;
     }
 
     public void setDimension(Dimension dimension) {

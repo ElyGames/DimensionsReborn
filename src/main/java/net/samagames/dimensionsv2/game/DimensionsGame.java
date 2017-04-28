@@ -102,6 +102,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
        getInGamePlayers().values().forEach(
                (p) -> {
                    p.getPlayerIfOnline().getInventory().setItem(8, new ItemStack(Material.AIR));
+                   p.getPlayerIfOnline().getInventory().setItem(7, new ItemStack(Material.AIR));
                    p.getPlayerIfOnline().teleport(it.next());
                }
        );
@@ -190,10 +191,21 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
 
     public void stumpPlayer(Player p, boolean logout){
+
+        for(DimensionsPlayer dimPlayer : getInGamePlayers().values()){
+            if(dimPlayer.getTarget()== dimPlayer.getPlayerIfOnline().getUniqueId()){
+                dimPlayer.setTarget(null);
+                dimPlayer.getPlayerIfOnline().sendMessage("§cVotre cible a disparu du jeu, la boussole ne pointe plus personne.");
+            }
+        }
+
         setSpectator(p);
         DimensionsPlayer dp = getPlayer(p.getUniqueId());
+
         int left = getInGamePlayers().values().size();
         if(!logout){
+            p.setGameMode(GameMode.SPECTATOR);
+            p.spigot().respawn();
             if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
                 if (left == 2) {
                     addCoins(p, 20, "Troisième !");
@@ -295,6 +307,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         for(DimensionsPlayer dp : getInGamePlayers().values()){
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
             dp.getPlayerIfOnline().getInventory().setItem(8, ItemUtils.getSwapItem());
+            dp.getPlayerIfOnline().getInventory().setItem(7, ItemUtils.getTargetItem());
         }
 
     }

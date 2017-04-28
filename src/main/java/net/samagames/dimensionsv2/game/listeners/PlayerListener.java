@@ -110,7 +110,7 @@ public class PlayerListener implements Listener
     public void dropItem(PlayerDropItemEvent e)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(e.getItemDrop().getItemStack().equals(ItemUtils.getSwapItem())){
+        if(e.getItemDrop().getItemStack().equals(ItemUtils.getSwapItem()) || e.getItemDrop().getItemStack().equals(ItemUtils.getTargetItem())) {
             e.setCancelled(true);
             return;
         }
@@ -140,6 +140,23 @@ public class PlayerListener implements Listener
             {
                 if(e.getItem().equals(ItemUtils.getSwapItem())){
                     DimensionsManager.getInstance().swap(e.getPlayer());
+                    e.setCancelled(true);
+                }
+                else if(e.getItem().equals(ItemUtils.getTargetItem())){
+                    DimensionsGame game = Dimensions.getInstance().getGame();
+                    for(Entity et : e.getPlayer().getNearbyEntities(100,100,100)){
+                        if(et instanceof Player){
+                            Player target = (Player) et;
+                            if(!target.equals(e.getPlayer())){
+                                e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : "  + target.getDisplayName());
+                                game.getPlayer(e.getPlayer().getUniqueId()).setTarget(target.getUniqueId());
+                                e.setCancelled(true);
+                                return;
+                            }
+                        }
+                    }
+                    e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
+
                 }
             }
         }
@@ -186,7 +203,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(e.getSlot()==8){
+        if(e.getSlot()==8 ||e.getSlot()==7 ){
             if(game.getGameStep()!= GameStep.DEATHMATCH){
                 e.setCancelled(true);
                 return;

@@ -15,4 +15,12 @@ public class ItemUtils {
         is.setItemMeta(im);
         return is;
     }
+
+    public static ItemStack getTargetItem(){
+        ItemStack is = new ItemStack(Material.COMPASS);
+        ItemMeta im = is.getItemMeta();
+        im.setDisplayName("§aChanger de dimension");
+        is.setItemMeta(im);
+        return is;
+    }
 }

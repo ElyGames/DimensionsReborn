@@ -111,6 +111,14 @@ public class DimensionsManager {
                 p.sendMessage( "§2Vous êtes maintenant dans la dimension §a"  + this.overworldName);
             else
                 p.sendMessage("§cVous êtes maintenant dans la dimension §4" + this.hardName);
+
+            for(DimensionsPlayer dimPlayer : game.getInGamePlayers().values()){
+                if(dimPlayer.getTarget()== dimPlayer.getPlayerIfOnline().getUniqueId()){
+                    dimPlayer.setTarget(null);
+                    dimPlayer.getPlayerIfOnline().sendMessage("§cVotre cible a changé de dimension, la boussole ne pointe plus personne.");
+                    break;
+                }
+            }
         }
         else
             p.sendMessage("§cOn dirait que vous ne pouvez pas changer de dimension ici...");
