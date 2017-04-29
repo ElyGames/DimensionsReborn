@@ -40,13 +40,6 @@ public class Dimensions extends JavaPlugin
 
     @Override
     public void onDisable(){
-        //TEMPORARY FOR LOCAL TESTS
-        try {
-            copyFolder(new File("dimensions"),new File("world"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
     public static Dimensions getInstance() {
         return instance;
@@ -61,43 +54,4 @@ public class Dimensions extends JavaPlugin
         return game;
     }
 
-
-    //TEMPORARY FOR LOCAL TEST
-    public static void copyFolder(File src, File dest)
-            throws IOException
-    {
-        if (src.isDirectory())
-        {
-            if (!dest.exists())
-            {
-                dest.mkdir();
-                System.out.println("Directory copied from " + src + "  to " + dest);
-            }
-            String[] files = src.list();
-            String[] arrayOfString1;
-            int j = (arrayOfString1 = files).length;
-            for (int i = 0; i < j; i++)
-            {
-                String file = arrayOfString1[i];
-                File srcFile = new File(src, file);
-                File destFile = new File(dest, file);
-                copyFolder(srcFile, destFile);
-            }
-        }
-        else
-        {
-            InputStream in = new FileInputStream(src);
-            OutputStream out = new FileOutputStream(dest);
-
-            byte[] buffer = new byte[63];
-            int length;
-            while ((length = in.read(buffer)) > 0)
-            {
-                out.write(buffer, 0, length);
-            }
-            in.close();
-            out.close();
-            System.out.println("File copied from " + src + " to " + dest);
-        }
-    }
 }

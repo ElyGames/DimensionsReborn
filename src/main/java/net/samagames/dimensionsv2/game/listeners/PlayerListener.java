@@ -22,7 +22,6 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkUnloadEvent;
-import org.bukkit.inventory.PlayerInventory;
 
 /**
  * Created by Tigger_San on 22/04/2017.
