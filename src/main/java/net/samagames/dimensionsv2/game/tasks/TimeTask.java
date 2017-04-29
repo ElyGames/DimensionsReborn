@@ -3,6 +3,7 @@ import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,7 +17,11 @@ public class TimeTask extends BukkitRunnable {
     public void run() {
         DimensionsGame game = Dimensions.getInstance().getGame();
         game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
-        game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation()));
+        game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
+            dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation());
+            ActionBarAPI.sendMessage(dp.getPlayerIfOnline() , Bukkit.getPlayer(dp.getTarget()).getDisplayName() + "§7 : §c"+
+                    new Double(dp.getPlayerIfOnline().getLocation().distance(Bukkit.getPlayer(dp.getTarget()).getLocation())).intValue()+"m");
+        });
         game.increaseGameTime();
         if(game.getGameStep()==GameStep.IN_GAME){
             switch(game.getPvpIn()){
