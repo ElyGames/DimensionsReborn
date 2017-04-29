@@ -117,6 +117,7 @@ public class DimensionsManager {
                 p.sendMessage("§cVous avez changé de dimension, la boussole ne pointe plus personne.");
             }
 
+
             for(DimensionsPlayer dimPlayer : game.getInGamePlayers().values()){
                 if(dimPlayer.getTarget()== p.getUniqueId()){
                     dimPlayer.setTarget(null);

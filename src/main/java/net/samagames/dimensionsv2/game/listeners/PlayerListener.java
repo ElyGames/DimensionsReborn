@@ -22,6 +22,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * Created by Tigger_San on 22/04/2017.
@@ -217,12 +218,6 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(e.getSlot()==8 ||e.getSlot()==7 ){
-            if(game.getGameStep()!= GameStep.DEATHMATCH){
-                e.setCancelled(true);
-                return;
-            }
-        }
         e.setCancelled(game.isNonGameStep());
     }
 

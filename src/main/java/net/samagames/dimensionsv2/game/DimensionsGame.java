@@ -24,6 +24,8 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by Tigger_San on 21/04/2017.
@@ -99,8 +101,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
        Iterator<Location> it = deathMatchSpawns.iterator();
        getInGamePlayers().values().forEach(
                (p) -> {
-                   p.getPlayerIfOnline().getInventory().setItem(8, new ItemStack(Material.AIR));
-                   p.getPlayerIfOnline().getInventory().setItem(7, new ItemStack(Material.AIR));
+
+                  Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem().getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
+
                    p.getPlayerIfOnline().teleport(it.next());
                }
        );
@@ -200,8 +203,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
         int left = getInGamePlayers().values().size();
         if(!logout){
-            p.setGameMode(GameMode.SPECTATOR);
-            p.spigot().respawn();
+         //   p.setGameMode(GameMode.SPECTATOR);
+         //   p.spigot().respawn();
             if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
                 if (left == 2) {
                     addCoins(p, 20, "Troisième !");
@@ -223,7 +226,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 end();
             }
         }
-
 
 
     public void end(){

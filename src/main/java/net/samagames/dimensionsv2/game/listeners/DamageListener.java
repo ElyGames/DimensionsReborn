@@ -1,7 +1,7 @@
 package net.samagames.dimensionsv2.game.listeners;
-
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
+import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import org.bukkit.EntityEffect;
 import org.bukkit.Material;
@@ -121,7 +121,7 @@ public class DamageListener implements Listener
     {
         Player p = event.getEntity();
         DimensionsGame game = Dimensions.getInstance().getGame();
-        final List<ItemStack> remove = event.getDrops().stream().filter(stack -> stack.getType() == Material.COMPASS || stack.getType() == Material.EYE_OF_ENDER).collect(Collectors.toList());
+        final List<ItemStack> remove = event.getDrops().stream().filter(stack -> stack.equals(ItemUtils.getTargetItem())|| stack.equals(ItemUtils.getSwapItem())).collect(Collectors.toList());
         for (ItemStack rem : remove){
             event.getDrops().remove(rem);
         }

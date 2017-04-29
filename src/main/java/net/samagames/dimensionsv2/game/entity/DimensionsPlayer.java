@@ -44,9 +44,6 @@ public class DimensionsPlayer extends GamePlayer{
         for(PowerUp pu : PowerUp.values()){
             powerUps.put(pu,pu.getPowerUpLevelForPlayer(shop));
         }
-
-
-
     }
 
     public int getValueForPowerUP(PowerUp pu){
