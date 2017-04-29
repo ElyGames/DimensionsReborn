@@ -3,6 +3,7 @@ import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -19,8 +20,10 @@ public class TimeTask extends BukkitRunnable {
         game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
         game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
             dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation());
-            ActionBarAPI.sendMessage(dp.getPlayerIfOnline() , Bukkit.getPlayer(dp.getTarget()).getDisplayName() + "§7 : §c"+
-                    new Double(dp.getPlayerIfOnline().getLocation().distance(Bukkit.getPlayer(dp.getTarget()).getLocation())).intValue()+"m");
+            if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem())){
+                ActionBarAPI.sendMessage(dp.getPlayerIfOnline() , Bukkit.getPlayer(dp.getTarget()).getDisplayName() + "§7 : §c"+
+                        new Double(dp.getPlayerIfOnline().getLocation().distance(Bukkit.getPlayer(dp.getTarget()).getLocation())).intValue()+"m");
+            }
         });
         game.increaseGameTime();
         if(game.getGameStep()==GameStep.IN_GAME){
