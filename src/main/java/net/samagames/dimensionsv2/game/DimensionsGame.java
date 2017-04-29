@@ -22,6 +22,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
+
+import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -162,12 +164,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     @Override
     public void handleLogout(Player player)
     {
+        DimensionsPlayer dp = getPlayer(player.getUniqueId());
         super.handleLogout(player);
-        if(this.hasPlayer(player)){
-            if(!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT){
+            if((!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT) && dp !=null && !dp.isSpectator()){
                 stumpPlayer(player,true);
             }
-        }
 
     }
     @Override
@@ -230,7 +231,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     public void end(){
         gameStep = GameStep.FINISH;
-        timerTask.cancel();
+        try{
+            timerTask.cancel();
+        }
+        catch (Exception ignored){}
         DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
         Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
 
