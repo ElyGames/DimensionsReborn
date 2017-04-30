@@ -33,8 +33,10 @@ public class Dimensions extends JavaPlugin
         getServer().getPluginManager().registerEvents(new DamageListener(),this);
         ChestItemManager.getInstance();
         DimensionsManager.getInstance();
+        Bukkit.getWorlds().get(0).setThundering(false);
         Bukkit.getWorlds().get(0).setStorm(false);
         Bukkit.getWorlds().get(0).setTime(6000);
+
         Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle","false");
     }
 

@@ -33,10 +33,7 @@ public class DamageListener implements Listener
         }
 
         //Damages
-        if (e.getCause() == EntityDamageEvent.DamageCause.WITHER){
-            e.setCancelled(true);
-        }
-        else if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive()){
+        if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive()){
             e.setCancelled(true);
         }
         else if (e.getCause() == EntityDamageEvent.DamageCause.POISON && game.isNonPVPActive()){
@@ -46,6 +43,10 @@ public class DamageListener implements Listener
 
     @EventHandler
     public void onPvp(EntityDamageByEntityEvent e){
+        if(e.getEntity() instanceof ItemFrame){
+            e.setCancelled(true);
+            return;
+        }
         DimensionsGame game = Dimensions.getInstance().getGame();
         if(e.getDamager() instanceof Player && !(e.getEntity() instanceof Player)){
             if(game.isNonGameStep() ){

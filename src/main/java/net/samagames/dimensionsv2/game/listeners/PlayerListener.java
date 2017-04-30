@@ -58,7 +58,7 @@ public class PlayerListener implements Listener
 
     @EventHandler
     public void onInteractAt(PlayerInteractAtEntityEvent e){
-        if(e.getRightClicked() instanceof ArmorStand){
+        if(e.getRightClicked() instanceof ArmorStand || e.getRightClicked() instanceof ItemFrame ){
             e.setCancelled(true);
             return;
         }
@@ -126,6 +126,10 @@ public class PlayerListener implements Listener
     public void onInteract(PlayerInteractEntityEvent e)
     {
 
+        if(e.getRightClicked() instanceof ItemFrame){
+            e.setCancelled(true);
+            return;
+        }
         DimensionsGame game = Dimensions.getInstance().getGame();
         e.setCancelled(game.isNonGameStep());
     }

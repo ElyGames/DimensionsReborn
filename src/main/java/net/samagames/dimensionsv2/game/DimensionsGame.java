@@ -99,6 +99,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
        Iterator<Location> it = deathMatchSpawns.iterator();
        getInGamePlayers().values().forEach(
                (p) -> {
+                   p.getPlayerIfOnline().resetPlayerTime();
 
                   Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem().getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
 
@@ -200,6 +201,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
         int left = getInGamePlayers().values().size();
         if(!logout){
+            p.resetPlayerTime();
          //   p.setGameMode(GameMode.SPECTATOR);
          //   p.spigot().respawn();
             if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
