@@ -1,5 +1,7 @@
 package net.samagames.dimensionsv2.game.listeners;
 
+
+import net.minecraft.server.v1_10_R1.*;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
@@ -8,15 +10,15 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-
 /**
  * Created by Tigger_San on 22/04/2017.
  */
@@ -44,7 +46,6 @@ public class ChestItemListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            ChestItemManager manager = ChestItemManager.getInstance();
             Chest chest = (Chest) e.getClickedBlock().getState();
 
             InventoryHolder ih = chest.getInventory().getHolder();
@@ -52,15 +53,24 @@ public class ChestItemListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if(!manager.isOpened(chest)) {
-                Inventory inv = chest.getInventory();
-                ChestItemManager.getInstance().fillRandomChestInventory(inv);
-                manager.opened(chest);
-            }
-
         }
     }
 
+    @EventHandler
+    public void onOpen(InventoryOpenEvent e){
+        if(e.getInventory().getHolder() instanceof Chest){
+            Chest chest = (Chest)e.getInventory().getHolder();
+            ChestItemManager manager = ChestItemManager.getInstance();
+            if(!manager.isOpened(chest)) {
+                TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
+                TileEntityChest tems = (TileEntityChest) te;
+                NBTTagCompound c = tems.c();
+                c.setString("LootTable","sg:dimensions/dim");
+                tems.a(c);
+                manager.opened(chest);
+            }
+        }
+    }
     @EventHandler
     public void onInventoryClose(final InventoryCloseEvent event)
     {
