@@ -6,6 +6,7 @@ import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import net.samagames.tools.chat.ActionBarAPI;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -52,6 +53,7 @@ public class RandomEffectsTask extends BukkitRunnable{
                     public void run() {
                         p.addPotionEffect(effects[effect]);
                         ActionBarAPI.sendMessage(p,"§c§oLe maléfice de ce monde semble vous atteindre ...");
+                        p.playSound(p.getLocation(), Sound.BLOCK_PORTAL_AMBIENT,50F,1F);
                     }
                 }.runTask(Dimensions.getInstance());
             }

@@ -34,7 +34,7 @@ public class DimensionsPlayer extends GamePlayer{
         lastTarget= -1;
         target =null;
         dimension = Dimension.OVERWORLD;
-        objectiveSign = new ObjectiveSign("dimensions","§a§lDimensions");
+        objectiveSign = new ObjectiveSign("dimensions","§f☯ §5§lDimensions §f☯");
         objectiveSign.addReceiver(this.getOfflinePlayer());
         this.kills = 0;
 
@@ -73,26 +73,32 @@ public class DimensionsPlayer extends GamePlayer{
         if(game.getGameStep()== GameStep.DEATHMATCH_PLANNED ||game.getGameStep()== GameStep.DEATHMATCH  ){
             if(game.getDeathMatchIn()>0){
                 String dmIn = TimeUtil.timeToString(game.getDeathMatchIn());
-                objectiveSign.setLine(-7,"§eD.Match§7 : §f" + dmIn);
+                objectiveSign.setLine(-7,"§6D.Match§7 : §f" + dmIn);
             }
             else{
-                objectiveSign.setLine(-7,"§aFight final !");
+                objectiveSign.setLine(-7,"§c§lDeathmatch");
             }
         }
         else if(game.getGameStep()== GameStep.PVP ||game.getGameStep()== GameStep.IN_GAME  ){
             if(game.getPvpIn()>0){
                 String pvpIn = TimeUtil.timeToString(game.getPvpIn());
-                objectiveSign.setLine(-7,"§ePVP§7 : §f" + pvpIn);
+                objectiveSign.setLine(-7,"§6PVP§7 : §f" + pvpIn);
             }
             else{
-                objectiveSign.setLine(-7,"§aLet's fight !");
+                objectiveSign.setLine(-7,"§2§lPvP activé");
             }
         }
 
         objectiveSign.setLine(-6, "  " );
         objectiveSign.setLine(-5, "§7Joueurs : §f" + game.getInGamePlayers().size());
         objectiveSign.setLine(-4, "   " );
-        objectiveSign.setLine(-3, "§7Kill(s) : §f" + kills);
+        if(kills<=1){
+            objectiveSign.setLine(-3, "§7Joueur tué : §f" + kills);
+        }
+        else{
+            objectiveSign.setLine(-3, "§7Joueurs tué : §f" + kills);
+        }
+
         objectiveSign.setLine(-2, "    " );
         objectiveSign.setLine(-1, "§f"  + time);
         objectiveSign.updateLines();

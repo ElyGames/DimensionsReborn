@@ -97,8 +97,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void startDeathmatch(){
        gameStep = GameStep.DEATHMATCH;
        Iterator<Location> it = deathMatchSpawns.iterator();
+        playSound(Sound.ENTITY_ENDERDRAGON_GROWL,1F);
        getInGamePlayers().values().forEach(
                (p) -> {
+
                    p.getPlayerIfOnline().resetPlayerTime();
 
                   Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem().getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
@@ -165,6 +167,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         super.handleLogout(player);
             if((!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT) && dp !=null && !dp.isSpectator()){
                 stumpPlayer(player,true);
+
             }
 
     }
@@ -189,6 +192,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     public void stumpPlayer(Player p, boolean logout){
 
+        playSound(Sound.ENTITY_WITHER_BREAK_BLOCK,1F);
         for(DimensionsPlayer dimPlayer : getInGamePlayers().values()){
             if(dimPlayer.getTarget()== p.getUniqueId()){
                 dimPlayer.setTarget(null);
@@ -273,7 +277,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 setXp(i);
                 switch(i){
                     case 15: getCoherenceMachine().getMessageManager().writeCustomMessage("§eDémarrage du jeu dans §c" + i + " " + secFormat + "§e.",true); break;
-                    case 10: case 5 : case 4 : case 3 : case 2 : case 1: playSound(Sound.BLOCK_NOTE_PLING,1.0F);sendTitle("§6Démarrage dans §c" + i + "§6sec.","§6Préparez vous au combat !"); break;
+                    case 10: case 5 : case 4 : case 3 : case 2 : case 1: playSound(Sound.BLOCK_NOTE_PLING,1.0F);sendTitle("§6Démarrage dans §c" + i + " §6sec.","§6Préparez vous au combat !"); break;
                     case 0 : playSound(Sound.BLOCK_NOTE_PLING,2.0F);begin();this.cancel(); break;
 
                 }

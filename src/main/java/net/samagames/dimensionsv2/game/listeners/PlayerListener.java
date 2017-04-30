@@ -227,10 +227,11 @@ public class PlayerListener implements Listener
     }
 
 
-    @EventHandler
-    public void onChunkUnload(ChunkUnloadEvent e){
-        e.setCancelled(true);
-    }
+  //  @EventHandler
+   // public void onChunkUnload(ChunkUnloadEvent e){
+    //    e.setCancelled(true);
+ //
+  //  }
 
 
     @EventHandler

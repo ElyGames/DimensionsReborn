@@ -31,7 +31,7 @@ public class TimeTask extends BukkitRunnable {
                 case 10 :case 5:case 4:case 3:case 2:case 1:game.getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans " + game.getPvpIn() + " secondes !",true);break;
                 case 0:game.getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP est activé !",true);
                     game.setGameStep(GameStep.PVP);
-                    game.playSound(Sound.ENTITY_CAT_AMBIENT,1F);game.sendActionBar("§6Le PvP est activé, prenez garde !");
+                    game.playSound(Sound.ENTITY_WITHER_DEATH,1F);game.sendActionBar("§6Le PvP est activé, prenez garde !");
                     if( game.getGameStep()!=GameStep.DEATHMATCH_PLANNED && game.getInGamePlayers().size()<=game.getDeathMatchSpawns().size()){
                         game.setGameStep(GameStep.DEATHMATCH_PLANNED);
                     }
