@@ -19,10 +19,11 @@ public class TimeTask extends BukkitRunnable {
         DimensionsGame game = Dimensions.getInstance().getGame();
         game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
         game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
+
             dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation());
+
             if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem())){
-                ActionBarAPI.sendMessage(dp.getPlayerIfOnline() , Bukkit.getPlayer(dp.getTarget()).getDisplayName() + "§7 : §c"+
-                        new Double(dp.getPlayerIfOnline().getLocation().distance(Bukkit.getPlayer(dp.getTarget()).getLocation())).intValue()+"m");
+                ItemUtils.displayActionBarTarget(dp.getPlayerIfOnline(),Bukkit.getPlayer(dp.getTarget()));
             }
         });
         game.increaseGameTime();

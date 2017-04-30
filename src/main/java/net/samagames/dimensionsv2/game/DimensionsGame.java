@@ -58,6 +58,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         random = new Random();
         timerTask = new TimeTask();
         randomEffects = new RandomEffectsTask();
+        new ItemUtils();
 
 
         this.lifeBoard = Dimensions.getInstance().getServer().getScoreboardManager().getNewScoreboard();

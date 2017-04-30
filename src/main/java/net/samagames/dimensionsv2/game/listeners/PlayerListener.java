@@ -7,6 +7,8 @@ import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import net.samagames.dimensionsv2.game.utils.ItemUtils;
+import net.samagames.tools.chat.ActionBarAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -239,6 +241,23 @@ public class PlayerListener implements Listener
             }
 
         }
+    }
+
+    @EventHandler
+    public void onSwitchItem(PlayerItemHeldEvent e){
+        Player p = e.getPlayer();
+
+            if(p.getInventory().getItem(e.getNewSlot())!=null && p.getInventory().getItem(e.getNewSlot()).equals(ItemUtils.getTargetItem())){
+                DimensionsGame game = Dimensions.getInstance().getGame();
+                if(game.getPlayer(p.getUniqueId()).getTarget()!=null){
+                    ItemUtils.displayActionBarTarget(p, Bukkit.getPlayer(game.getPlayer(p.getUniqueId()).getTarget()));
+                }
+            }
+            else if(p.getInventory().getItem(e.getNewSlot())==null || p.getInventory().getItem(e.getPreviousSlot()).equals(ItemUtils.getTargetItem())){
+                ActionBarAPI.sendMessage(p," ");
+            }
+
+
     }
 }
 
