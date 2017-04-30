@@ -2,16 +2,14 @@ package net.samagames.dimensionsv2.game.listeners;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.utils.ItemUtils;
-import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import org.bukkit.EntityEffect;
-import org.bukkit.Material;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import java.util.List;
@@ -89,7 +87,7 @@ public class DamageListener implements Listener
         }
 
     }
-    
+
 
 
     @EventHandler
@@ -105,5 +103,10 @@ public class DamageListener implements Listener
         game.die(p);
         game.stumpPlayer(p,false);
 
+    }
+
+    @EventHandler
+    public void onStorm(WeatherChangeEvent e){
+        e.setCancelled(true);
     }
 }

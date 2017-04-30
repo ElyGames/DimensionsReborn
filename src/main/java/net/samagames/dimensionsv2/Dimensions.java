@@ -7,9 +7,9 @@ import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import net.samagames.dimensionsv2.game.listeners.ChestItemListener;
 import net.samagames.dimensionsv2.game.listeners.DamageListener;
 import net.samagames.dimensionsv2.game.listeners.PlayerListener;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.*;
 
 /**
  * Created by Tigger_San on 21/04/2017.
@@ -33,7 +33,9 @@ public class Dimensions extends JavaPlugin
         getServer().getPluginManager().registerEvents(new DamageListener(),this);
         ChestItemManager.getInstance();
         DimensionsManager.getInstance();
-
+        Bukkit.getWorlds().get(0).setStorm(false);
+        Bukkit.getWorlds().get(0).setTime(6000);
+        Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle","false");
     }
 
 
