@@ -89,31 +89,7 @@ public class DamageListener implements Listener
         }
 
     }
-
-    @EventHandler
-    public void onCreatureDeath(EntityDeathEvent e){
-        DimensionsGame game = Dimensions.getInstance().getGame();
-        if(e.getEntity() instanceof Cow){
-            e.getDrops().clear();
-            e.getDrops().add(new ItemStack(Material.COOKED_BEEF, RandomUtil.pickNumber(game.getRandom(),1,2)));
-        }
-        else if(e.getEntity() instanceof Sheep){
-            e.getDrops().clear();
-            e.getDrops().add(new ItemStack(Material.COOKED_MUTTON, RandomUtil.pickNumber(game.getRandom(),1,2)));
-        }
-        else if(e.getEntity() instanceof Pig){
-            e.getDrops().clear();
-            e.getDrops().add(new ItemStack(Material.GRILLED_PORK, RandomUtil.pickNumber(game.getRandom(),1,2)));
-        }
-        else if(e.getEntity().getType() == EntityType.HORSE){
-            e.getDrops().clear();
-            e.getDrops().add(new ItemStack(Material.COOKED_BEEF, RandomUtil.pickNumber(game.getRandom(),1,3)));
-        }
-        else if(e.getEntity() instanceof Chicken){
-            e.getDrops().clear();
-            e.getDrops().add(new ItemStack(Material.COOKED_CHICKEN,  RandomUtil.pickNumber(game.getRandom(),1,3)));
-        }
-    }
+    
 
 
     @EventHandler
