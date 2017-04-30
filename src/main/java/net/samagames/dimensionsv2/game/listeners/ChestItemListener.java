@@ -3,12 +3,14 @@ import net.minecraft.server.v1_10_R1.*;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
+import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
 import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -56,18 +58,28 @@ public class ChestItemListener implements Listener {
 
     @EventHandler
     public void onOpen(InventoryOpenEvent e){
-        if(e.getInventory().getHolder() instanceof Chest){
-            Chest chest = (Chest)e.getInventory().getHolder();
-            ChestItemManager manager = ChestItemManager.getInstance();
-            if(!manager.isOpened(chest)) {
-                TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
-                TileEntityChest tems = (TileEntityChest) te;
-                NBTTagCompound c = tems.c();
-                c.setString("LootTable","sg:dimensions/dim");
-                tems.a(c);
-                manager.opened(chest);
+        DimensionsGame game = Dimensions.getInstance().getGame();
+        if(game.hasPlayer((Player)e.getPlayer())){
+            if(e.getInventory().getHolder() instanceof Chest){
+                Chest chest = (Chest)e.getInventory().getHolder();
+                ChestItemManager manager = ChestItemManager.getInstance();
+                if(!manager.isOpened(chest)) {
+                    TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
+                    TileEntityChest tems = (TileEntityChest) te;
+                    NBTTagCompound c = tems.c();
+                    if(game.getPlayer(e.getPlayer().getUniqueId()).getDimension() == Dimension.OVERWORLD){
+                        c.setString("LootTable","sg:dimensions/dim_normal");
+                    }
+                    else{
+                        c.setString("LootTable","sg:dimensions/dim_parallel");
+                    }
+
+                    tems.a(c);
+                    manager.opened(chest);
+                }
             }
         }
+
     }
     @EventHandler
     public void onInventoryClose(final InventoryCloseEvent event)
