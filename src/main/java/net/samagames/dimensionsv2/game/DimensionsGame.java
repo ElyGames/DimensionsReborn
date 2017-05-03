@@ -12,6 +12,7 @@ import net.samagames.dimensionsv2.game.tasks.TimeTask;
 import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
+import net.samagames.tools.RulesBook;
 import net.samagames.tools.Titles;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.*;
@@ -21,6 +22,9 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.*;
+import org.bukkit.util.Vector;
+
 import java.util.*;
 import java.util.List;
 
@@ -42,11 +46,17 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private TimeTask timerTask;
     private Scoreboard lifeBoard;
     private RandomEffectsTask randomEffects;
+    private RulesBook rulesBook;
 
 
     public DimensionsGame() {
 
         super("dimensions", "Dimensions", "", DimensionsPlayer.class);
+        rulesBook = new RulesBook("Dimensions");
+        rulesBook.addOwner("Tigger_San");
+        rulesBook.addPage("TODO","//TODO");
+
+
         spawns = new ArrayList<>();
         deathMatchSpawns = new ArrayList<>();
         gameTime=0;
@@ -100,11 +110,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         playSound(Sound.ENTITY_ENDERDRAGON_GROWL,1F);
        getInGamePlayers().values().forEach(
                (p) -> {
-
+                   p.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
                    p.getPlayerIfOnline().resetPlayerTime();
-
-                  Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem().getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
-
+                   Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem().getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
                    p.getPlayerIfOnline().teleport(it.next());
                }
        );
@@ -179,6 +187,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         player.setHealth(20D);
         player.getInventory().clear();
         player.setFoodLevel(20);
+        player.getInventory().setItem(4,rulesBook.toItemStack());
         super.handleLogin(player);
     }
 
@@ -309,6 +318,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6La partie commence. Bonne chance !",true);
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans 2 minutes  !",true);
         for(DimensionsPlayer dp : getInGamePlayers().values()){
+            dp.getPlayerIfOnline().getInventory().clear();
+            dp.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
             dp.getPlayerIfOnline().getInventory().setItem(8, ItemUtils.getSwapItem());
             dp.getPlayerIfOnline().getInventory().setItem(7, ItemUtils.getTargetItem());
