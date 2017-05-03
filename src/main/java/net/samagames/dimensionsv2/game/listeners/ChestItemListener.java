@@ -4,6 +4,7 @@ import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
 import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
+import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -68,10 +69,10 @@ public class ChestItemListener implements Listener {
                     TileEntityChest tems = (TileEntityChest) te;
                     NBTTagCompound c = tems.c();
                     if(game.getPlayer(e.getPlayer().getUniqueId()).getDimension() == Dimension.OVERWORLD){
-                        c.setString("LootTable","sg:dimensions/dim_normal");
+                        c.setString("LootTable", DimensionsManager.getInstance().getOverworldLootTable());
                     }
                     else{
-                        c.setString("LootTable","sg:dimensions/dim_parallel");
+                        c.setString("LootTable",DimensionsManager.getInstance().getParallelLootTable());
                     }
 
                     tems.a(c);

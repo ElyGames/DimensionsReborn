@@ -29,7 +29,8 @@ public class DimensionsManager {
     private int offsetZ;
     private String overworldName;
     private String hardName;
-
+    private String overworldLootTable;
+    private String parallelLootTable;
 
     private DimensionsManager() {
         IGameProperties prop = Dimensions.getInstance().getApi().getGameManager().getGameProperties();
@@ -37,12 +38,22 @@ public class DimensionsManager {
         this.offsetZ =   prop.getConfig("offsetZ",new JsonPrimitive("100")).getAsInt();
         this.overworldName = prop.getConfig("overworldName",new JsonPrimitive("No set")).getAsString();
         this.hardName = prop.getConfig("parallelName",new JsonPrimitive("No set")).getAsString();
+        this.overworldLootTable = prop.getConfig("overworldLootTable",new JsonPrimitive("sg:dimensions/dim_normal")).getAsString();
+        this.parallelLootTable = prop.getConfig("parallelLootTable",new JsonPrimitive("sg:dimensions/dim_parallel")).getAsString();
     }
     public List<DimensionsPlayer> getPlayersInDimension(Dimension dim)
     {
         return Dimensions.getInstance().getGame().getInGamePlayers().values().stream().filter(pl ->  pl.getDimension() == dim).collect(Collectors.toList());
     }
 
+
+    public String getOverworldLootTable() {
+        return overworldLootTable;
+    }
+
+    public String getParallelLootTable() {
+        return parallelLootTable;
+    }
 
     public void swap(Player p)
     {
