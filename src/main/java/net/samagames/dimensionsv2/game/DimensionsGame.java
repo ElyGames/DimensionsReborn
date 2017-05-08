@@ -243,7 +243,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void end(){
         gameStep = GameStep.FINISH;
         try{
-            timerTask.cancel();
+            Bukkit.getServer().getScheduler().runTaskLater(Dimensions.getInstance(),() ->  timerTask.cancel(),30L);
         }
         catch (Exception ignored){}
         DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
