@@ -214,17 +214,19 @@ public class DimensionsManager {
                         if(random.nextBoolean()){
                             Block b1 = loc1.clone().add(x,y,z).getBlock();
                             Block b2 = loc2.clone().add(x,y,z).getBlock();
+                            if(!(b1.getType() == Material.ANVIL || b1.getType() == Material.ENCHANTMENT_TABLE ||
+                                    b2.getType() == Material.ANVIL || b2.getType() == Material.ENCHANTMENT_TABLE )){
 
-                            byte data1 = b1.getData();
-                            Material mat1 = b1.getType();
+                                byte data1 = b1.getData();
+                                Material mat1 = b1.getType();
 
-                            b1.setType(b2.getType());
-                            b1.setData(b2.getData());
+                                b1.setType(b2.getType());
+                                b1.setData(b2.getData());
 
-                            b2.setType(mat1);
-                            b2.setData(data1);
+                                b2.setType(mat1);
+                                b2.setData(data1);
 
-
+                            }
                         }
                     }
                 }
