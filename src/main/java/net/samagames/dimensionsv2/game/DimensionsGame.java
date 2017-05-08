@@ -87,7 +87,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
         Collections.shuffle(spawns);
 
-
         for(JsonElement elt : prop.getConfig("allowBreak",new JsonArray()).getAsJsonArray()){
             blockBreakWhitelist.add(Material.matchMaterial(elt.getAsString()));
         }
@@ -97,6 +96,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString()));
         }
         Collections.shuffle(deathMatchSpawns);
+
+        deleteChests(prop);
 
         waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
 
@@ -178,6 +179,26 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             }
 
     }
+
+    public void deleteChests(IGameProperties prop){
+        List<Location> chests = new ArrayList<>();
+        for(JsonElement elt : prop.getConfig("chestsOverworld",new JsonArray()).getAsJsonArray()){
+            chests.add(LocationUtils.str2loc(elt.getAsString()));
+        }
+        Collections.shuffle(chests);
+        for(int i=0; i< (chests.size()/2); i++){
+            chests.get(i).getBlock().setType(Material.AIR);
+        }
+        chests.clear();
+        for(JsonElement elt : prop.getConfig("chestsParallel",new JsonArray()).getAsJsonArray()){
+            chests.add(LocationUtils.str2loc(elt.getAsString()));
+        }
+        Collections.shuffle(chests);
+        for(int i=0; i< (chests.size()/2); i++){
+            chests.get(i).getBlock().setType(Material.AIR);
+        }
+    }
+
     @Override
     public void handleLogin(Player player){
         player.setScoreboard(this.lifeBoard);

@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
+ * Manage dimensions and playuer swag
  * Created by Tigger_San on 26/04/2017.
  */
 public class DimensionsManager {
@@ -41,11 +42,16 @@ public class DimensionsManager {
         this.overworldLootTable = prop.getConfig("overworldLootTable",new JsonPrimitive("sg:dimensions/dim_normal")).getAsString();
         this.parallelLootTable = prop.getConfig("parallelLootTable",new JsonPrimitive("sg:dimensions/dim_parallel")).getAsString();
     }
+
+    /**
+     * Get a list of player in a specific dimension
+     * @param dim The dimension
+     * @return The list of player in the dimension
+     */
     public List<DimensionsPlayer> getPlayersInDimension(Dimension dim)
     {
         return Dimensions.getInstance().getGame().getInGamePlayers().values().stream().filter(pl ->  pl.getDimension() == dim).collect(Collectors.toList());
     }
-
 
     public String getOverworldLootTable() {
         return overworldLootTable;
@@ -55,6 +61,11 @@ public class DimensionsManager {
         return parallelLootTable;
     }
 
+
+    /**
+     * Change dimension of a plyer
+     * @param p The player
+     */
     public void swap(Player p)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
@@ -142,6 +153,11 @@ public class DimensionsManager {
     }
 
 
+    /**
+     * Swap random nea
+     * @param loc1
+     * @param loc2
+     */
     private void swapBlocks(final Location loc1, final Location loc2)
     {
         Random random = Dimensions.getInstance().getGame().getRandom();
