@@ -24,7 +24,7 @@ public class RandomEffectsTask extends BukkitRunnable{
     {
         this.effects = new PotionEffect[]
                 {
-                        new PotionEffect(PotionEffectType.HARM, 1, 0),
+                        new PotionEffect(PotionEffectType.POISON, 80, 0),
                         new PotionEffect(PotionEffectType.BLINDNESS, 60, 0),
                         new PotionEffect(PotionEffectType.SLOW, 100, 0),
                         new PotionEffect(PotionEffectType.WITHER, 140, 0)
