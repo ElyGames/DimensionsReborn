@@ -1,13 +1,17 @@
 package net.samagames.dimensionsv2.game.listeners;
+import net.minecraft.server.v1_10_R1.BlockAnvil;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
+import net.samagames.dimensionsv2.game.entity.TargetType;
 import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
+import net.samagames.dimensionsv2.game.utils.DistanceUtil;
 import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -21,8 +25,11 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.PlayerInventory;
 
 /**
@@ -140,8 +147,7 @@ public class PlayerListener implements Listener
     {
 
         if(e.hasItem()){
-            if ((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) ||
-                    (e.getAction() == Action.LEFT_CLICK_AIR) || (e.getAction() == Action.LEFT_CLICK_BLOCK)  )
+            if ((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) )
             {
 
                 if(e.getItem().equals(ItemUtils.getSwapItem())){
@@ -158,28 +164,52 @@ public class PlayerListener implements Listener
                     }
                     dp.setLastTargetTime(System.currentTimeMillis());
 
-                    Player target = null;
-                    for(Entity et : e.getPlayer().getNearbyEntities(100,100,100)){
-                        if(et instanceof Player){
-                            Player current = (Player) et;
-                            if(game.hasPlayer(current)) {
-                                if(target == null || e.getPlayer().getLocation().distance(current.getLocation()) <  e.getPlayer().getLocation().distance(target.getLocation())){
-                                    target=current;
+                    if(dp.getTargetType() == TargetType.PLAYER){
+                        Player target = null;
+                        for(DimensionsPlayer dimPlayer : DimensionsManager.getInstance().getPlayersInDimension(dp.getDimension())){
+                                Player current = dimPlayer.getPlayerIfOnline();
+                                if(current!=e.getPlayer()){
+                                    if(game.hasPlayer(current)) {
+                                        if(target == null || e.getPlayer().getLocation().distance(current.getLocation()) <  e.getPlayer().getLocation().distance(target.getLocation())){
+                                            target=current;
+                                        }
+                                    }
                                 }
-                            }
-
+                        }
+                        if(target!=null){
+                            e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : " + target.getDisplayName());
+                            dp.setTarget(target.getUniqueId());
+                        }
+                        else{
+                            e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
                         }
                     }
-                    if(target!=null){
-                        e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : " + target.getDisplayName());
-                        dp.setTarget(target.getUniqueId());
+                    else if(dp.getTargetType() == TargetType.ANVIL){
+                        Location target = DistanceUtil.getNearbyLocation(dp.getPlayerIfOnline().getLocation(),DimensionsManager.getInstance().getAnvils(dp.getDimension()));
+                        dp.setTargetLoc(target);
+                        dp.getPlayerIfOnline().setCompassTarget(target);
                     }
-                    else{
-                        e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
+                    else if(dp.getTargetType() == TargetType.ENCHANTING){
+                        Location target = DistanceUtil.getNearbyLocation(dp.getPlayerIfOnline().getLocation(),DimensionsManager.getInstance().getEnchanting(dp.getDimension()));
+                        dp.setTargetLoc(target);
+                        dp.getPlayerIfOnline().setCompassTarget(target);
                     }
+
                     e.setCancelled(true);
                     return;
                 }
+            }
+            else if((e.getAction() == Action.LEFT_CLICK_BLOCK) || (e.getAction() == Action.LEFT_CLICK_AIR)){
+                DimensionsPlayer dp = Dimensions.getInstance().getGame().getPlayer(e.getPlayer().getUniqueId());
+                switch (dp.getTargetType()){
+                    case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclumes la plus proche§6.");break;
+                    case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTables d'enchantement la plus proche§6.");break;
+                    case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6.");
+                }
+                    dp.setTarget(null);
+                    dp.setTargetLoc(null);
+                    dp.getPlayerIfOnline().sendMessage("§cCible réinitialisée.");
+
             }
         }
         if (e.getClickedBlock() != null){
@@ -263,12 +293,13 @@ public class PlayerListener implements Listener
                 if(game.getPlayer(p.getUniqueId()).getTarget()!=null){
                     ItemUtils.displayActionBarTarget(p, Bukkit.getPlayer(game.getPlayer(p.getUniqueId()).getTarget()));
                 }
+                else if(game.getPlayer(p.getUniqueId()).getTargetLoc()!=null){
+                    ItemUtils.displayActionBarTarget(p, game.getPlayer(p.getUniqueId()).getTargetType(),game.getPlayer(p.getUniqueId()).getTargetLoc());
+                }
             }
             else if(p.getInventory().getItem(e.getPreviousSlot())!=null && (p.getInventory().getItem(e.getNewSlot())==null || p.getInventory().getItem(e.getPreviousSlot()).equals(ItemUtils.getTargetItem()))){
                 ActionBarAPI.sendMessage(p," ");
             }
-
-
     }
 }
 

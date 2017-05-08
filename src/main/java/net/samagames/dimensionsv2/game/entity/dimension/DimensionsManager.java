@@ -1,5 +1,7 @@
 package net.samagames.dimensionsv2.game.entity.dimension;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.games.IGameProperties;
 import net.samagames.dimensionsv2.Dimensions;
@@ -7,11 +9,14 @@ import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
+import net.samagames.tools.LocationUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -32,9 +37,32 @@ public class DimensionsManager {
     private String hardName;
     private String overworldLootTable;
     private String parallelLootTable;
+    private List<Location> overworldEnchantings;
+    private List<Location> overworldAnvils;
+    private List<Location> parallelEnchantings;
+    private List<Location> paralleldAnvils;
 
     private DimensionsManager() {
-        IGameProperties prop = Dimensions.getInstance().getApi().getGameManager().getGameProperties();
+        overworldEnchantings = new ArrayList<>();
+        overworldAnvils = new ArrayList<>();
+        parallelEnchantings = new ArrayList<>();
+        paralleldAnvils = new ArrayList<>();
+
+        IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
+
+        for(JsonElement elt : prop.getConfig("enchantingTablesOverworld",new JsonArray()).getAsJsonArray()){
+            overworldEnchantings.add(LocationUtils.str2loc(elt.getAsString()));
+        }
+        for(JsonElement elt : prop.getConfig("anvilsOverworld",new JsonArray()).getAsJsonArray()){
+            overworldAnvils.add(LocationUtils.str2loc(elt.getAsString()));
+        }
+        for(JsonElement elt : prop.getConfig("enchantingTablesParallel",new JsonArray()).getAsJsonArray()){
+            parallelEnchantings.add(LocationUtils.str2loc(elt.getAsString()));
+        }
+        for(JsonElement elt : prop.getConfig("anvilsParallel",new JsonArray()).getAsJsonArray()){
+            paralleldAnvils.add(LocationUtils.str2loc(elt.getAsString()));
+        }
+
         this.offsetX =   prop.getConfig("offsetX",new JsonPrimitive("100")).getAsInt();
         this.offsetZ =   prop.getConfig("offsetZ",new JsonPrimitive("100")).getAsInt();
         this.overworldName = prop.getConfig("overworldName",new JsonPrimitive("No set")).getAsString();
@@ -61,6 +89,21 @@ public class DimensionsManager {
         return parallelLootTable;
     }
 
+    public List<Location> getAnvils(Dimension dim){
+        switch (dim){
+            case OVERWORLD: return overworldAnvils;
+            case PARALLEL: return paralleldAnvils;
+        }
+        return null;
+    }
+
+    public List<Location> getEnchanting(Dimension dim){
+        switch (dim){
+            case OVERWORLD: return overworldEnchantings;
+            case PARALLEL: return paralleldAnvils;
+        }
+        return null;
+    }
 
     /**
      * Change dimension of a plyer
@@ -127,16 +170,19 @@ public class DimensionsManager {
 
 
             dp.setLastSwap(System.currentTimeMillis());
-            if (dim == Dimension.OVERWORLD)
+            if (dim == Dimension.OVERWORLD){
                 p.sendMessage( "§2Vous êtes maintenant dans la dimension §a"  + this.overworldName);
-            else
+            }
+            else{
                 p.sendMessage("§cVous êtes maintenant dans la dimension §4" + this.hardName);
-
-
-
+            }
             if(dp.getTarget()!=null){
                 dp.setTarget(null);
                 p.sendMessage("§cVous avez changé de dimension, la boussole ne pointe plus personne.");
+            }
+            else if(dp.getTargetLoc()!=null){
+                dp.setTargetLoc(null);
+                p.sendMessage("§cVous avez changé de dimension, la boussole ne pointe plus rien.");
             }
 
 

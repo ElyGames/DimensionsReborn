@@ -1,5 +1,7 @@
 package net.samagames.dimensionsv2.game.utils;
+import net.samagames.dimensionsv2.game.entity.TargetType;
 import net.samagames.tools.chat.ActionBarAPI;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -37,5 +39,14 @@ public class ItemUtils {
     public static void displayActionBarTarget(Player p , Player target){
         ActionBarAPI.sendMessage(p,target.getDisplayName() + "§7 : §c"+
                 new Double(p.getLocation().distance(target.getLocation())).intValue()+"m");
+    }
+    public static void displayActionBarTarget(Player p , TargetType type, Location l){
+        String s = "";
+        switch (type){
+            case ENCHANTING: s = "Table d'enchantement"; break;
+            case ANVIL: s = "Enclume";
+        }
+        ActionBarAPI.sendMessage(p,"§2" +s+ "§7 : §c"+
+                new Double(p.getLocation().distance(l)).intValue()+"m");
     }
 }

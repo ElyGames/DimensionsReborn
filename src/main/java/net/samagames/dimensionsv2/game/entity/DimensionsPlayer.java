@@ -8,6 +8,7 @@ import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
 import net.samagames.dimensionsv2.game.utils.TimeUtil;
 import net.samagames.tools.scoreboards.ObjectiveSign;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,10 +27,12 @@ public class DimensionsPlayer extends GamePlayer{
     private long lastSwap;
     private long lastTarget;
     private UUID target;
+    private TargetType targetType;
+    private Location targetLoc;
 
     public DimensionsPlayer(Player player) {
         super(player);
-
+        targetType = TargetType.PLAYER;
         lastSwap = -1;
         lastTarget= -1;
         target =null;
@@ -44,6 +47,15 @@ public class DimensionsPlayer extends GamePlayer{
         for(PowerUp pu : PowerUp.values()){
             powerUps.put(pu,pu.getPowerUpLevelForPlayer(shop));
         }
+    }
+
+
+    public Location getTargetLoc() {
+        return targetLoc;
+    }
+
+    public void setTargetLoc(Location targetLoc) {
+        this.targetLoc = targetLoc;
     }
 
     public int getValueForPowerUP(PowerUp pu){
@@ -117,6 +129,10 @@ public class DimensionsPlayer extends GamePlayer{
         return dimension;
     }
 
+    public void setTargetType(TargetType targetType) {
+        this.targetType = targetType;
+    }
+
     public int getNextSwapDelay(){
         if(lastSwap == -1){
             return 0;
@@ -128,6 +144,9 @@ public class DimensionsPlayer extends GamePlayer{
 
     }
 
+    public TargetType getTargetType() {
+        return targetType;
+    }
 
     public int getNextTargetDelay(){
         if(lastTarget == -1){

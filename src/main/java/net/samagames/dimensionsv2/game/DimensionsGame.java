@@ -177,7 +177,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 stumpPlayer(player,true);
 
             }
-
     }
 
     public void deleteChests(IGameProperties prop){
