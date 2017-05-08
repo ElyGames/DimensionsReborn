@@ -149,7 +149,6 @@ public class PlayerListener implements Listener
         if(e.hasItem()){
             if ((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) )
             {
-
                 if(e.getItem().equals(ItemUtils.getSwapItem())){
                     DimensionsManager.getInstance().swap(e.getPlayer());
                     e.setCancelled(true);
@@ -202,16 +201,22 @@ public class PlayerListener implements Listener
                 }
             }
             else if((e.getAction() == Action.LEFT_CLICK_BLOCK) || (e.getAction() == Action.LEFT_CLICK_AIR)){
-                DimensionsPlayer dp = Dimensions.getInstance().getGame().getPlayer(e.getPlayer().getUniqueId());
-                switch (dp.getTargetType()){
-                    case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclumes la plus proche§6, cible actuelle réinitialisée.");break;
-                    case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTables d'enchantement la plus proche§6, cible actuelle réinitialisée.");break;
-                    case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6, cible actuelle réinitialisée.");
+                if(e.getItem().equals(ItemUtils.getSwapItem())){
+                    DimensionsManager.getInstance().swap(e.getPlayer());
+                    e.setCancelled(true);
                 }
-                ActionBarAPI.sendMessage(dp.getPlayerIfOnline()," ");
+                else if(e.getItem().equals(ItemUtils.getTargetItem())){
+                    DimensionsPlayer dp = Dimensions.getInstance().getGame().getPlayer(e.getPlayer().getUniqueId());
+                    switch (dp.getTargetType()){
+                        case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclumes la plus proche§6, cible actuelle réinitialisée.");break;
+                        case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTables d'enchantement la plus proche§6, cible actuelle réinitialisée.");break;
+                        case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6, cible actuelle réinitialisée.");
+                    }
+                    ActionBarAPI.sendMessage(dp.getPlayerIfOnline()," ");
                     dp.setTarget(null);
                     dp.setTargetLoc(null);
-
+                    e.setCancelled(true);
+                }
             }
         }
         if (e.getClickedBlock() != null){
