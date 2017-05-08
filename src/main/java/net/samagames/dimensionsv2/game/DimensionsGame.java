@@ -144,7 +144,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void die(Player p){
         DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
         if (killer==null){
-            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() +" a été éliminé sans aide extérieure.",true);
+            getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() +" §ea été éliminé sans aide extérieure.",true);
         }
         else
         {
