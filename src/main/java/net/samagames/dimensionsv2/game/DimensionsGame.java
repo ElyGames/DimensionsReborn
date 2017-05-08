@@ -149,7 +149,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
         else
         {
-            getCoherenceMachine().getMessageManager().writeCustomMessage("§c" + p.getDisplayName() + " §c a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§c.",true);
+            getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() + " §e a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§e.",true);
             killer.addKill();
             addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
 
