@@ -1,12 +1,14 @@
 package net.samagames.dimensionsv2.game;
 
 import com.google.gson.*;
+import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.Game;
 import net.samagames.api.games.IGameProperties;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
 import net.samagames.dimensionsv2.game.entity.PowerUp;
+import net.samagames.dimensionsv2.game.entity.dimension.DimensionsStatistics;
 import net.samagames.dimensionsv2.game.tasks.RandomEffectsTask;
 import net.samagames.dimensionsv2.game.tasks.TimeTask;
 import net.samagames.dimensionsv2.game.utils.ItemUtils;
@@ -143,6 +145,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
 
     public void die(Player p){
+        ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseDeaths(p.getUniqueId());
         DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
         if (killer==null){
             getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() +" §ea été éliminé sans aide extérieure.",true);
@@ -151,6 +154,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         {
             getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() + " §e a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§e.",true);
             killer.addKill();
+            ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseKills(killer.getUUID());
             addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
 
             if (killer.getPlayerIfOnline().getHealth() >= 1.0)
@@ -273,6 +277,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         });
         this.coherenceMachine.getTemplateManager().getPlayerWinTemplate().execute(winner.getPlayerIfOnline(), winner.getKills());
         addCoins(winner.getPlayerIfOnline(), 60, "Victoire !");
+        handleWinner(winner.getUUID());
         handleGameEnd();
     }
     @Override

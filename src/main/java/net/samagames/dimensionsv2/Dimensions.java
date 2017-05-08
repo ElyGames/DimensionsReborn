@@ -4,6 +4,7 @@ import net.samagames.api.games.GamesNames;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
+import net.samagames.dimensionsv2.game.entity.dimension.DimensionsStatistics;
 import net.samagames.dimensionsv2.game.listeners.ChestItemListener;
 import net.samagames.dimensionsv2.game.listeners.DamageListener;
 import net.samagames.dimensionsv2.game.listeners.PlayerListener;
@@ -27,6 +28,7 @@ public class Dimensions extends JavaPlugin
         this.game = new DimensionsGame();
         SamaGamesAPI.get().getGameManager().setLegacyPvP(true);
         SamaGamesAPI.get().getGameManager().registerGame(game);
+        SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new DimensionsStatistics());
         SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.DIMENSION, true);
         getServer().getPluginManager().registerEvents(new PlayerListener(),this);
         getServer().getPluginManager().registerEvents(new ChestItemListener(),this);
@@ -36,7 +38,6 @@ public class Dimensions extends JavaPlugin
         Bukkit.getWorlds().get(0).setThundering(false);
         Bukkit.getWorlds().get(0).setStorm(false);
         Bukkit.getWorlds().get(0).setTime(6000);
-
         Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle","false");
     }
 
