@@ -21,8 +21,10 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  * Created by Tigger_San on 22/04/2017.
@@ -222,6 +224,9 @@ public class PlayerListener implements Listener
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
+        if(e.getClickedInventory() instanceof PlayerInventory && e.getSlot() == 45){
+            e.setCancelled(true);
+        }
         DimensionsGame game = Dimensions.getInstance().getGame();
         e.setCancelled(game.isNonGameStep());
     }
