@@ -25,12 +25,8 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.*;
-import org.bukkit.inventory.AnvilInventory;
-import org.bukkit.inventory.PlayerInventory;
 
 /**
  * Created by Tigger_San on 22/04/2017.
@@ -208,8 +204,8 @@ public class PlayerListener implements Listener
                 else if(e.getItem().equals(ItemUtils.getTargetItem())){
                     DimensionsPlayer dp = Dimensions.getInstance().getGame().getPlayer(e.getPlayer().getUniqueId());
                     switch (dp.getTargetType()){
-                        case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclumes la plus proche§6, cible actuelle réinitialisée.");break;
-                        case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTables d'enchantement la plus proche§6, cible actuelle réinitialisée.");break;
+                        case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclume la plus proche§6, cible actuelle réinitialisée.");break;
+                        case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTable d'enchantement la plus proche§6, cible actuelle réinitialisée.");break;
                         case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6, cible actuelle réinitialisée.");
                     }
                     ActionBarAPI.sendMessage(dp.getPlayerIfOnline()," ");

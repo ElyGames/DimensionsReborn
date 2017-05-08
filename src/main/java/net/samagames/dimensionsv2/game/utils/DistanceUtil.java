@@ -1,6 +1,4 @@
 package net.samagames.dimensionsv2.game.utils;
-
-import net.samagames.tools.LocationUtils;
 import org.bukkit.Location;
 
 import java.util.List;
