@@ -119,7 +119,7 @@ public class DimensionsManager {
         int nextSwap =dp.getNextSwapDelay();
         if (nextSwap>0)
         {
-            p.sendMessage("§cMerci d'attendre " +nextSwap + " seconde(s) avant de changer de dimension.");
+            p.sendMessage("§eMerci d'attendre §c" +nextSwap + " seconde(s) §eavant de changer de dimension.");
             return ;
         }
         Dimension dim = dp.getDimension();

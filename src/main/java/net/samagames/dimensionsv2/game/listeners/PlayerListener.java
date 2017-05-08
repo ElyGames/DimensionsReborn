@@ -158,7 +158,7 @@ public class PlayerListener implements Listener
                     DimensionsGame game = Dimensions.getInstance().getGame();
                     DimensionsPlayer dp = game.getPlayer(e.getPlayer().getUniqueId());
                     if(dp.getNextTargetDelay() >0){
-                        e.getPlayer().sendMessage("§cMerci de patienter un peu ...");
+                        e.getPlayer().sendMessage("§eMerci de patienter encore §c" + dp.getNextTargetDelay() + " §eseconde(s).");
                         e.setCancelled(true);
                         return;
                     }
@@ -185,11 +185,13 @@ public class PlayerListener implements Listener
                         }
                     }
                     else if(dp.getTargetType() == TargetType.ANVIL){
+                        e.getPlayer().sendMessage("§bVotre boussole pointe vers l'enclume la plus proche.");
                         Location target = DistanceUtil.getNearbyLocation(dp.getPlayerIfOnline().getLocation(),DimensionsManager.getInstance().getAnvils(dp.getDimension()));
                         dp.setTargetLoc(target);
                         dp.getPlayerIfOnline().setCompassTarget(target);
                     }
                     else if(dp.getTargetType() == TargetType.ENCHANTING){
+                        e.getPlayer().sendMessage("§bVotre boussole pointe vers l'enclume la table d'enchantement la plus proche.");
                         Location target = DistanceUtil.getNearbyLocation(dp.getPlayerIfOnline().getLocation(),DimensionsManager.getInstance().getEnchanting(dp.getDimension()));
                         dp.setTargetLoc(target);
                         dp.getPlayerIfOnline().setCompassTarget(target);
@@ -202,13 +204,13 @@ public class PlayerListener implements Listener
             else if((e.getAction() == Action.LEFT_CLICK_BLOCK) || (e.getAction() == Action.LEFT_CLICK_AIR)){
                 DimensionsPlayer dp = Dimensions.getInstance().getGame().getPlayer(e.getPlayer().getUniqueId());
                 switch (dp.getTargetType()){
-                    case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclumes la plus proche§6.");break;
-                    case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTables d'enchantement la plus proche§6.");break;
-                    case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6.");
+                    case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclumes la plus proche§6, cible actuelle réinitialisée.");break;
+                    case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTables d'enchantement la plus proche§6, cible actuelle réinitialisée.");break;
+                    case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6, cible actuelle réinitialisée.");
                 }
+                ActionBarAPI.sendMessage(dp.getPlayerIfOnline()," ");
                     dp.setTarget(null);
                     dp.setTargetLoc(null);
-                    dp.getPlayerIfOnline().sendMessage("§cCible réinitialisée.");
 
             }
         }
