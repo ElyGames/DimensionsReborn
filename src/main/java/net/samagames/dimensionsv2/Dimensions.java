@@ -40,7 +40,7 @@ public class Dimensions extends JavaPlugin
         Bukkit.getWorlds().get(0).setTime(6000);
         Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle","false");
     }
-    
+
     @Override
     public void onDisable(){
     }
@@ -51,7 +51,6 @@ public class Dimensions extends JavaPlugin
     public SamaGamesAPI getApi() {
         return api;
     }
-
 
     public DimensionsGame getGame() {
         return game;

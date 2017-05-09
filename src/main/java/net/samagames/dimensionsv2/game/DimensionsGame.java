@@ -77,6 +77,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         blockPlaceWhitelist.add(Material.FURNACE); blockBreakWhitelist.add(Material.FURNACE);
         blockPlaceWhitelist.add(Material.CAKE); blockBreakWhitelist.add(Material.CAKE);
         blockPlaceWhitelist.add(Material.CAKE_BLOCK); blockBreakWhitelist.add(Material.CAKE_BLOCK);
+        blockBreakWhitelist.add(Material.COAL_ORE);
+        blockBreakWhitelist.add(Material.DIAMOND_ORE);
+        blockBreakWhitelist.add(Material.IRON_ORE);
+        blockBreakWhitelist.add(Material.LAPIS_ORE);
+        blockBreakWhitelist.add(Material.GOLD_ORE);
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 

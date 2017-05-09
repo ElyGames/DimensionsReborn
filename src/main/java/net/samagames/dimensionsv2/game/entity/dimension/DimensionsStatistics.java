@@ -12,7 +12,6 @@ public class DimensionsStatistics implements IGameStatisticsHelper {
     public void increasePlayedTime(UUID uuid, long playedTime) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getDimensionsStatistics().incrByPlayedTime(playedTime);
     }
-
     @Override
     public void increasePlayedGames(UUID uuid) {
         SamaGamesAPI.get().getStatsManager().getPlayerStats(uuid).getDimensionsStatistics().incrByPlayedGames(1);

@@ -27,6 +27,7 @@ import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by Tigger_San on 22/04/2017.
@@ -56,6 +57,31 @@ public class PlayerListener implements Listener
         else{
             if(!game.getBlockBreakWhitelist().contains(e.getBlock().getType())){
                 e.setCancelled(true);
+            }
+            else if(e.getBlock().getType() == Material.COAL_ORE){
+                e.setCancelled(true);
+                e.getBlock().breakNaturally(new ItemStack(Material.BARRIER));
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.COAL,4));
+            }
+            else if(e.getBlock().getType() == Material.DIAMOND_ORE){
+                e.setCancelled(true);
+                e.getBlock().breakNaturally(new ItemStack(Material.BARRIER));
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.DIAMOND,1));
+            }
+            else if(e.getBlock().getType() == Material.GOLD_ORE){
+                e.setCancelled(true);
+                e.getBlock().breakNaturally(new ItemStack(Material.BARRIER));
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.GOLD_INGOT,1));
+            }
+            else if(e.getBlock().getType() == Material.LAPIS_ORE){
+                e.setCancelled(true);
+                e.getBlock().breakNaturally(new ItemStack(Material.BARRIER));
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.INK_SACK,3,(short)4));
+            }
+            else if(e.getBlock().getType() == Material.IRON_ORE){
+                e.setCancelled(true);
+                e.getBlock().breakNaturally(new ItemStack(Material.BARRIER));
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.IRON_INGOT,2,(short)4));
             }
         }
     }
@@ -87,6 +113,7 @@ public class PlayerListener implements Listener
                 int y = e.getBlock().getY();
                 int z = e.getBlock().getZ();
                 World w = e.getBlock().getWorld();
+                //Prevent from placing several blocks next to each other
                 boolean cantPlace = game.getBlockPlaceWhitelist().contains(w.getBlockAt(x, y + 1, z).getType())
                         || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x, y - 1, z).getType())
                         || game.getBlockPlaceWhitelist().contains(w.getBlockAt(x + 1, y, z).getType())
@@ -129,7 +156,6 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInteract(PlayerInteractEntityEvent e)
     {
-
         if(e.getRightClicked() instanceof ItemFrame){
             e.setCancelled(true);
             return;
@@ -141,7 +167,6 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInteract(PlayerInteractEvent e)
     {
-
         if(e.hasItem()){
             if ((e.getAction() == Action.RIGHT_CLICK_AIR) || (e.getAction() == Action.RIGHT_CLICK_BLOCK) )
             {

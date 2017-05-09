@@ -52,6 +52,7 @@ public class DamageListener implements Listener
                 return;
             }
             else if(e.getEntity() instanceof ArmorStand){
+                //Beautiful animation on armor stands death :o
                 e.setCancelled(true);
                 e.getEntity().playEffect(EntityEffect.DEATH);
                 new BukkitRunnable(){
@@ -85,10 +86,7 @@ public class DamageListener implements Listener
                 game.playerDamageByPlayer(player,shooter);
             }
         }
-
     }
-
-
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event)

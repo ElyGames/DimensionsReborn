@@ -67,6 +67,7 @@ public class ChestItemListener implements Listener {
                     TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
                     TileEntityChest tec = (TileEntityChest) te;
                     NBTTagCompound c = tec.c();
+                    //Apply customs loots based on LootTables system
                     if(game.getPlayer(e.getPlayer().getUniqueId()).getDimension() == Dimension.OVERWORLD){
                         c.setString("LootTable", DimensionsManager.getInstance().getOverworldLootTable());
                     }
@@ -78,8 +79,8 @@ public class ChestItemListener implements Listener {
                 }
             }
         }
-
     }
+
     @EventHandler
     public void onInventoryClose(final InventoryCloseEvent event)
     {
@@ -96,7 +97,6 @@ public class ChestItemListener implements Listener {
             manager.launchAndExplode( chest.getLocation(), FireworkEffect.builder().withColor(colors[game.getRandom().nextInt(colors.length)]).with(FireworkEffect.Type.BALL).build());
             chest.getBlock().setType(Material.AIR);
         }
-
     }
 }
 

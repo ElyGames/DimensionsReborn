@@ -121,9 +121,8 @@ public class DimensionsManager {
             p.sendMessage("§eMerci d'attendre §c" +nextSwap + " seconde(s) §eavant de changer de dimension.");
             return ;
         }
+
         Dimension dim = dp.getDimension();
-
-
         Location oldLoc = p.getLocation().clone().add(0,-1,0);
         Location tpTo =p.getLocation().clone().add(0.5,0,0.5);
 
@@ -139,9 +138,11 @@ public class DimensionsManager {
             tpTo.setZ(tpTo.getZ() + this.offsetZ);
             dim = Dimension.OVERWORLD;
         }
+        //Location for verifications
         Location verifier =tpTo.clone().add(0,1,0);
         Block newBlock = tpTo.getBlock();
         Block newBlockUp = verifier.getBlock();
+
         if (this.isEmpty(newBlock) && this.isEmpty(newBlockUp))
         {
             verifier.add(0,-1,0);
@@ -155,10 +156,12 @@ public class DimensionsManager {
                 }
             }
             dp.setDimension(dim);
-            if (dim == Dimension.OVERWORLD)
+            if (dim == Dimension.OVERWORLD){
                 p.setPlayerTime(6000L, false);
-            else
+            }
+            else{
                 p.setPlayerTime(17000L, false);
+            }
             tpTo.setY(verifier.getY() + 2.0);
             p.teleport(tpTo);
             oldLoc.setY(verifier.getY());
@@ -210,6 +213,7 @@ public class DimensionsManager {
             for(int z=-2; z<=2;z++){
                 for(int y=-1; y<=1;y++){
                     if(!(x==0 && z==0 && y==0)){
+                        //Choose randomly for better effects
                         if(random.nextBoolean()){
                             Block b1 = loc1.clone().add(x,y,z).getBlock();
                             Block b2 = loc2.clone().add(x,y,z).getBlock();

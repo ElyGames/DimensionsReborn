@@ -12,7 +12,6 @@ public enum PowerUp {
     HEAL_AT_STRIKE(new int[]{127, 128, 129, 130, 131, 132, 133},new int[]{2, 4, 6, 7, 8,9,10}),
     TP_TIME(new int[]{117, 118, 119, 120, 121},new int[]{14, 12, 10, 8, 7} );
 
-
     private int[] shopValues;
     private int[] gameValues;
 
