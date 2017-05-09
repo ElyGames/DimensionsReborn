@@ -3,6 +3,7 @@ import net.samagames.api.shops.IPlayerShop;
 
 
 /**
+ * Represents the power ups that players can buy in the shop
  * Created by Tigger_San on 21/04/2017.
  */
 public enum PowerUp {
@@ -20,6 +21,11 @@ public enum PowerUp {
         this.gameValues = gameValues;
     }
 
+    /**
+     * Get the power up level of a player (buyable by shop)
+     * @param shop The player shop
+     * @return The level of the powerup
+     */
     public int getPowerUpLevelForPlayer(IPlayerShop shop)
     {
         int[] items = this.shopValues;

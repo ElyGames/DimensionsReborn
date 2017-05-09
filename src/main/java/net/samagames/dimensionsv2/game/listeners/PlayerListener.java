@@ -265,14 +265,6 @@ public class PlayerListener implements Listener
         e.setCancelled(game.isNonGameStep());
     }
 
-
-  //  @EventHandler
-   // public void onChunkUnload(ChunkUnloadEvent e){
-    //    e.setCancelled(true);
- //
-  //  }
-
-
     @EventHandler
     public void onRegainHealth(EntityRegainHealthEvent e)
     {

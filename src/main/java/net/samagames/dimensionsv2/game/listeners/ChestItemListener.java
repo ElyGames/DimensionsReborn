@@ -48,7 +48,6 @@ public class ChestItemListener implements Listener {
                 return;
             }
             Chest chest = (Chest) e.getClickedBlock().getState();
-
             InventoryHolder ih = chest.getInventory().getHolder();
             if (ih instanceof DoubleChest) {
                 e.setCancelled(true);
@@ -66,16 +65,15 @@ public class ChestItemListener implements Listener {
                 ChestItemManager manager = ChestItemManager.getInstance();
                 if(!manager.isOpened(chest)) {
                     TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
-                    TileEntityChest tems = (TileEntityChest) te;
-                    NBTTagCompound c = tems.c();
+                    TileEntityChest tec = (TileEntityChest) te;
+                    NBTTagCompound c = tec.c();
                     if(game.getPlayer(e.getPlayer().getUniqueId()).getDimension() == Dimension.OVERWORLD){
                         c.setString("LootTable", DimensionsManager.getInstance().getOverworldLootTable());
                     }
                     else{
                         c.setString("LootTable",DimensionsManager.getInstance().getParallelLootTable());
                     }
-
-                    tems.a(c);
+                    tec.a(c);
                     manager.opened(chest);
                 }
             }

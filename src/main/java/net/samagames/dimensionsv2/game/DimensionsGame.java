@@ -1,5 +1,4 @@
 package net.samagames.dimensionsv2.game;
-
 import com.google.gson.*;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.Game;
@@ -25,11 +24,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
-
 import java.util.*;
 import java.util.List;
 
 /**
+ * Represent the dimensions game
  * Created by Tigger_San on 21/04/2017.
  */
 public class DimensionsGame extends Game<DimensionsPlayer>{
@@ -71,16 +70,13 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         randomEffects = new RandomEffectsTask();
         new ItemUtils();
 
-
         this.lifeBoard = Dimensions.getInstance().getServer().getScoreboardManager().getNewScoreboard();
-
 
         blockPlaceWhitelist.add(Material.TNT); blockBreakWhitelist.add(Material.TNT);
         blockPlaceWhitelist.add(Material.WORKBENCH); blockBreakWhitelist.add(Material.WORKBENCH);
         blockPlaceWhitelist.add(Material.FURNACE); blockBreakWhitelist.add(Material.FURNACE);
         blockPlaceWhitelist.add(Material.CAKE); blockBreakWhitelist.add(Material.CAKE);
         blockPlaceWhitelist.add(Material.CAKE_BLOCK); blockBreakWhitelist.add(Material.CAKE_BLOCK);
-
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
@@ -102,10 +98,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         deleteChests(prop);
 
         waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
-
-
     }
 
+    /**
+     * Start the deathmatch
+     */
     public void startDeathmatch(){
        gameStep = GameStep.DEATHMATCH;
        Iterator<Location> it = deathMatchSpawns.iterator();
@@ -121,6 +118,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
     }
 
+    /**
+     * Called when a player is damaged by a player
+     * @param p The damages receiver
+     * @param damager The damager
+     */
     public void playerDamageByPlayer(Player p  , Player damager){
 
         DimensionsPlayer hitPlayer = getPlayer(p.getUniqueId());
@@ -144,6 +146,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             }.runTaskLater(Dimensions.getInstance(),5L);
     }
 
+    /**
+     * Called when a player die
+     * @param p The player
+     */
     public void die(Player p){
         ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseDeaths(p.getUniqueId());
         DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
@@ -183,6 +189,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             }
     }
 
+    /**
+     * Removes half of the chests on the map
+     * @param prop The game properties
+     */
     public void deleteChests(IGameProperties prop){
         List<Location> chests = new ArrayList<>();
         for(JsonElement elt : prop.getConfig("chestsOverworld",new JsonArray()).getAsJsonArray()){
@@ -222,6 +232,11 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         return random;
     }
 
+    /**
+     * Called when a player loose
+     * @param p The player
+     * @param logout If the player logour
+     */
     public void stumpPlayer(Player p, boolean logout){
 
         playSound(Sound.ENTITY_WITHER_BREAK_BLOCK,1F);
@@ -238,8 +253,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         int left = getInGamePlayers().values().size();
         if(!logout){
             p.resetPlayerTime();
-         //   p.setGameMode(GameMode.SPECTATOR);
-         //   p.spigot().respawn();
             if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
                 if (left == 2) {
                     addCoins(p, 20, "Troisième !");
@@ -248,7 +261,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 }
             }
         }
-
             this.coherenceMachine.getMessageManager().writeCustomMessage(p.getDisplayName() + " a été éliminé.", true);
 
             if (left!=1) {
@@ -263,6 +275,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
 
 
+    /**
+     * Called when the game finish
+     */
     public void end(){
         gameStep = GameStep.FINISH;
         try{
@@ -280,6 +295,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         handleWinner(winner.getUUID());
         handleGameEnd();
     }
+
     @Override
     public void startGame()
     {
@@ -294,9 +310,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             this.lifeBoard.getObjective("vie").getScore(dp.getPlayerIfOnline().getName()).setScore(20);
             index++;
         }
-
-
-
 
         getCoherenceMachine().getMessageManager().writeCustomMessage("§6Préparation du jeu ! ",true);
         new BukkitRunnable(){
@@ -334,6 +347,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
        this.getInGamePlayers().values().forEach(dp ->  ActionBarAPI.sendMessage(dp.getPlayerIfOnline(),message));
     }
 
+    /**
+     * Called when the game begin
+     */
     public void begin(){
 
         this.randomEffects.runTaskTimerAsynchronously(Dimensions.getInstance(),1L,20L);
@@ -350,12 +366,17 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
 
     }
+
+    /**
+     * Play sound for every players in the game
+     * @param sound The souns
+     * @param pitch The pitch of the sound
+     */
     public void playSound(Sound sound,float pitch){
         for(DimensionsPlayer dp : this.getInGamePlayers().values()){
             dp.getPlayerIfOnline().playSound(dp.getPlayerIfOnline().getLocation(),sound,1000F,pitch);
         }
     }
-
 
     public List<Material> getBlockPlaceWhitelist() {
         return blockPlaceWhitelist;
@@ -369,10 +390,19 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         return deathMatchIn;
     }
 
+    /**
+     * Check if it's a non-game GameStep
+     * @return Yes or no
+     */
     public boolean isNonGameStep(){
 
         return(gameStep==GameStep.WAIT || gameStep==GameStep.PRE_TELEPORT  || gameStep==GameStep.FINISH);
     }
+
+    /**
+     * Check if it's a non-pvp-active GameStep
+     * @return Yes or no
+     */
     public boolean isNonPVPActive(){
 
         return(gameStep==GameStep.WAIT || gameStep==GameStep.PRE_TELEPORT  || gameStep==GameStep.FINISH || gameStep==GameStep.IN_GAME);
@@ -389,7 +419,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void increaseGameTime() {
        gameTime++;
     }
-
 
     public int getPvpIn() {
         return pvpIn;

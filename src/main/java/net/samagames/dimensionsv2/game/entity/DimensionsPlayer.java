@@ -1,5 +1,4 @@
 package net.samagames.dimensionsv2.game.entity;
-
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamePlayer;
 import net.samagames.api.shops.IPlayerShop;
@@ -15,6 +14,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Represent a dimensions game player
  * Created by Tigger_San on 21/04/2017.
  */
 public class DimensionsPlayer extends GamePlayer{
@@ -44,6 +44,7 @@ public class DimensionsPlayer extends GamePlayer{
         powerUps = new HashMap<>();
         IPlayerShop shop = SamaGamesAPI.get().getShopsManager().getPlayer(this.uuid);
 
+        //Get shop values for player
         for(PowerUp pu : PowerUp.values()){
             powerUps.put(pu,pu.getPowerUpLevelForPlayer(shop));
         }

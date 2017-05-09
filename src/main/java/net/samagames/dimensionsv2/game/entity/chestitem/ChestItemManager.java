@@ -1,5 +1,4 @@
 package net.samagames.dimensionsv2.game.entity.chestitem;
-
 import net.samagames.dimensionsv2.Dimensions;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;

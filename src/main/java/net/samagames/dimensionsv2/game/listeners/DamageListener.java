@@ -31,8 +31,6 @@ public class DamageListener implements Listener
             e.setCancelled(true);
             return;
         }
-
-        //Damages
         if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive()){
             e.setCancelled(true);
         }
@@ -104,7 +102,6 @@ public class DamageListener implements Listener
         event.setDeathMessage("");
         game.die(p);
         game.stumpPlayer(p,false);
-
     }
 
     @EventHandler

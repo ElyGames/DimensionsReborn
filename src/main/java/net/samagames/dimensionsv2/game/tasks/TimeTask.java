@@ -9,6 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
+ * Represent the task that count the time and activates events
  * Created by Tigger_San on 22/04/2017.
  */
 public class TimeTask extends BukkitRunnable {
@@ -17,12 +18,14 @@ public class TimeTask extends BukkitRunnable {
     public void run() {
         DimensionsGame game = Dimensions.getInstance().getGame();
         game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
+        //For player that have a human target
         game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
             dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation());
             if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem())){
                 ItemUtils.displayActionBarTarget(dp.getPlayerIfOnline(),Bukkit.getPlayer(dp.getTarget()));
             }
         });
+        //For player that have a non human target
         game.getInGamePlayers().values().stream().filter(dp -> dp.getTargetLoc()!=null).forEach(dp -> {
             if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem())){
                 ItemUtils.displayActionBarTarget(dp.getPlayerIfOnline(),dp.getTargetType(),dp.getTargetLoc());
@@ -38,7 +41,6 @@ public class TimeTask extends BukkitRunnable {
                     if( game.getGameStep()!=GameStep.DEATHMATCH_PLANNED && game.getInGamePlayers().size()<=game.getDeathMatchSpawns().size()){
                         game.setGameStep(GameStep.DEATHMATCH_PLANNED);
                     }
-
             }
             game.decreasePvpIn();
         }

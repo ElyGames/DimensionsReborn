@@ -15,14 +15,13 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
- * Manage dimensions and playuer swag
+ * Manage dimensions and player swap
  * Created by Tigger_San on 26/04/2017.
  */
 public class DimensionsManager {
@@ -238,6 +237,12 @@ public class DimensionsManager {
         loc1.getWorld().createExplosion((double)loc1.getBlockX(), (double)loc1.getBlockY(), (double)loc1.getBlockZ(), 1.0f, true, false);
         loc2.getWorld().createExplosion((double)loc2.getBlockX(), (double)loc2.getBlockY(), (double)loc2.getBlockZ(), 1.0f, false, false);
     }
+
+    /**
+     * Vérify if a block is empty
+     * @param block The block
+     * @return Is empty or not
+     */
     private boolean isEmpty(final Block block)
     {
         return block.isEmpty() || block.getType() == Material.CARPET || block.getType() == Material.SIGN || block.getType() == Material.LADDER || block.getType() == Material.SIGN_POST;

@@ -1,12 +1,11 @@
 package net.samagames.dimensionsv2.game.entity.dimension;
-
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.IGameStatisticsHelper;
 
 import java.util.UUID;
 
 /**
- * Created by Tigger_San on 08/05/2017.
+ * Created by BlueSlime
  */
 public class DimensionsStatistics implements IGameStatisticsHelper {
     @Override

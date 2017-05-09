@@ -13,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 /**
+ * Represent the task that give random potions effects of players in parallel world
  * Created by Tigger_San on 27/04/2017.
  */
 public class RandomEffectsTask extends BukkitRunnable{
@@ -30,6 +31,7 @@ public class RandomEffectsTask extends BukkitRunnable{
                         new PotionEffect(PotionEffectType.WITHER, 140, 0)
                 };
     }
+
     @Override
     public void run()
     {
@@ -41,7 +43,6 @@ public class RandomEffectsTask extends BukkitRunnable{
                 this.cancel();
                 return;
             }
-
             this.nextEffect = 30 + game.getRandom().nextInt(60);
 
             for (DimensionsPlayer player : DimensionsManager.getInstance().getPlayersInDimension(Dimension.PARALLEL))
@@ -59,5 +60,4 @@ public class RandomEffectsTask extends BukkitRunnable{
             }
         }
     }
-
 }
