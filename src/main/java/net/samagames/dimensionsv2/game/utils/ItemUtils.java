@@ -24,9 +24,8 @@ public class ItemUtils {
 
         targetItem = new ItemStack(Material.COMPASS);
         im = targetItem.getItemMeta();
-        im.setDisplayName("§aBoussole magique");
+        im.setDisplayName("§aSamaTracker");
         targetItem.setItemMeta(im);
-
     }
 
     /**

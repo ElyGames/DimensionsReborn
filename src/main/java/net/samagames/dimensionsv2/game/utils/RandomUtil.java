@@ -19,7 +19,4 @@ public class RandomUtil {
         }
         return false;
     }
-    public static int pickNumber(Random random,int min, int max){
-        return random.nextInt(max-min+1)+min;
-    }
 }

@@ -85,21 +85,13 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
-        for(JsonElement elt : prop.getConfig("spawns",new JsonArray()).getAsJsonArray()){
-            spawns.add(LocationUtils.str2loc(elt.getAsString()));
-        }
+        prop.getConfig("spawns",new JsonArray()).getAsJsonArray().forEach(elt ->  spawns.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(spawns);
 
-        for(JsonElement elt : prop.getConfig("allowBreak",new JsonArray()).getAsJsonArray()){
-            blockBreakWhitelist.add(Material.matchMaterial(elt.getAsString()));
-        }
-        Collections.shuffle(spawns);
+        prop.getConfig("allowBreak",new JsonArray()).getAsJsonArray().forEach(elt ->  blockBreakWhitelist.add(Material.matchMaterial(elt.getAsString())));
+        prop.getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray().forEach(elt -> deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString())));
 
-        for(JsonElement elt : prop.getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray()){
-            deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString()));
-        }
         Collections.shuffle(deathMatchSpawns);
-
         deleteChests(prop);
 
         waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
@@ -200,17 +192,15 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
      */
     public void deleteChests(IGameProperties prop){
         List<Location> chests = new ArrayList<>();
-        for(JsonElement elt : prop.getConfig("chestsOverworld",new JsonArray()).getAsJsonArray()){
-            chests.add(LocationUtils.str2loc(elt.getAsString()));
-        }
+        prop.getConfig("chestsOverworld",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(chests);
+
         for(int i=0; i< (chests.size()/2); i++){
             chests.get(i).getBlock().setType(Material.AIR);
         }
+
         chests.clear();
-        for(JsonElement elt : prop.getConfig("chestsParallel",new JsonArray()).getAsJsonArray()){
-            chests.add(LocationUtils.str2loc(elt.getAsString()));
-        }
+        prop.getConfig("chestsParallel",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(chests);
         for(int i=0; i< (chests.size()/2); i++){
             chests.get(i).getBlock().setType(Material.AIR);
@@ -245,6 +235,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void stumpPlayer(Player p, boolean logout){
 
         playSound(Sound.ENTITY_WITHER_BREAK_BLOCK,1F);
+
         for(DimensionsPlayer dimPlayer : getInGamePlayers().values()){
             if(dimPlayer.getTarget()== p.getUniqueId()){
                 dimPlayer.setTarget(null);
@@ -336,8 +327,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             }
 
         }.runTaskTimer(Dimensions.getInstance(),2L,20L );
-
-
     }
 
     public void setXp(int level){
