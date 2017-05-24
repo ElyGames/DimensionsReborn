@@ -148,7 +148,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
      * @param p The player
      */
     public void die(Player p){
-        ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseDeaths(p.getUniqueId());
+        //((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseDeaths(p.getUniqueId());
         DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
         if (killer==null){
             getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() +" §ea été éliminé sans aide extérieure.",true);
@@ -157,7 +157,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         {
             getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() + " §e a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§e.",true);
             killer.addKill();
-            ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseKills(killer.getUUID());
+           // ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseKills(killer.getUUID());
             addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
 
             if (killer.getPlayerIfOnline().getHealth() >= 1.0)
@@ -257,7 +257,10 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 }
             }
         }
-            this.coherenceMachine.getMessageManager().writeCustomMessage(p.getDisplayName() + " a été éliminé.", true);
+        else{
+            this.coherenceMachine.getMessageManager().writeCustomMessage(p.getDisplayName() + " s'est déconnecté.", true);
+        }
+
 
             if (left!=1) {
                 getCoherenceMachine().getMessageManager().writeCustomMessage("§eIl reste encore §b" + + left + " §ejoueurs en vie.",false);

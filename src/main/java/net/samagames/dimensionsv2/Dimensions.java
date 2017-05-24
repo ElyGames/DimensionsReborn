@@ -28,7 +28,7 @@ public class Dimensions extends JavaPlugin
         this.game = new DimensionsGame();
         SamaGamesAPI.get().getGameManager().setLegacyPvP(true);
         SamaGamesAPI.get().getGameManager().registerGame(game);
-        SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new DimensionsStatistics());
+        //SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new DimensionsStatistics());
         SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.DIMENSION, true);
         getServer().getPluginManager().registerEvents(new PlayerListener(),this);
         getServer().getPluginManager().registerEvents(new ChestItemListener(),this);

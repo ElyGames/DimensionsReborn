@@ -199,6 +199,7 @@ public class PlayerListener implements Listener
                         if(target!=null){
                             e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : " + target.getDisplayName());
                             dp.setTarget(target.getUniqueId());
+                            dp.setTargetLoc(null);
                         }
                         else{
                             e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
