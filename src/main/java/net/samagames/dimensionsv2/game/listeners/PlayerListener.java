@@ -140,7 +140,7 @@ public class PlayerListener implements Listener
     public void dropItem(PlayerDropItemEvent e)
     {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(e.getItemDrop().getItemStack().equals(ItemUtils.getSwapItem()) || e.getItemDrop().getItemStack().equals(ItemUtils.getTargetItem())) {
+        if(e.getItemDrop().getItemStack().equals(ItemUtils.getSwapItem()) || e.getItemDrop().getItemStack().equals(ItemUtils.getTargetItem(e.getPlayer()))) {
             e.setCancelled(true);
             return;
         }
@@ -174,7 +174,7 @@ public class PlayerListener implements Listener
                     DimensionsManager.getInstance().swap(e.getPlayer());
                     e.setCancelled(true);
                 }
-                else if(e.getItem().equals(ItemUtils.getTargetItem())){
+                else if(e.getItem().equals(ItemUtils.getTargetItem(e.getPlayer()))){
                     DimensionsGame game = Dimensions.getInstance().getGame();
                     DimensionsPlayer dp = game.getPlayer(e.getPlayer().getUniqueId());
                     if(dp.getNextTargetDelay() >0){
@@ -199,7 +199,6 @@ public class PlayerListener implements Listener
                         if(target!=null){
                             e.getPlayer().sendMessage("§bVotre boussole pointe vers le joueur le plus proche : " + target.getDisplayName());
                             dp.setTarget(target.getUniqueId());
-                            dp.setTargetLoc(null);
                         }
                         else{
                             e.getPlayer().sendMessage("§cAucun joueur n'a été trouvé :(");
@@ -227,7 +226,7 @@ public class PlayerListener implements Listener
                     DimensionsManager.getInstance().swap(e.getPlayer());
                     e.setCancelled(true);
                 }
-                else if(e.getItem().equals(ItemUtils.getTargetItem())){
+                else if(e.getItem().equals(ItemUtils.getTargetItem(e.getPlayer()))){
                     DimensionsPlayer dp = Dimensions.getInstance().getGame().getPlayer(e.getPlayer().getUniqueId());
                     switch (dp.getTargetType()){
                         case PLAYER : dp.setTargetType(TargetType.ANVIL); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cEnclume la plus proche§6, cible actuelle réinitialisée.");break;
@@ -309,7 +308,7 @@ public class PlayerListener implements Listener
     public void onSwitchItem(PlayerItemHeldEvent e){
         Player p = e.getPlayer();
 
-            if(p.getInventory().getItem(e.getNewSlot())!=null && p.getInventory().getItem(e.getNewSlot()).equals(ItemUtils.getTargetItem())){
+            if(p.getInventory().getItem(e.getNewSlot())!=null && p.getInventory().getItem(e.getNewSlot()).equals(ItemUtils.getTargetItem(p))){
                 DimensionsGame game = Dimensions.getInstance().getGame();
                 if(game.getPlayer(p.getUniqueId()).getTarget()!=null){
                     ItemUtils.displayActionBarTarget(p, Bukkit.getPlayer(game.getPlayer(p.getUniqueId()).getTarget()));
@@ -318,7 +317,7 @@ public class PlayerListener implements Listener
                     ItemUtils.displayActionBarTarget(p, game.getPlayer(p.getUniqueId()).getTargetType(),game.getPlayer(p.getUniqueId()).getTargetLoc());
                 }
             }
-            else if(p.getInventory().getItem(e.getPreviousSlot())!=null && (p.getInventory().getItem(e.getNewSlot())==null || p.getInventory().getItem(e.getPreviousSlot()).equals(ItemUtils.getTargetItem()))){
+            else if(p.getInventory().getItem(e.getPreviousSlot())!=null && (p.getInventory().getItem(e.getNewSlot())==null || p.getInventory().getItem(e.getPreviousSlot()).equals(ItemUtils.getTargetItem(p)))){
                 ActionBarAPI.sendMessage(p," ");
             }
     }

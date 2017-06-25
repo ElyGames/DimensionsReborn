@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class ItemUtils {
 
     private static ItemStack swapItem;
-    private static ItemStack targetItem;
+
 
     public ItemUtils(){
         swapItem = new ItemStack(Material.EYE_OF_ENDER);
@@ -22,10 +22,6 @@ public class ItemUtils {
         im.setDisplayName("§5Changer de dimension");
         swapItem.setItemMeta(im);
 
-        targetItem = new ItemStack(Material.COMPASS);
-        im = targetItem.getItemMeta();
-        im.setDisplayName("§aSamaTracker");
-        targetItem.setItemMeta(im);
     }
 
     /**
@@ -40,8 +36,12 @@ public class ItemUtils {
      * Get the target item
      * @return The target item
      */
-    public static ItemStack getTargetItem(){
-      return targetItem;
+    public static ItemStack getTargetItem(Player p){
+        ItemStack i  = new ItemStack(Material.COMPASS);
+        ItemMeta im = i.getItemMeta();
+        im.setDisplayName("§aSamaTracker §7| " + p.getDisplayName());
+        i.setItemMeta(im);
+        return i;
     }
 
     /**

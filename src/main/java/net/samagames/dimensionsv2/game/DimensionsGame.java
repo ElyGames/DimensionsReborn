@@ -108,7 +108,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                (p) -> {
                    p.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
                    p.getPlayerIfOnline().resetPlayerTime();
-                   Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem().getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
+                   Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem(p.getPlayerIfOnline()).getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
                    p.getPlayerIfOnline().teleport(it.next());
                }
        );
@@ -237,6 +237,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         playSound(Sound.ENTITY_WITHER_BREAK_BLOCK,1F);
 
         for(DimensionsPlayer dimPlayer : getInGamePlayers().values()){
+
             if(dimPlayer.getTarget()== p.getUniqueId()){
                 dimPlayer.setTarget(null);
                 dimPlayer.getPlayerIfOnline().sendMessage("§cVotre cible a disparu du jeu, la boussole ne pointe plus personne.");
@@ -291,6 +292,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         });
         this.coherenceMachine.getTemplateManager().getPlayerWinTemplate().execute(winner.getPlayerIfOnline(), winner.getKills());
         addCoins(winner.getPlayerIfOnline(), 60, "Victoire !");
+        this.effectsOnWinner(winner.getPlayerIfOnline());
         handleWinner(winner.getUUID());
         handleGameEnd();
     }
@@ -359,7 +361,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             dp.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
             dp.getPlayerIfOnline().getInventory().setItem(8, ItemUtils.getSwapItem());
-            dp.getPlayerIfOnline().getInventory().setItem(7, ItemUtils.getTargetItem());
+            dp.getPlayerIfOnline().getInventory().setItem(7, ItemUtils.getTargetItem(dp.getPlayerIfOnline()));
         }
 
     }
