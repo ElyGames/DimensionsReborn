@@ -101,6 +101,9 @@ public class DimensionsPlayer extends GamePlayer{
                 objectiveSign.setLine(-7,"§2§lPvP activé");
             }
         }
+        else if(game.getGameStep()== GameStep.WAIT){
+            objectiveSign.setLine(-7,"§aEn attente ...");
+        }
 
         objectiveSign.setLine(-6, "  " );
         objectiveSign.setLine(-5, "§7Joueurs : §f" + game.getInGamePlayers().size());

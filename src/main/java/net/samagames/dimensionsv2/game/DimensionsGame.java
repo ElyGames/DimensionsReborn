@@ -10,6 +10,7 @@ import net.samagames.dimensionsv2.game.entity.PowerUp;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsStatistics;
 import net.samagames.dimensionsv2.game.tasks.RandomEffectsTask;
 import net.samagames.dimensionsv2.game.tasks.TimeTask;
+import net.samagames.dimensionsv2.game.tasks.TrakerTask;
 import net.samagames.dimensionsv2.game.utils.ItemUtils;
 import net.samagames.dimensionsv2.game.utils.RandomUtil;
 import net.samagames.tools.LocationUtils;
@@ -24,6 +25,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
+
+import java.nio.file.DirectoryNotEmptyException;
 import java.util.*;
 import java.util.List;
 
@@ -95,6 +98,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         deleteChests(prop);
 
         waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
+        new TrakerTask().runTaskTimer(Dimensions.getInstance(),1L,10L);
     }
 
     /**

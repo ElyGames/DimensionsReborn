@@ -318,7 +318,13 @@ public class PlayerListener implements Listener
                 }
             }
             else if(p.getInventory().getItem(e.getPreviousSlot())!=null && (p.getInventory().getItem(e.getNewSlot())==null || p.getInventory().getItem(e.getPreviousSlot()).equals(ItemUtils.getTargetItem(p)))){
-                ActionBarAPI.sendMessage(p," ");
+                DimensionsGame game = Dimensions.getInstance().getGame();
+                if(game.getPlayer(p.getUniqueId()).getTarget()!=null){
+                    ItemUtils.displayActionBarArrow(p, Bukkit.getPlayer(game.getPlayer(p.getUniqueId()).getTarget()));
+                }
+                else if(game.getPlayer(p.getUniqueId()).getTargetLoc()!=null){
+                    ItemUtils.displayActionBarArrow(p, game.getPlayer(p.getUniqueId()).getTargetType(),game.getPlayer(p.getUniqueId()).getTargetLoc());
+                }
             }
     }
 }

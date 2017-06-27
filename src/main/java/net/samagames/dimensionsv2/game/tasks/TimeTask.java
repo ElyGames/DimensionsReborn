@@ -20,22 +20,6 @@ public class TimeTask extends BukkitRunnable {
     @Override
     public void run() {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
-        //For player that have a human target
-        game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
-
-                dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation());
-            if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem(dp.getPlayerIfOnline()))){
-                ItemUtils.displayActionBarTarget(dp.getPlayerIfOnline(),Bukkit.getPlayer(dp.getTarget()));
-            }
-
-        });
-        //For player that have a non human target
-        game.getInGamePlayers().values().stream().filter(dp -> dp.getTargetLoc()!=null).forEach(dp -> {
-            if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem(dp.getPlayerIfOnline()))){
-                ItemUtils.displayActionBarTarget(dp.getPlayerIfOnline(),dp.getTargetType(),dp.getTargetLoc());
-            }
-        });
         game.increaseGameTime();
         if(game.getGameStep()==GameStep.IN_GAME){
             switch(game.getPvpIn()){
