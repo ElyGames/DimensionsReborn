@@ -94,6 +94,8 @@ public class ChestItemListener implements Listener {
                                new Color[] { Color.BLACK, Color.GRAY, Color.WHITE },
                                new Color[] { Color.GREEN, Color.LIME, Color.OLIVE },
                                new Color[] { Color.BLUE, Color.AQUA, Color.WHITE }};
+
+
             manager.launchAndExplode( chest.getLocation(), FireworkEffect.builder().withColor(colors[game.getRandom().nextInt(colors.length)]).with(FireworkEffect.Type.BALL).build());
             chest.getBlock().setType(Material.AIR);
         }
