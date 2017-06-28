@@ -1,13 +1,7 @@
 package net.samagames.dimensionsv2.game.tasks;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
 import net.samagames.dimensionsv2.game.entity.GameStep;
-import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
-import net.samagames.dimensionsv2.game.utils.ItemUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
 

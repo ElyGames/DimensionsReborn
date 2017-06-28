@@ -25,8 +25,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.Vector;
-
-import java.nio.file.DirectoryNotEmptyException;
 import java.util.*;
 import java.util.List;
 
@@ -71,7 +69,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         random = new Random();
         timerTask = new TimeTask();
         randomEffects = new RandomEffectsTask();
-        new ItemUtils();
 
         this.lifeBoard = Dimensions.getInstance().getServer().getScoreboardManager().getNewScoreboard();
 
@@ -109,7 +106,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
        Iterator<Location> it = deathMatchSpawns.iterator();
         playSound(Sound.ENTITY_ENDERDRAGON_GROWL,1F);
        getInGamePlayers().values().forEach(
-               (p) -> {
+               p -> {
                    p.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
                    p.getPlayerIfOnline().resetPlayerTime();
                    Arrays.asList(p.getPlayerIfOnline().getInventory().getContents()).stream().filter(i -> (i!=null && (i.getType().equals(ItemUtils.getTargetItem(p.getPlayerIfOnline()).getType()) ||  i.getType().equals(ItemUtils.getSwapItem().getType())))).forEach(i -> p.getPlayerIfOnline().getInventory().remove(i));
@@ -291,9 +288,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
         Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
 
-        Bukkit.getServer().getOnlinePlayers().stream().filter(p -> !p.equals(winner.getPlayerIfOnline())).forEach(p -> {
-            Titles.sendTitle(p, 5, 80, 5, ChatColor.GOLD + "Fin de partie !", ChatColor.GREEN + "Bravo à " + winner.getPlayerIfOnline().getDisplayName());
-        });
+        Bukkit.getServer().getOnlinePlayers().stream().filter(p -> !p.equals(winner.getPlayerIfOnline())).forEach(p ->
+            Titles.sendTitle(p, 5, 80, 5, ChatColor.GOLD + "Fin de partie !", ChatColor.GREEN + "Bravo à " + winner.getPlayerIfOnline().getDisplayName())
+        );
         this.coherenceMachine.getTemplateManager().getPlayerWinTemplate().execute(winner.getPlayerIfOnline(), winner.getKills());
         addCoins(winner.getPlayerIfOnline(), 60, "Victoire !");
         this.effectsOnWinner(winner.getPlayerIfOnline());

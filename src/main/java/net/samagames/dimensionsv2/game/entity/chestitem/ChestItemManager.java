@@ -1,14 +1,8 @@
 package net.samagames.dimensionsv2.game.entity.chestitem;
-import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.utils.FireworkUtils;
-import org.bukkit.EntityEffect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.block.Chest;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
-import org.bukkit.inventory.meta.FireworkEffectMeta;
-import org.bukkit.inventory.meta.FireworkMeta;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +20,7 @@ public class ChestItemManager {
      * @param effect The builded effect
      */
     public void launchAndExplode(Location loc, FireworkEffect effect){
-        loc = loc.add(0.5,0.5,0.5);
+        loc.add(0.5,0.5,0.5);
         FireworkUtils.launchfw(loc,effect);
     }
 

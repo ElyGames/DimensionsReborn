@@ -41,9 +41,6 @@ public class Dimensions extends JavaPlugin
         Bukkit.getWorlds().get(0).setGameRuleValue("doDaylightCycle","false");
     }
 
-    @Override
-    public void onDisable(){
-    }
     public static Dimensions getInstance() {
         return instance;
     }

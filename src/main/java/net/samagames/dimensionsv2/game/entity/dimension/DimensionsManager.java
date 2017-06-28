@@ -93,7 +93,7 @@ public class DimensionsManager {
             case OVERWORLD: return overworldAnvils;
             case PARALLEL: return paralleldAnvils;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public List<Location> getEnchanting(Dimension dim){
@@ -101,7 +101,7 @@ public class DimensionsManager {
             case OVERWORLD: return overworldEnchantings;
             case PARALLEL: return paralleldAnvils;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     /**

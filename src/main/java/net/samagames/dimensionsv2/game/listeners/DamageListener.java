@@ -27,15 +27,11 @@ public class DamageListener implements Listener
     {
 
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(game.isNonGameStep()){
+        if(game.isNonGameStep() ||
+                e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive() ||
+                e.getCause() == EntityDamageEvent.DamageCause.POISON && game.isNonPVPActive()){
             e.setCancelled(true);
             return;
-        }
-        if (e.getCause() == EntityDamageEvent.DamageCause.MAGIC && game.isNonPVPActive()){
-            e.setCancelled(true);
-        }
-        else if (e.getCause() == EntityDamageEvent.DamageCause.POISON && game.isNonPVPActive()){
-            e.setCancelled(true);
         }
     }
 

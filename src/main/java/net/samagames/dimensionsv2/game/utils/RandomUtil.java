@@ -14,9 +14,6 @@ public class RandomUtil {
      */
     public static boolean pickBoolean(Random random, int percent){
         int i = random.nextInt(100);
-        if(i<percent){
-            return true;
-        }
-        return false;
+        return i<percent;
     }
 }

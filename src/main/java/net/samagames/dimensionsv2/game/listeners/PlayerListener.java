@@ -1,5 +1,4 @@
 package net.samagames.dimensionsv2.game.listeners;
-import net.minecraft.server.v1_10_R1.BlockAnvil;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
