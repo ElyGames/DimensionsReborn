@@ -4,7 +4,6 @@ import net.samagames.api.games.GamesNames;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
 import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
-import net.samagames.dimensionsv2.game.entity.dimension.DimensionsStatistics;
 import net.samagames.dimensionsv2.game.listeners.ChestItemListener;
 import net.samagames.dimensionsv2.game.listeners.DamageListener;
 import net.samagames.dimensionsv2.game.listeners.PlayerListener;
