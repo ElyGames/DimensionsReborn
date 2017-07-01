@@ -16,6 +16,7 @@ import net.samagames.tools.RulesBook;
 import net.samagames.tools.Titles;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.*;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -55,7 +56,6 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         rulesBook.addOwner("Tigger_San");
         rulesBook.addPage("TODO","//TODO");
 
-
         spawns = new ArrayList<>();
         deathMatchSpawns = new ArrayList<>();
         gameTime=0;
@@ -83,16 +83,16 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
-        prop.getConfig("spawns",new JsonArray()).getAsJsonArray().forEach(elt ->  spawns.add(LocationUtils.str2loc(elt.getAsString())));
+        prop.getMapProperty("spawns",new JsonArray()).getAsJsonArray().forEach(elt ->  spawns.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(spawns);
 
-        prop.getConfig("allowBreak",new JsonArray()).getAsJsonArray().forEach(elt ->  blockBreakWhitelist.add(Material.matchMaterial(elt.getAsString())));
-        prop.getConfig("deathMatchSpawns",new JsonArray()).getAsJsonArray().forEach(elt -> deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString())));
+        prop.getMapProperty("allowBreak",new JsonArray()).getAsJsonArray().forEach(elt ->  blockBreakWhitelist.add(Material.matchMaterial(elt.getAsString())));
+        prop.getMapProperty("deathMatchSpawns",new JsonArray()).getAsJsonArray().forEach(elt -> deathMatchSpawns.add(LocationUtils.str2loc(elt.getAsString())));
 
         Collections.shuffle(deathMatchSpawns);
         deleteChests(prop);
 
-        waitingRoom = LocationUtils.str2loc(prop.getConfig("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
+        waitingRoom = LocationUtils.str2loc(prop.getMapProperty("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
         new TrakerTask().runTaskTimer(Dimensions.getInstance(),1L,10L);
     }
 
@@ -191,7 +191,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
      */
     public void deleteChests(IGameProperties prop){
         List<Location> chests = new ArrayList<>();
-        prop.getConfig("chestsOverworld",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
+        prop.getMapProperty("chestsOverworld",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(chests);
 
         for(int i=0; i< (chests.size()/2); i++){
@@ -199,7 +199,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
 
         chests.clear();
-        prop.getConfig("chestsParallel",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
+        prop.getMapProperty("chestsParallel",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(chests);
         for(int i=0; i< (chests.size()/2); i++){
             chests.get(i).getBlock().setType(Material.AIR);

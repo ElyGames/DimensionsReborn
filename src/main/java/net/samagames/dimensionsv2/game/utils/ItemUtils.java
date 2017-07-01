@@ -17,7 +17,7 @@ public class ItemUtils {
     private static ItemStack swapItem;
 
     
-    {
+    static {
         swapItem = new ItemStack(Material.EYE_OF_ENDER);
         ItemMeta im = swapItem.getItemMeta();
         im.setDisplayName("§5Changer de dimension");

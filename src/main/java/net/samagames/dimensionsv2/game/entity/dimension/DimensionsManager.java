@@ -49,25 +49,25 @@ public class DimensionsManager {
 
         IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
-        for(JsonElement elt : prop.getConfig("enchantingTablesOverworld",new JsonArray()).getAsJsonArray()){
+        for(JsonElement elt : prop.getMapProperty("enchantingTablesOverworld",new JsonArray()).getAsJsonArray()){
             overworldEnchantings.add(LocationUtils.str2loc(elt.getAsString()));
         }
-        for(JsonElement elt : prop.getConfig("anvilsOverworld",new JsonArray()).getAsJsonArray()){
+        for(JsonElement elt : prop.getMapProperty("anvilsOverworld",new JsonArray()).getAsJsonArray()){
             overworldAnvils.add(LocationUtils.str2loc(elt.getAsString()));
         }
-        for(JsonElement elt : prop.getConfig("enchantingTablesParallel",new JsonArray()).getAsJsonArray()){
+        for(JsonElement elt : prop.getMapProperty("enchantingTablesParallel",new JsonArray()).getAsJsonArray()){
             parallelEnchantings.add(LocationUtils.str2loc(elt.getAsString()));
         }
-        for(JsonElement elt : prop.getConfig("anvilsParallel",new JsonArray()).getAsJsonArray()){
+        for(JsonElement elt : prop.getMapProperty("anvilsParallel",new JsonArray()).getAsJsonArray()){
             paralleldAnvils.add(LocationUtils.str2loc(elt.getAsString()));
         }
 
-        this.offsetX =   prop.getConfig("offsetX",new JsonPrimitive("100")).getAsInt();
-        this.offsetZ =   prop.getConfig("offsetZ",new JsonPrimitive("100")).getAsInt();
-        this.overworldName = prop.getConfig("overworldName",new JsonPrimitive("No set")).getAsString();
-        this.hardName = prop.getConfig("parallelName",new JsonPrimitive("No set")).getAsString();
-        this.overworldLootTable = prop.getConfig("overworldLootTable",new JsonPrimitive("sg:dimensions/dim_normal")).getAsString();
-        this.parallelLootTable = prop.getConfig("parallelLootTable",new JsonPrimitive("sg:dimensions/dim_parallel")).getAsString();
+        this.offsetX =   prop.getMapProperty("offsetX",new JsonPrimitive("100")).getAsInt();
+        this.offsetZ =   prop.getMapProperty("offsetZ",new JsonPrimitive("100")).getAsInt();
+        this.overworldName = prop.getMapProperty("overworldName",new JsonPrimitive("No set")).getAsString();
+        this.hardName = prop.getMapProperty("parallelName",new JsonPrimitive("No set")).getAsString();
+        this.overworldLootTable = prop.getMapProperty("overworldLootTable",new JsonPrimitive("sg:dimensions/dim_normal")).getAsString();
+        this.parallelLootTable = prop.getMapProperty("parallelLootTable",new JsonPrimitive("sg:dimensions/dim_parallel")).getAsString();
     }
 
     /**

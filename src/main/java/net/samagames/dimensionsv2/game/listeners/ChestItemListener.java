@@ -1,5 +1,8 @@
 package net.samagames.dimensionsv2.game.listeners;
-import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.NBTTagCompound;
+import net.minecraft.server.v1_12_R1.TileEntity;
+import net.minecraft.server.v1_12_R1.TileEntityChest;
 import net.samagames.dimensionsv2.Dimensions;
 import net.samagames.dimensionsv2.game.DimensionsGame;
 import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
@@ -10,7 +13,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -66,7 +69,7 @@ public class ChestItemListener implements Listener {
                 if(!manager.isOpened(chest)) {
                     TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
                     TileEntityChest tec = (TileEntityChest) te;
-                    NBTTagCompound c = tec.c();
+                    NBTTagCompound c = tec.d();
                     //Apply customs loots based on LootTables system
                     if(game.getPlayer(e.getPlayer().getUniqueId()).getDimension() == Dimension.OVERWORLD){
                         c.setString("LootTable", DimensionsManager.getInstance().getOverworldLootTable());

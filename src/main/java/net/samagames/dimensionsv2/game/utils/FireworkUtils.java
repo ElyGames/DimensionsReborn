@@ -1,18 +1,20 @@
 package net.samagames.dimensionsv2.game.utils;
 
-import net.minecraft.server.v1_10_R1.EntityFireworks;
-import net.minecraft.server.v1_10_R1.World;
+import net.minecraft.server.v1_12_R1.EntityFireworks;
+import net.minecraft.server.v1_12_R1.World;
 import net.samagames.dimensionsv2.Dimensions;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_10_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftFirework;
+
+
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftFirework;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 /**
- * Created by Tigger_San on 28/06/2017.
+ * Created by BlueSlime on 28/06/2017.
  */
 public class FireworkUtils
 {

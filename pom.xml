@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
+            <version>1.12-R0.1-20170627.185028-1</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>net.samagames</groupId>
             <artifactId>SamaGamesAPI</artifactId>
-            <version>4.1.0</version>
+            <version>5.0.0</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
