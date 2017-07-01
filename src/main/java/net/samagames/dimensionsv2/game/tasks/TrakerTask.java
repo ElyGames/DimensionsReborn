@@ -16,7 +16,7 @@ public class TrakerTask extends BukkitRunnable
     @Override
     public void run() {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        game.getRegisteredGamePlayers().values().forEach(DimensionsPlayer::updateScoreboard);
+
         //For player that have a human target
         game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
 
