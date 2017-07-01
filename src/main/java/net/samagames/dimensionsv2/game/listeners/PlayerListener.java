@@ -281,7 +281,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e){
 
-        if(e.getClickedInventory().getType().equals(InventoryType.PLAYER) && e.getSlot() == 40){
+        if(e.getClickedInventory()!= null && e.getClickedInventory().getType().equals(InventoryType.PLAYER) && e.getSlot() == 40){
             e.setCancelled(true);
             return;
         }
