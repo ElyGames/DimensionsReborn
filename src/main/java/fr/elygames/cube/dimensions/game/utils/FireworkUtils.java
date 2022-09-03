@@ -1,8 +1,8 @@
-package net.samagames.dimensionsv2.game.utils;
+package fr.elygames.cube.dimensions.game.utils;
 
 import net.minecraft.server.v1_12_R1.EntityFireworks;
 import net.minecraft.server.v1_12_R1.World;
-import net.samagames.dimensionsv2.Dimensions;
+import fr.elygames.cube.dimensions.Dimensions;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 

@@ -1,6 +1,6 @@
 ![SamaGames](https://assets.samagames.net/images/logo.png "SamaGames logo")
 
-## SamaGames - DimensionsV2
+## ElyGames - DimensionsV2 (from SamaGames)
 
 Ce projet vous est mis a disposition dans une volonté de partage suite à la fermeture du serveur Minecraft [**SamaGames**](http://samagames.net).
 
@@ -9,12 +9,9 @@ Pour plus de détails, référez-vous au texte de licence disponible [ici](LICEN
 
 ------------------------------------
 
-- Nom : DimensionsV2
-- Type : Mini-Jeu
-- État : Non terminé
-- Développeur(s) : Tigger_San
-- CDC (Si existant) :
+- Nom : Dimensions
+- Développeur(s) : MrWells (aka Tigger_San)
 
 
 ## Description
-DimensionsV2 est un projet visant à remettre à neuf le projet [Dimensions](https://github.com/SamaGames/Dimensions).
+Dimensions est un projet visant à remettre à neuf le projet [Dimensions](https://github.com/SamaGames/Dimensions).

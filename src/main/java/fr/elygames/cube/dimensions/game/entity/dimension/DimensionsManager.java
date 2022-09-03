@@ -1,14 +1,14 @@
-package net.samagames.dimensionsv2.game.entity.dimension;
+package fr.elygames.cube.dimensions.game.entity.dimension;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
 import net.samagames.api.games.IGameProperties;
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
-import net.samagames.dimensionsv2.game.entity.GameStep;
-import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
+import fr.elygames.cube.dimensions.Dimensions;
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+import fr.elygames.cube.dimensions.game.entity.DimensionsPlayer;
+import fr.elygames.cube.dimensions.game.entity.GameStep;
+import fr.elygames.cube.dimensions.game.entity.chestitem.ChestItemManager;
 import net.samagames.tools.LocationUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;

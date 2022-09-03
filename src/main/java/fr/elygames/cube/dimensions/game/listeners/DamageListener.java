@@ -1,8 +1,9 @@
-package net.samagames.dimensionsv2.game.listeners;
+package fr.elygames.cube.dimensions.game.listeners;
 
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.utils.ItemUtils;
+import fr.elygames.cube.dimensions.Dimensions;
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+import fr.elygames.cube.dimensions.game.utils.ItemUtils;
+
 import org.bukkit.EntityEffect;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;

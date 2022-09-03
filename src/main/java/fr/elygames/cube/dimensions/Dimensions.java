@@ -1,13 +1,14 @@
-package net.samagames.dimensionsv2;
+package fr.elygames.cube.dimensions;
 
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+import fr.elygames.cube.dimensions.game.entity.chestitem.ChestItemManager;
+import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
+import fr.elygames.cube.dimensions.game.listeners.PlayerListener;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamesNames;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
-import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
-import net.samagames.dimensionsv2.game.listeners.ChestItemListener;
-import net.samagames.dimensionsv2.game.listeners.DamageListener;
-import net.samagames.dimensionsv2.game.listeners.PlayerListener;
+import fr.elygames.cube.dimensions.game.listeners.ChestItemListener;
+import fr.elygames.cube.dimensions.game.listeners.DamageListener;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -1,11 +1,11 @@
-package net.samagames.dimensionsv2.game.entity;
+package fr.elygames.cube.dimensions.game.entity;
+import fr.elygames.cube.dimensions.game.entity.dimension.Dimension;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.GamePlayer;
 import net.samagames.api.shops.IPlayerShop;
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
-import net.samagames.dimensionsv2.game.utils.TimeUtil;
+import fr.elygames.cube.dimensions.Dimensions;
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+import fr.elygames.cube.dimensions.game.utils.TimeUtil;
 import net.samagames.tools.scoreboards.ObjectiveSign;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

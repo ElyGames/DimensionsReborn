@@ -1,14 +1,14 @@
-package net.samagames.dimensionsv2.game.listeners;
+package fr.elygames.cube.dimensions.game.listeners;
 
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
-import net.samagames.dimensionsv2.game.entity.GameStep;
-import net.samagames.dimensionsv2.game.entity.TargetType;
-import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
-import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
-import net.samagames.dimensionsv2.game.utils.DistanceUtil;
-import net.samagames.dimensionsv2.game.utils.ItemUtils;
+import fr.elygames.cube.dimensions.game.entity.dimension.Dimension;
+import fr.elygames.cube.dimensions.Dimensions;
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+import fr.elygames.cube.dimensions.game.entity.DimensionsPlayer;
+import fr.elygames.cube.dimensions.game.entity.GameStep;
+import fr.elygames.cube.dimensions.game.entity.TargetType;
+import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
+import fr.elygames.cube.dimensions.game.utils.DistanceUtil;
+import fr.elygames.cube.dimensions.game.utils.ItemUtils;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

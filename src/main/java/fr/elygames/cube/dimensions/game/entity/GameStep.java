@@ -1,5 +1,4 @@
-package net.samagames.dimensionsv2.game.utils;
-import java.util.Random;
+package fr.elygames.cube.dimensions.game.entity;
 
 /*
  * This file is part of DimensionsV2.
@@ -17,15 +16,12 @@ import java.util.Random;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class RandomUtil {
-    /**
-     * Pick a boolean based on a percent
-     * @param random Instance of random
-     * @param percent The percent
-     * @return Yes or no
-     */
-    public static boolean pickBoolean(Random random, int percent){
-        int i = random.nextInt(100);
-        return i<percent;
-    }
+public enum GameStep {
+    WAIT,
+    PRE_TELEPORT,
+    IN_GAME,
+    PVP,
+    DEATHMATCH_PLANNED,
+    DEATHMATCH,
+    FINISH;
 }

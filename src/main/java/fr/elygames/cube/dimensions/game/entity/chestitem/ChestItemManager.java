@@ -1,5 +1,5 @@
-package net.samagames.dimensionsv2.game.entity.chestitem;
-import net.samagames.dimensionsv2.game.utils.FireworkUtils;
+package fr.elygames.cube.dimensions.game.entity.chestitem;
+import fr.elygames.cube.dimensions.game.utils.FireworkUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.block.Chest;

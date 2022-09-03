@@ -1,4 +1,6 @@
-package net.samagames.dimensionsv2.game.entity.dimension;
+package fr.elygames.cube.dimensions.game.utils;
+import org.bukkit.Location;
+import java.util.List;
 
 /*
  * This file is part of DimensionsV2.
@@ -16,7 +18,20 @@ package net.samagames.dimensionsv2.game.entity.dimension;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public enum Dimension {
-    OVERWORLD,
-    PARALLEL
+public class DistanceUtil {
+    /**
+     * Get the closest location of a location
+     * @param l The location
+     * @param locs List of other locations
+     * @return The closest location
+     */
+    public static Location getNearbyLocation(Location l ,List<Location> locs){
+        Location nearby = locs.get(0);
+        for(Location loc : locs){
+            if(loc.distance(l) < nearby.distance(l)){
+                nearby=loc;
+            }
+        }
+        return nearby;
+    }
 }

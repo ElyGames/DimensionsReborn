@@ -1,4 +1,4 @@
-package net.samagames.dimensionsv2.game.entity;
+package fr.elygames.cube.dimensions.game.utils;
 
 /*
  * This file is part of DimensionsV2.
@@ -16,12 +16,16 @@ package net.samagames.dimensionsv2.game.entity;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public enum GameStep {
-    WAIT,
-    PRE_TELEPORT,
-    IN_GAME,
-    PVP,
-    DEATHMATCH_PLANNED,
-    DEATHMATCH,
-    FINISH;
+public class TimeUtil {
+
+    /**
+     * Format seconds to string which can be displayed on the scoreboard
+     * @param time The time in second
+     * @return The formatted time
+     */
+    public static String timeToString(int time){
+        int minutes = time / 60;
+        int seconds = time % 60;
+         return (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    }
 }

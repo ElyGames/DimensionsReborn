@@ -1,5 +1,5 @@
-name: DimensionsV2
-main: net.samagames.dimensionsv2.Dimensions
-version: Dev
-depend: [SamaGamesAPI]
-authors: [Tigger_San]
+name: Dimensions
+main: fr.elygames.cube.dimensions.Dimensions
+version: 1.0
+depend: [ ElycubeAPI ]
+authors: [ MrWells ]

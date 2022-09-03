@@ -1,4 +1,4 @@
-package net.samagames.dimensionsv2.game.entity;
+package fr.elygames.cube.dimensions.game.entity;
 import net.samagames.api.shops.IPlayerShop;
 
 /*

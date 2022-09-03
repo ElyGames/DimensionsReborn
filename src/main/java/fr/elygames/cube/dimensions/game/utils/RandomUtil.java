@@ -1,4 +1,5 @@
-package net.samagames.dimensionsv2.game.utils;
+package fr.elygames.cube.dimensions.game.utils;
+import java.util.Random;
 
 /*
  * This file is part of DimensionsV2.
@@ -16,16 +17,15 @@ package net.samagames.dimensionsv2.game.utils;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class TimeUtil {
-
+public class RandomUtil {
     /**
-     * Format seconds to string which can be displayed on the scoreboard
-     * @param time The time in second
-     * @return The formatted time
+     * Pick a boolean based on a percent
+     * @param random Instance of random
+     * @param percent The percent
+     * @return Yes or no
      */
-    public static String timeToString(int time){
-        int minutes = time / 60;
-        int seconds = time % 60;
-         return (minutes > 9 ? minutes : "0" + minutes) + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    public static boolean pickBoolean(Random random, int percent){
+        int i = random.nextInt(100);
+        return i<percent;
     }
 }

@@ -1,4 +1,4 @@
-package net.samagames.dimensionsv2.game.entity.dimension;
+package fr.elygames.cube.dimensions.game.entity.dimension;
 import net.samagames.api.SamaGamesAPI;
 import net.samagames.api.games.IGameStatisticsHelper;
 

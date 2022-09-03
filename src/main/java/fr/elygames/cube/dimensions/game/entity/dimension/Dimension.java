@@ -1,4 +1,4 @@
-package net.samagames.dimensionsv2.game.entity;
+package fr.elygames.cube.dimensions.game.entity.dimension;
 
 /*
  * This file is part of DimensionsV2.
@@ -16,8 +16,7 @@ package net.samagames.dimensionsv2.game.entity;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public enum TargetType {
-    PLAYER,
-    ENCHANTING,
-    ANVIL
+public enum Dimension {
+    OVERWORLD,
+    PARALLEL
 }

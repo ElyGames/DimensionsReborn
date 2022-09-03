@@ -1,17 +1,18 @@
-package net.samagames.dimensionsv2.game;
+package fr.elygames.cube.dimensions.game;
 
 import com.google.gson.*;
+
+import fr.elygames.cube.dimensions.game.entity.DimensionsPlayer;
+import fr.elygames.cube.dimensions.game.entity.GameStep;
+import fr.elygames.cube.dimensions.game.entity.PowerUp;
+import fr.elygames.cube.dimensions.game.tasks.RandomEffectsTask;
+import fr.elygames.cube.dimensions.game.tasks.TimeTask;
+import fr.elygames.cube.dimensions.game.tasks.TrakerTask;
+import fr.elygames.cube.dimensions.game.utils.ItemUtils;
+import fr.elygames.cube.dimensions.game.utils.RandomUtil;
 import net.samagames.api.games.Game;
 import net.samagames.api.games.IGameProperties;
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
-import net.samagames.dimensionsv2.game.entity.GameStep;
-import net.samagames.dimensionsv2.game.entity.PowerUp;
-import net.samagames.dimensionsv2.game.tasks.RandomEffectsTask;
-import net.samagames.dimensionsv2.game.tasks.TimeTask;
-import net.samagames.dimensionsv2.game.tasks.TrakerTask;
-import net.samagames.dimensionsv2.game.utils.ItemUtils;
-import net.samagames.dimensionsv2.game.utils.RandomUtil;
+import fr.elygames.cube.dimensions.Dimensions;
 import net.samagames.tools.LocationUtils;
 import net.samagames.tools.RulesBook;
 import net.samagames.tools.Titles;

@@ -1,10 +1,10 @@
-package net.samagames.dimensionsv2.game.tasks;
+package fr.elygames.cube.dimensions.game.tasks;
 
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.DimensionsPlayer;
-import net.samagames.dimensionsv2.game.entity.GameStep;
-import net.samagames.dimensionsv2.game.utils.ItemUtils;
+import fr.elygames.cube.dimensions.game.entity.GameStep;
+import fr.elygames.cube.dimensions.game.utils.ItemUtils;
+import fr.elygames.cube.dimensions.Dimensions;
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 

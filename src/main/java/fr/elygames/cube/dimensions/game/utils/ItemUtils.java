@@ -1,5 +1,5 @@
-package net.samagames.dimensionsv2.game.utils;
-import net.samagames.dimensionsv2.game.entity.TargetType;
+package fr.elygames.cube.dimensions.game.utils;
+import fr.elygames.cube.dimensions.game.entity.TargetType;
 import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;

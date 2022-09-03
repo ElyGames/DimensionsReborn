@@ -1,14 +1,15 @@
-package net.samagames.dimensionsv2.game.listeners;
+package fr.elygames.cube.dimensions.game.listeners;
 
+import fr.elygames.cube.dimensions.Dimensions;
+import fr.elygames.cube.dimensions.game.DimensionsGame;
+import fr.elygames.cube.dimensions.game.entity.chestitem.ChestItemManager;
+import fr.elygames.cube.dimensions.game.entity.dimension.Dimension;
+import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
 import net.minecraft.server.v1_12_R1.BlockPosition;
 import net.minecraft.server.v1_12_R1.NBTTagCompound;
 import net.minecraft.server.v1_12_R1.TileEntity;
 import net.minecraft.server.v1_12_R1.TileEntityChest;
-import net.samagames.dimensionsv2.Dimensions;
-import net.samagames.dimensionsv2.game.DimensionsGame;
-import net.samagames.dimensionsv2.game.entity.chestitem.ChestItemManager;
-import net.samagames.dimensionsv2.game.entity.dimension.Dimension;
-import net.samagames.dimensionsv2.game.entity.dimension.DimensionsManager;
+
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
