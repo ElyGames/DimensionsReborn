@@ -5,17 +5,14 @@ import fr.elygames.cube.dimensions.game.DimensionsGame;
 import fr.elygames.cube.dimensions.game.entity.chestitem.ChestItemManager;
 import fr.elygames.cube.dimensions.game.entity.dimension.Dimension;
 import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
-import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.TileEntity;
-import net.minecraft.server.v1_12_R1.TileEntityChest;
+
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -48,7 +45,7 @@ public class ChestItemListener implements Listener {
     public void onChestOpen(PlayerInteractEvent e)
     {
         if(e.getAction() == Action.PHYSICAL){
-            if(e.getClickedBlock().getType() == Material.SOIL){
+            if(e.getClickedBlock().getType() == Material.FARMLAND){
                 e.setCancelled(true);
                 return;
             }
@@ -62,7 +59,7 @@ public class ChestItemListener implements Listener {
         }
         if (e.getAction().equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.CHEST))
         {
-            if(Dimensions.getInstance().getGame().isSpectator(e.getPlayer()) ||game.isNonGameStep() ){
+            if(Dimensions.getInstance().getGame().getSpectators().containsKey(e.getPlayer().getUniqueId()) ||game.isNonGameStep() ){
                 e.setCancelled(true);
                 return;
             }
@@ -83,7 +80,8 @@ public class ChestItemListener implements Listener {
                 Chest chest = (Chest)e.getInventory().getHolder();
                 ChestItemManager manager = ChestItemManager.getInstance();
                 if(!manager.isOpened(chest)) {
-                    TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
+                    //TODO : rework this
+                    /*TileEntity te = ((CraftWorld)chest.getBlock().getWorld()).getHandle().getTileEntity(new BlockPosition(chest.getX(),chest.getY(),chest.getZ()));
                     TileEntityChest tec = (TileEntityChest) te;
                     NBTTagCompound c = tec.d();
                     //Apply customs loots based on LootTables system
@@ -93,7 +91,8 @@ public class ChestItemListener implements Listener {
                     else{
                         c.setString("LootTable",DimensionsManager.getInstance().getParallelLootTable());
                     }
-                    tec.a(c);
+                    tec.a(c);*/
+
                     manager.opened(chest);
                 }
             }

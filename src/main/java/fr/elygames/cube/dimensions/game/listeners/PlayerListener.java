@@ -9,7 +9,6 @@ import fr.elygames.cube.dimensions.game.entity.TargetType;
 import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
 import fr.elygames.cube.dimensions.game.utils.DistanceUtil;
 import fr.elygames.cube.dimensions.game.utils.ItemUtils;
-import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -50,7 +49,7 @@ public class PlayerListener implements Listener
     @EventHandler
     public void onMove(PlayerMoveEvent e){
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(game.getGameStep()== GameStep.PRE_TELEPORT && game.hasPlayer(e.getPlayer()) && !game.isSpectator(e.getPlayer())){
+        if(game.getDimensionsGameStep()== GameStep.PRE_TELEPORT && game.hasPlayer(e.getPlayer()) && !game.getSpectators().containsKey(e.getPlayer().getUniqueId())){
             if (e.getTo().getBlockX() != e.getFrom().getBlockX() || e.getTo().getBlockZ() != e.getFrom().getBlockZ())
                 e.setTo(e.getFrom());
         }
@@ -89,7 +88,7 @@ public class PlayerListener implements Listener
             else if(e.getBlock().getType() == Material.LAPIS_ORE){
                 e.setCancelled(true);
                 e.getBlock().breakNaturally(new ItemStack(Material.BARRIER));
-                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.INK_SACK,3,(short)4));
+                e.getBlock().getWorld().dropItem(e.getBlock().getLocation().add(0.5,0,0.5),new ItemStack(Material.INK_SAC,3,(short)4));
             }
             else if(e.getBlock().getType() == Material.IRON_ORE){
                 e.setCancelled(true);
@@ -246,7 +245,7 @@ public class PlayerListener implements Listener
                         case ANVIL : dp.setTargetType(TargetType.ENCHANTING); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cTable d'enchantement la plus proche§6, cible actuelle réinitialisée.");break;
                         case ENCHANTING:  dp.setTargetType(TargetType.PLAYER); dp.getPlayerIfOnline().sendMessage("§6Type de cible : §cJoueur le plus proche§6, cible actuelle réinitialisée.");
                     }
-                    ActionBarAPI.sendMessage(dp.getPlayerIfOnline()," ");
+                    //ActionBarAPI.sendMessage(dp.getPlayerIfOnline()," ");
                     dp.setTarget(null);
                     dp.setTargetLoc(null);
                     e.setCancelled(true);
@@ -254,7 +253,7 @@ public class PlayerListener implements Listener
             }
         }
         if (e.getClickedBlock() != null){
-            if(e.getClickedBlock().getType() == Material.BED || e.getClickedBlock().getType() == Material.BED_BLOCK)
+            if(e.getClickedBlock().getType().toString().toLowerCase().contains("bed"))
             {
                 e.setCancelled(true);
             }

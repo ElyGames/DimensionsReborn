@@ -1,10 +1,11 @@
 package fr.elygames.cube.dimensions.game.entity.chestitem;
-import fr.elygames.cube.dimensions.game.utils.FireworkUtils;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.block.Chest;
 import java.util.ArrayList;
 import java.util.List;
+
+import fr.elygames.cube.utils.FireworkUtil;
 
 /*
  * This file is part of DimensionsV2.
@@ -33,7 +34,9 @@ public class ChestItemManager {
      */
     public void launchAndExplode(Location loc, FireworkEffect effect){
         loc.add(0.5,0.5,0.5);
-        FireworkUtils.launchfw(loc,effect);
+        //TODO : rework
+        // FireworkUtils.launchfw(loc,effect);
+
     }
 
     /**

@@ -1,12 +1,11 @@
 package fr.elygames.cube.dimensions.game.entity;
 import fr.elygames.cube.dimensions.game.entity.dimension.Dimension;
-import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.games.GamePlayer;
-import net.samagames.api.shops.IPlayerShop;
+
 import fr.elygames.cube.dimensions.Dimensions;
 import fr.elygames.cube.dimensions.game.DimensionsGame;
 import fr.elygames.cube.dimensions.game.utils.TimeUtil;
-import net.samagames.tools.scoreboards.ObjectiveSign;
+import fr.elygames.cube.game.GamePlayer;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import java.util.HashMap;
@@ -29,10 +28,11 @@ import java.util.UUID;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DimensionsPlayer extends GamePlayer{
+public class DimensionsPlayer extends GamePlayer {
 
     private Map<PowerUp,Integer> powerUps;
-    private ObjectiveSign objectiveSign;
+    //TODO : replace with ely sb
+    //private ObjectiveSign objectiveSign;
     private int kills;
     private UUID lastDamager;
     private Dimension dimension;
@@ -49,17 +49,17 @@ public class DimensionsPlayer extends GamePlayer{
         lastTarget= -1;
         target =null;
         dimension = Dimension.OVERWORLD;
-        objectiveSign = new ObjectiveSign("dimensions","§f☯ §5§lDimensions §f☯");
-        objectiveSign.addReceiver(this.getOfflinePlayer());
+        //objectiveSign = new ObjectiveSign("dimensions","§f☯ §5§lDimensions §f☯");
+        //objectiveSign.addReceiver(this.getOfflinePlayer());
         this.kills = 0;
 
         powerUps = new HashMap<>();
-        IPlayerShop shop = SamaGamesAPI.get().getShopsManager().getPlayer(this.uuid);
+        //IPlayerShop shop = SamaGamesAPI.get().getShopsManager().getPlayer(this.uuid);
 
         //Get shop values for player
-        for(PowerUp pu : PowerUp.values()){
+        /*for(PowerUp pu : PowerUp.values()){
             powerUps.put(pu,pu.getPowerUpLevelForPlayer(shop));
-        }
+        }*/
     }
 
 
@@ -84,12 +84,10 @@ public class DimensionsPlayer extends GamePlayer{
         kills++;
     }
 
-    public ObjectiveSign getObjectiveSign() {
-        return objectiveSign;
-    }
+
 
     public void updateScoreboard(){
-        DimensionsGame game = Dimensions.getInstance().getGame();
+        /*DimensionsGame game = Dimensions.getInstance().getGame();
         int timer = game.getGameTime();
         String time = TimeUtil.timeToString(timer);
 
@@ -129,7 +127,7 @@ public class DimensionsPlayer extends GamePlayer{
 
         objectiveSign.setLine(-2, "    " );
         objectiveSign.setLine(-1, "§f"  + time);
-        objectiveSign.updateLines();
+        objectiveSign.updateLines();*/
     }
 
     public UUID getLastDamager() {
@@ -139,7 +137,7 @@ public class DimensionsPlayer extends GamePlayer{
 
     public Dimension getDimension() {
         DimensionsGame game = Dimensions.getInstance().getGame();
-        if(game.getGameStep() == GameStep.DEATHMATCH){
+        if(game.getDimensionsGameStep() == GameStep.DEATHMATCH){
             return Dimension.OVERWORLD;
         }
         return dimension;

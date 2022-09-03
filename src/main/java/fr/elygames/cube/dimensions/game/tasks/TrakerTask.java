@@ -31,7 +31,7 @@ public class TrakerTask extends BukkitRunnable
         DimensionsGame game = Dimensions.getInstance().getGame();
 
         //For player that have a human target
-        game.getInGamePlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
+        game.getPlayers().values().stream().filter(dp -> dp.getTarget()!=null).forEach(dp -> {
 
             dp.getPlayerIfOnline().setCompassTarget(Bukkit.getPlayer(dp.getTarget()).getLocation().getBlock().getLocation());
             if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem(dp.getPlayerIfOnline()))){
@@ -43,7 +43,7 @@ public class TrakerTask extends BukkitRunnable
 
         });
         //For player that have a non human target
-        game.getInGamePlayers().values().stream().filter(dp -> dp.getTargetLoc()!=null).forEach(dp -> {
+        game.getPlayers().values().stream().filter(dp -> dp.getTargetLoc()!=null).forEach(dp -> {
             if(dp.getPlayerIfOnline().getInventory().getItemInMainHand().equals(ItemUtils.getTargetItem(dp.getPlayerIfOnline()))){
                 ItemUtils.displayActionBarTarget(dp.getPlayerIfOnline(),dp.getTargetType(),dp.getTargetLoc());
             }
@@ -52,7 +52,7 @@ public class TrakerTask extends BukkitRunnable
             }
         });
 
-        if(game.getGameStep() == GameStep.DEATHMATCH){
+        if(game.getDimensionsGameStep() == GameStep.DEATHMATCH){
             this.cancel();
         }
     }

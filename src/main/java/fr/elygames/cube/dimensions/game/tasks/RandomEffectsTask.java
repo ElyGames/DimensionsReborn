@@ -6,7 +6,6 @@ import fr.elygames.cube.dimensions.game.entity.dimension.Dimension;
 import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
 import fr.elygames.cube.dimensions.Dimensions;
 import fr.elygames.cube.dimensions.game.DimensionsGame;
-import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -54,7 +53,7 @@ public class RandomEffectsTask extends BukkitRunnable{
         if (this.nextEffect <= 0)
         {
             DimensionsGame game = Dimensions.getInstance().getGame();
-            if (game.getGameStep() == GameStep.DEATHMATCH){
+            if (game.getDimensionsGameStep() == GameStep.DEATHMATCH){
                 this.cancel();
                 return;
             }
@@ -68,7 +67,8 @@ public class RandomEffectsTask extends BukkitRunnable{
                     @Override
                     public void run() {
                         p.addPotionEffect(effects[effect]);
-                        ActionBarAPI.sendMessage(p,"§c§oLe maléfice de ce monde semble vous atteindre ...");
+                        // TODO : rework this
+                        //ActionBarAPI.sendMessage(p,"§c§oLe maléfice de ce monde semble vous atteindre ...");
                         p.playSound(p.getLocation(), Sound.BLOCK_PORTAL_AMBIENT,50F,1F);
                     }
                 }.runTask(Dimensions.getInstance());

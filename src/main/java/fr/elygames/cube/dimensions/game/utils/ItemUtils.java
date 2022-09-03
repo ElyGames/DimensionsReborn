@@ -1,6 +1,5 @@
 package fr.elygames.cube.dimensions.game.utils;
 import fr.elygames.cube.dimensions.game.entity.TargetType;
-import net.samagames.tools.chat.ActionBarAPI;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,7 +29,7 @@ public class ItemUtils {
 
     
     static {
-        swapItem = new ItemStack(Material.EYE_OF_ENDER);
+        swapItem = new ItemStack(Material.ENDER_EYE);
         ItemMeta im = swapItem.getItemMeta();
         im.setDisplayName("§5Changer de dimension");
         swapItem.setItemMeta(im);
@@ -63,12 +62,12 @@ public class ItemUtils {
      * @param target The target
      */
     public static void displayActionBarTarget(Player p , Player target){
-        ActionBarAPI.sendMessage(p,target.getDisplayName() + "§7 : §b"+ getDirection(p,target.getLocation().clone())+ "§c "+
-        new Double(p.getLocation().distance(target.getLocation())).intValue()+"m" );
+      //  ActionBarAPI.sendMessage(p,target.getDisplayName() + "§7 : §b"+ getDirection(p,target.getLocation().clone())+ "§c "+
+     //   new Double(p.getLocation().distance(target.getLocation())).intValue()+"m" );
     }
 
     public static void displayActionBarArrow(Player p , Player target){
-        ActionBarAPI.sendMessage(p,target.getDisplayName() + "§7 : §b"+ getDirection(p,target.getLocation().clone()));
+      //  ActionBarAPI.sendMessage(p,target.getDisplayName() + "§7 : §b"+ getDirection(p,target.getLocation().clone()));
     }
 
     /**
@@ -83,8 +82,8 @@ public class ItemUtils {
             case ENCHANTING: s = "Table d'enchantement"; break;
             case ANVIL: s = "Enclume";
         }
-        ActionBarAPI.sendMessage(p,"§2" +s+ "§7 : §b"+ getDirection(p,l.clone()) + "§c "+
-        new Double(p.getLocation().distance(l)).intValue()+"m"  );
+        //ActionBarAPI.sendMessage(p,"§2" +s+ "§7 : §b"+ getDirection(p,l.clone()) + "§c "+
+       // new Double(p.getLocation().distance(l)).intValue()+"m"  );
     }
     public static void displayActionBarArrow(Player p , TargetType type, Location l){
         String s = "";
@@ -92,7 +91,7 @@ public class ItemUtils {
             case ENCHANTING: s = "Table d'enchantement"; break;
             case ANVIL: s = "Enclume";
         }
-        ActionBarAPI.sendMessage(p,"§2" +s+ "§7 : §b"+ getDirection(p,l.clone()));
+        //ActionBarAPI.sendMessage(p,"§2" +s+ "§7 : §b"+ getDirection(p,l.clone()));
     }
 
     private static char getDirection(Player p, Location point)

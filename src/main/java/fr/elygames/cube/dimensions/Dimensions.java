@@ -1,11 +1,10 @@
 package fr.elygames.cube.dimensions;
 
+import fr.elygames.cube.ElyAPI;
 import fr.elygames.cube.dimensions.game.DimensionsGame;
 import fr.elygames.cube.dimensions.game.entity.chestitem.ChestItemManager;
 import fr.elygames.cube.dimensions.game.entity.dimension.DimensionsManager;
-import fr.elygames.cube.dimensions.game.listeners.PlayerListener;
-import net.samagames.api.SamaGamesAPI;
-import net.samagames.api.games.GamesNames;
+import fr.elygames.cube.dimensions.game.listeners.PlayerListener;;
 import fr.elygames.cube.dimensions.game.listeners.ChestItemListener;
 import fr.elygames.cube.dimensions.game.listeners.DamageListener;
 
@@ -30,19 +29,16 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Dimensions extends JavaPlugin
 {
-    private SamaGamesAPI api;
     private DimensionsGame game;
     private static Dimensions instance;
 
     @Override
     public void onEnable(){
         instance = this;
-        this.api = SamaGamesAPI.get();
         this.game = new DimensionsGame();
-        SamaGamesAPI.get().getGameManager().setLegacyPvP(true);
-        SamaGamesAPI.get().getGameManager().registerGame(game);
-        //SamaGamesAPI.get().getGameManager().setGameStatisticsHelper(new DimensionsStatistics());
-        SamaGamesAPI.get().getShopsManager().setShopToLoad(GamesNames.DIMENSION, true);
+        //SamaGamesAPI.get().getGameManager().setLegacyPvP(true);
+        ElyAPI.getGameManager().registerGame(game);
+
         getServer().getPluginManager().registerEvents(new PlayerListener(),this);
         getServer().getPluginManager().registerEvents(new ChestItemListener(),this);
         getServer().getPluginManager().registerEvents(new DamageListener(),this);
@@ -56,10 +52,6 @@ public class Dimensions extends JavaPlugin
 
     public static Dimensions getInstance() {
         return instance;
-    }
-
-    public SamaGamesAPI getApi() {
-        return api;
     }
 
     public DimensionsGame getGame() {

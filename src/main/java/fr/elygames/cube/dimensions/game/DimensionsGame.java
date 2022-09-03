@@ -2,6 +2,7 @@ package fr.elygames.cube.dimensions.game;
 
 import com.google.gson.*;
 
+import fr.elygames.cube.ElyAPI;
 import fr.elygames.cube.dimensions.game.entity.DimensionsPlayer;
 import fr.elygames.cube.dimensions.game.entity.GameStep;
 import fr.elygames.cube.dimensions.game.entity.PowerUp;
@@ -10,15 +11,10 @@ import fr.elygames.cube.dimensions.game.tasks.TimeTask;
 import fr.elygames.cube.dimensions.game.tasks.TrakerTask;
 import fr.elygames.cube.dimensions.game.utils.ItemUtils;
 import fr.elygames.cube.dimensions.game.utils.RandomUtil;
-import net.samagames.api.games.Game;
-import net.samagames.api.games.IGameProperties;
 import fr.elygames.cube.dimensions.Dimensions;
-import net.samagames.tools.LocationUtils;
-import net.samagames.tools.RulesBook;
-import net.samagames.tools.Titles;
-import net.samagames.tools.chat.ActionBarAPI;
+import fr.elygames.cube.game.Game;
+
 import org.bukkit.*;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -45,7 +41,7 @@ import java.util.List;
  * You should have received a copy of the GNU General Public License
  * along with DimensionsV2.  If not, see <http://www.gnu.org/licenses/>.
  */
-public class DimensionsGame extends Game<DimensionsPlayer>{
+public class DimensionsGame extends Game<DimensionsPlayer> {
 
     private List<Location> spawns;
     private List<Location> deathMatchSpawns;
@@ -60,15 +56,15 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     private TimeTask timerTask;
     private Scoreboard lifeBoard;
     private RandomEffectsTask randomEffects;
-    private RulesBook rulesBook;
+
 
 
     public DimensionsGame() {
 
-        super("dimensions", "Dimensions", "", DimensionsPlayer.class);
-        rulesBook = new RulesBook("Dimensions");
-        rulesBook.addOwner("Tigger_San");
-        rulesBook.addPage("TODO","//TODO");
+        super("dimensions", "Dimensions", "", DimensionsPlayer.class,false);
+        //rulesBook = new RulesBook("Dimensions");
+        //rulesBook.addOwner("Tigger_San");
+        //rulesBook.addPage("TODO","//TODO");
 
         spawns = new ArrayList<>();
         deathMatchSpawns = new ArrayList<>();
@@ -85,17 +81,18 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         this.lifeBoard = Dimensions.getInstance().getServer().getScoreboardManager().getNewScoreboard();
 
         blockPlaceWhitelist.add(Material.TNT); blockBreakWhitelist.add(Material.TNT);
-        blockPlaceWhitelist.add(Material.WORKBENCH); blockBreakWhitelist.add(Material.WORKBENCH);
+        blockPlaceWhitelist.add(Material.CRAFTING_TABLE); blockBreakWhitelist.add(Material.CRAFTING_TABLE);
         blockPlaceWhitelist.add(Material.FURNACE); blockBreakWhitelist.add(Material.FURNACE);
         blockPlaceWhitelist.add(Material.CAKE); blockBreakWhitelist.add(Material.CAKE);
-        blockPlaceWhitelist.add(Material.CAKE_BLOCK); blockBreakWhitelist.add(Material.CAKE_BLOCK);
+        // blockPlaceWhitelist.add(Material.CAKE_BLOCK); blockBreakWhitelist.add(Material.CAKE_BLOCK);
         blockBreakWhitelist.add(Material.COAL_ORE);
         blockBreakWhitelist.add(Material.DIAMOND_ORE);
         blockBreakWhitelist.add(Material.IRON_ORE);
         blockBreakWhitelist.add(Material.LAPIS_ORE);
         blockBreakWhitelist.add(Material.GOLD_ORE);
 
-        IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
+        //TODO : replace
+        /*IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
         prop.getMapProperty("spawns",new JsonArray()).getAsJsonArray().forEach(elt ->  spawns.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(spawns);
@@ -106,7 +103,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         Collections.shuffle(deathMatchSpawns);
         deleteChests(prop);
 
-        waitingRoom = LocationUtils.str2loc(prop.getMapProperty("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());
+        waitingRoom = LocationUtils.str2loc(prop.getMapProperty("waitingRoom",new JsonPrimitive("world, 0, 0, 0, 0, 0")).getAsString());*/
         new TrakerTask().runTaskTimer(Dimensions.getInstance(),1L,10L);
     }
 
@@ -116,8 +113,8 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     public void startDeathmatch(){
        gameStep = GameStep.DEATHMATCH;
        Iterator<Location> it = deathMatchSpawns.iterator();
-        playSound(Sound.ENTITY_ENDERDRAGON_GROWL,1F);
-       getInGamePlayers().values().forEach(
+        playSound(Sound.ENTITY_ENDER_DRAGON_GROWL,1F);
+       getPlayers().values().forEach(
                p -> {
                    p.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
                    p.getPlayerIfOnline().resetPlayerTime();
@@ -164,14 +161,14 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         //((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseDeaths(p.getUniqueId());
         DimensionsPlayer killer = getPlayer(getPlayer(p.getUniqueId()).getLastDamager());
         if (killer==null){
-            getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() +" §ea été éliminé sans aide extérieure.",true);
+            ElyAPI.getChatManager().sendGlobalMessage("§e" + p.getDisplayName() +" §ea été éliminé sans aide extérieure.");
         }
         else
         {
-            getCoherenceMachine().getMessageManager().writeCustomMessage("§e" + p.getDisplayName() + " §e a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§e.",true);
+            ElyAPI.getChatManager().sendGlobalMessage("§e" + p.getDisplayName() + " §e a été tué par " + killer.getPlayerIfOnline().getDisplayName() + "§e.");
             killer.addKill();
            // ((DimensionsStatistics) SamaGamesAPI.get().getGameManager().getGameStatisticsHelper()).increaseKills(killer.getUUID());
-            addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
+            //addCoins(killer.getPlayerIfOnline(), 20, "Un joueur tué !");
 
             if (killer.getPlayerIfOnline().getHealth() >= 1.0)
              {
@@ -188,22 +185,25 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         }
     }
 
+
+    public boolean isSpectator(DimensionsPlayer dp){
+        return this.getSpectators().containsKey(dp.getPlayerIfOnline().getUniqueId());
+
+    }
+
+
     @Override
-    public void handleLogout(Player player)
+    public void playerLogout(Player player)
     {
         DimensionsPlayer dp = getPlayer(player.getUniqueId());
-        super.handleLogout(player);
-            if((!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT) && dp !=null && !dp.isSpectator()){
+        super.playerLogout(player);
+            if((!isNonGameStep() || gameStep== GameStep.PRE_TELEPORT) && dp !=null && !isSpectator(dp)){
                 stumpPlayer(player,true);
-
             }
     }
 
-    /**
-     * Removes half of the chests on the map
-     * @param prop The game properties
-     */
-    public void deleteChests(IGameProperties prop){
+
+   /* public void deleteChests(IGameProperties prop){
         List<Location> chests = new ArrayList<>();
         prop.getMapProperty("chestsOverworld",new JsonArray()).getAsJsonArray().forEach(elt -> chests.add(LocationUtils.str2loc(elt.getAsString())));
         Collections.shuffle(chests);
@@ -218,18 +218,18 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         for(int i=0; i< (chests.size()/2); i++){
             chests.get(i).getBlock().setType(Material.AIR);
         }
-    }
+    }*/
 
     @Override
-    public void handleLogin(Player player){
+    public void playerLogin(Player player){
         player.setScoreboard(this.lifeBoard);
         player.setGameMode(GameMode.ADVENTURE);
         player.teleport(waitingRoom);
         player.setHealth(20D);
         player.getInventory().clear();
         player.setFoodLevel(20);
-        player.getInventory().setItem(4,rulesBook.toItemStack());
-        super.handleLogin(player);
+        //player.getInventory().setItem(4,rulesBook.toItemStack());
+        super.playerLogin(player);
     }
 
     public List<Location> getDeathMatchSpawns() {
@@ -249,7 +249,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
 
         playSound(Sound.ENTITY_WITHER_BREAK_BLOCK,1F);
 
-        for(DimensionsPlayer dimPlayer : getInGamePlayers().values()){
+        for(DimensionsPlayer dimPlayer : getPlayers().values()){
 
             if(dimPlayer.getTarget()== p.getUniqueId()){
                 dimPlayer.setTarget(null);
@@ -257,28 +257,28 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             }
         }
 
-        setSpectator(p);
+        //setSpectator(p);
         DimensionsPlayer dp = getPlayer(p.getUniqueId());
 
-        int left = getInGamePlayers().values().size();
+        int left = getPlayers().values().size();
         if(!logout){
             p.resetPlayerTime();
-            if ((!dp.getUUID().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
+            if ((!dp.getPlayerIfOnline().getUniqueId().equals(dp.getLastDamager())) || dp.getLastDamager()==null) {
                 if (left == 2) {
-                    addCoins(p, 20, "Troisième !");
+                    //addCoins(p, 20, "Troisième !");
                 } else if (left == 1) {
-                    addCoins(p, 40, "Second !");
+                   // addCoins(p, 40, "Second !");
                 }
             }
         }
         else{
-            this.coherenceMachine.getMessageManager().writeCustomMessage(p.getDisplayName() + " s'est déconnecté.", true);
+            ElyAPI.getChatManager().sendGlobalMessage(p.getDisplayName() + " s'est déconnecté.");
         }
 
 
             if (left!=1) {
-                getCoherenceMachine().getMessageManager().writeCustomMessage("§eIl reste encore §b" + + left + " §ejoueurs en vie.",false);
-                if( pvpIn<= 0&& gameStep!=GameStep.DEATHMATCH_PLANNED && getInGamePlayers().size()<=deathMatchSpawns.size()){
+                ElyAPI.getChatManager().sendGlobalMessage("§eIl reste encore §b" + + left + " §ejoueurs en vie.");
+                if( pvpIn<= 0&& gameStep!=GameStep.DEATHMATCH_PLANNED && getPlayers().size()<=deathMatchSpawns.size()){
                     gameStep= GameStep.DEATHMATCH_PLANNED;
                 }
             }
@@ -297,35 +297,38 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
             Bukkit.getServer().getScheduler().runTaskLater(Dimensions.getInstance(),() ->  timerTask.cancel(),30L);
         }
         catch (Exception ignored){}
-        DimensionsPlayer winner = getInGamePlayers().values().iterator().next();
-        Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
+        DimensionsPlayer winner = getPlayers().values().iterator().next();
+        //Titles.sendTitle(winner.getPlayerIfOnline(), 5, 80, 5,"§6Victoire !","§aVous gagnez la partie en §a" +  + winner.getKills() + " §akills !");
 
-        Bukkit.getServer().getOnlinePlayers().stream().filter(p -> !p.equals(winner.getPlayerIfOnline())).forEach(p ->
-            Titles.sendTitle(p, 5, 80, 5, ChatColor.GOLD + "Fin de partie !", ChatColor.GREEN + "Bravo à " + winner.getPlayerIfOnline().getDisplayName())
-        );
-        this.coherenceMachine.getTemplateManager().getPlayerWinTemplate().execute(winner.getPlayerIfOnline(), winner.getKills());
-        addCoins(winner.getPlayerIfOnline(), 60, "Victoire !");
-        this.effectsOnWinner(winner.getPlayerIfOnline());
-        handleWinner(winner.getUUID());
-        handleGameEnd();
+        //Bukkit.getServer().getOnlinePlayers().stream().filter(p -> !p.equals(winner.getPlayerIfOnline())).forEach(p ->
+            //Titles.sendTitle(p, 5, 80, 5, ChatColor.GOLD + "Fin de partie !", ChatColor.GREEN + "Bravo à " + winner.getPlayerIfOnline().getDisplayName())
+        //);
+        //this.coherenceMachine.getTemplateManager().getPlayerWinTemplate().execute(winner.getPlayerIfOnline(), winner.getKills());
+        //addCoins(winner.getPlayerIfOnline(), 60, "Victoire !");
+        //this.effectsOnWinner(winner.getPlayerIfOnline());
+        winner(winner.getPlayerIfOnline().getUniqueId());
+        //handleGameEnd();
+
     }
 
+
+
     @Override
-    public void startGame()
+    public void start()
     {
-        super.startGame();
+        super.start();
         this.lifeBoard.registerNewObjective("vie", "health").setDisplaySlot(DisplaySlot.BELOW_NAME);
         this.lifeBoard.getObjective("vie").setDisplayName(ChatColor.RED + "♥");
         gameStep = GameStep.PRE_TELEPORT;
         int index=0;
-        for(DimensionsPlayer dp : getInGamePlayers().values()){
+        for(DimensionsPlayer dp : getPlayers().values()){
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
             dp.getPlayerIfOnline().teleport(spawns.get(index).clone().add(0,1,0));
             this.lifeBoard.getObjective("vie").getScore(dp.getPlayerIfOnline().getName()).setScore(20);
             index++;
         }
 
-        getCoherenceMachine().getMessageManager().writeCustomMessage("§6Préparation du jeu ! ",true);
+        ElyAPI.getChatManager().sendGlobalMessage("§6Préparation du jeu ! ");
         new BukkitRunnable(){
             int i =15;
             @Override
@@ -336,9 +339,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
                 }
                 setXp(i);
                 switch(i){
-                    case 15: getCoherenceMachine().getMessageManager().writeCustomMessage("§eDémarrage du jeu dans §c" + i + " " + secFormat + "§e.",true); break;
-                    case 10: case 5 : case 4 : case 3 : case 2 : case 1: playSound(Sound.BLOCK_NOTE_PLING,1.0F);sendTitle("§6Démarrage dans §c" + i + " §6sec.","§6Préparez vous au combat !"); break;
-                    case 0 : playSound(Sound.BLOCK_NOTE_PLING,2.0F);begin();this.cancel(); break;
+                    case 15: ElyAPI.getChatManager().sendGlobalMessage("§eDémarrage du jeu dans §c" + i + " " + secFormat + "§e."); break;
+                    case 10: case 5 : case 4 : case 3 : case 2 : case 1: playSound(Sound.BLOCK_NOTE_BLOCK_PLING,1.0F);sendTitle("§6Démarrage dans §c" + i + " §6sec.","§6Préparez vous au combat !"); break;
+                    case 0 : playSound(Sound.BLOCK_NOTE_BLOCK_PLING,2.0F);begin();this.cancel(); break;
 
                 }
                 i--;
@@ -348,15 +351,15 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
     }
 
     public void setXp(int level){
-        this.getInGamePlayers().values().forEach(dp ->    dp.getPlayerIfOnline().setLevel(level) );
+        this.getPlayers().values().forEach(dp ->    dp.getPlayerIfOnline().setLevel(level) );
     }
 
     public void sendTitle(String title,String subTitle){
-        this.getInGamePlayers().values().forEach(dp ->   Titles.sendTitle(dp.getPlayerIfOnline(),5,50,5,title,subTitle));
+       // this.getPlayers().values().forEach(dp ->   Titles.sendTitle(dp.getPlayerIfOnline(),5,50,5,title,subTitle));
     }
 
     public void sendActionBar(String message){
-       this.getInGamePlayers().values().forEach(dp ->  ActionBarAPI.sendMessage(dp.getPlayerIfOnline(),message));
+     //  this.getInGamePlayers().values().forEach(dp ->  ActionBarAPI.sendMessage(dp.getPlayerIfOnline(),message));
     }
 
     /**
@@ -367,9 +370,9 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         this.randomEffects.runTaskTimerAsynchronously(Dimensions.getInstance(),1L,20L);
         gameStep= GameStep.IN_GAME;
         timerTask.runTaskTimer(Dimensions.getInstance(),1L,20L);
-        getCoherenceMachine().getMessageManager().writeCustomMessage("§6La partie commence. Bonne chance !",true);
-        getCoherenceMachine().getMessageManager().writeCustomMessage("§6Le PVP sera activé dans 2 minutes  !",true);
-        for(DimensionsPlayer dp : getInGamePlayers().values()){
+        ElyAPI.getChatManager().sendGlobalMessage("§6La partie commence. Bonne chance !");
+        ElyAPI.getChatManager().sendGlobalMessage("§6Le PVP sera activé dans 2 minutes  !");
+        for(DimensionsPlayer dp : getPlayers().values()){
             dp.getPlayerIfOnline().getInventory().clear();
             dp.getPlayerIfOnline().setVelocity(new Vector(0,0,0));
             dp.getPlayerIfOnline().setGameMode(GameMode.SURVIVAL);
@@ -385,7 +388,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
      * @param pitch The pitch of the sound
      */
     public void playSound(Sound sound,float pitch){
-        for(DimensionsPlayer dp : this.getInGamePlayers().values()){
+        for(DimensionsPlayer dp : this.getPlayers().values()){
             dp.getPlayerIfOnline().playSound(dp.getPlayerIfOnline().getLocation(),sound,1000F,pitch);
         }
     }
@@ -440,7 +443,7 @@ public class DimensionsGame extends Game<DimensionsPlayer>{
         pvpIn--;
     }
 
-    public GameStep getGameStep() {
+    public GameStep getDimensionsGameStep() {
         return gameStep;
     }
 

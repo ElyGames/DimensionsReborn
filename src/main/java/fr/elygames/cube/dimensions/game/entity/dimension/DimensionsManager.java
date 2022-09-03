@@ -3,13 +3,11 @@ package fr.elygames.cube.dimensions.game.entity.dimension;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;
-import net.samagames.api.games.IGameProperties;
 import fr.elygames.cube.dimensions.Dimensions;
 import fr.elygames.cube.dimensions.game.DimensionsGame;
 import fr.elygames.cube.dimensions.game.entity.DimensionsPlayer;
 import fr.elygames.cube.dimensions.game.entity.GameStep;
 import fr.elygames.cube.dimensions.game.entity.chestitem.ChestItemManager;
-import net.samagames.tools.LocationUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -59,7 +57,8 @@ public class DimensionsManager {
         parallelEnchantings = new ArrayList<>();
         paralleldAnvils = new ArrayList<>();
 
-        IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
+        // TODO : How to do with elyapi
+        /*IGameProperties prop =Dimensions.getInstance().getApi().getGameManager().getGameProperties();
 
         for(JsonElement elt : prop.getMapProperty("enchantingTablesOverworld",new JsonArray()).getAsJsonArray()){
             overworldEnchantings.add(LocationUtils.str2loc(elt.getAsString()));
@@ -79,7 +78,7 @@ public class DimensionsManager {
         this.overworldName = prop.getMapProperty("overworldName",new JsonPrimitive("No set")).getAsString();
         this.hardName = prop.getMapProperty("parallelName",new JsonPrimitive("No set")).getAsString();
         this.overworldLootTable = prop.getMapProperty("overworldLootTable",new JsonPrimitive("sg:dimensions/dim_normal")).getAsString();
-        this.parallelLootTable = prop.getMapProperty("parallelLootTable",new JsonPrimitive("sg:dimensions/dim_parallel")).getAsString();
+        this.parallelLootTable = prop.getMapProperty("parallelLootTable",new JsonPrimitive("sg:dimensions/dim_parallel")).getAsString();*/
     }
 
     /**
@@ -89,7 +88,7 @@ public class DimensionsManager {
      */
     public List<DimensionsPlayer> getPlayersInDimension(Dimension dim)
     {
-        return Dimensions.getInstance().getGame().getInGamePlayers().values().stream().filter(pl ->  pl.getDimension() == dim).collect(Collectors.toList());
+        return Dimensions.getInstance().getGame().getPlayers().values().stream().filter(pl ->  pl.getDimension() == dim).collect(Collectors.toList());
     }
 
     public String getOverworldLootTable() {
@@ -125,7 +124,7 @@ public class DimensionsManager {
         DimensionsGame game = Dimensions.getInstance().getGame();
         DimensionsPlayer dp = game.getPlayer(p.getUniqueId());
 
-        if ( game.isNonGameStep()|| game.getGameStep() == GameStep.DEATHMATCH)
+        if ( game.isNonGameStep()|| game.getDimensionsGameStep() == GameStep.DEATHMATCH)
             return ;
         int nextSwap =dp.getNextSwapDelay();
         if (nextSwap>0)
@@ -178,7 +177,7 @@ public class DimensionsManager {
             p.teleport(tpTo);
             oldLoc.setY(verifier.getY());
             this.swapBlocks(oldLoc, verifier);
-            p.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 1.0f, 1.0f);
+            p.playSound(p.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 1.0f, 1.0f);
             p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 50, 0));
             p.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 0));
 
@@ -200,7 +199,7 @@ public class DimensionsManager {
             }
 
 
-            for(DimensionsPlayer dimPlayer : game.getInGamePlayers().values()){
+            for(DimensionsPlayer dimPlayer : game.getPlayers().values()){
                 if(dimPlayer.getTarget()== p.getUniqueId()){
                     dimPlayer.setTarget(null);
                     dimPlayer.getPlayerIfOnline().sendMessage("§cVotre cible a changé de dimension, la boussole ne pointe plus personne.");
@@ -229,17 +228,18 @@ public class DimensionsManager {
                         if(random.nextBoolean()){
                             Block b1 = loc1.clone().add(x,y,z).getBlock();
                             Block b2 = loc2.clone().add(x,y,z).getBlock();
-                            if(!(b1.getType() == Material.ANVIL || b1.getType() == Material.ENCHANTMENT_TABLE ||
-                                    b2.getType() == Material.ANVIL || b2.getType() == Material.ENCHANTMENT_TABLE )){
+                            if(!(b1.getType() == Material.ANVIL || b1.getType() == Material.ENCHANTING_TABLE ||
+                                    b2.getType() == Material.ANVIL || b2.getType() == Material.ENCHANTING_TABLE )){
 
                                 byte data1 = b1.getData();
                                 Material mat1 = b1.getType();
 
                                 b1.setType(b2.getType());
-                                b1.setData(b2.getData());
+                                //TODO : check how to do now
+                                //b1.setData(b2.getData());
 
                                 b2.setType(mat1);
-                                b2.setData(data1);
+                                //b2.setData(data1);
 
                             }
                         }
@@ -249,7 +249,7 @@ public class DimensionsManager {
 
         }
 
-        ChestItemManager.getInstance().launchAndExplode(loc1, FireworkEffect.builder().withColor(new Color[]{Color.RED,Color.BLACK}).with(FireworkEffect.Type.BURST).build());
+        ChestItemManager.getInstance().launchAndExplode(loc1, FireworkEffect.builder().withColor(Color.RED,Color.BLACK).with(FireworkEffect.Type.BURST).build());
         loc1.getWorld().createExplosion((double)loc1.getBlockX(), (double)loc1.getBlockY(), (double)loc1.getBlockZ(), 1.0f, true, false);
         loc2.getWorld().createExplosion((double)loc2.getBlockX(), (double)loc2.getBlockY(), (double)loc2.getBlockZ(), 1.0f, false, false);
     }
@@ -261,7 +261,7 @@ public class DimensionsManager {
      */
     private boolean isEmpty(final Block block)
     {
-        return block.isEmpty() || block.getType() == Material.CARPET || block.getType() == Material.SIGN || block.getType() == Material.LADDER || block.getType() == Material.SIGN_POST;
+        return block.isEmpty() || block.getType().toString().toLowerCase().contains("carpet")|| block.getType().toString().toLowerCase().contains("sign") || block.getType() == Material.LADDER;
     }
 
 

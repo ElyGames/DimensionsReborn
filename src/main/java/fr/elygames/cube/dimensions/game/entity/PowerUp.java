@@ -1,5 +1,5 @@
 package fr.elygames.cube.dimensions.game.entity;
-import net.samagames.api.shops.IPlayerShop;
+
 
 /*
  * This file is part of DimensionsV2.
@@ -30,12 +30,16 @@ public enum PowerUp {
         this.shopValues = shopValues;
         this.gameValues = gameValues;
     }
+/*
 
+
+ */
     /**
      * Get the power up level of a player (buyable by shop)
      * @param shop The player shop
      * @return The level of the powerup
      */
+    /*
     public int getPowerUpLevelForPlayer(IPlayerShop shop)
     {
         int[] items = this.shopValues;
@@ -50,5 +54,6 @@ public enum PowerUp {
         }
         catch (Exception e) {}
         return 1;
-      }
+      }*/
+
 }
